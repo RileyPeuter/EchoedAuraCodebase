@@ -101,15 +101,14 @@ public abstract class Cutscene : MonoBehaviour
 
     public void setFrame(CutsceneFrame frame)
     {
-        print(frame.speakerName);
-        bigTextBox.GetComponent<CutsceneTextBoxController>().setText(frame.speakerName, frame.speakerText, frame.talker);
         executeTrigger(frame.frameTrigger);
+        bigTextBox.GetComponent<CutsceneTextBoxController>().setText(frame.speakerName, frame.speakerText, frame.talker);
     }
 
     public void setFrame(int index)
     {
+        //executeTrigger(frames[index].frameTrigger);
         setFrame(frames[index]);
-        executeTrigger(frames[index].frameTrigger);
     }
 
     public void createDialogueObject()
@@ -129,6 +128,10 @@ public abstract class Cutscene : MonoBehaviour
     {
         speakerSprites = new Dictionary<string, Sprite>();
         frames = new List<CutsceneFrame>();
+    }
+
+    public void recreateTextBox()
+    {
     }
 
     public abstract void endCutscene();

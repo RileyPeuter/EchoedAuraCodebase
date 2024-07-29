@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class SoloStandOffController : StandOffController
 {
     StandOffSide side;
@@ -52,7 +53,8 @@ public class SoloStandOffController : StandOffController
 
 
         resourceName = recName;
-        side = new StandOffSide(BCO, resourceName, GameObject.Find("uI_StandOffAttackerSide_Object"));
+
+        side = new StandOffSide(BCO, resourceName, GetComponentsInChildren<MsSuperSecretScriptThatImUsingAsAFlag>().ToList().Find(x => x.gameObject.name == "uI_StandOffAttackerSide_Object").gameObject);
         caster = BCO;
 
         if (ability.name == "Move")
@@ -70,7 +72,6 @@ public class SoloStandOffController : StandOffController
     // Start is called before the first frame update
     void Start()
     {
-
         initialize();
         if (SOS == StandOffStage.Movement)
         {
@@ -78,7 +79,7 @@ public class SoloStandOffController : StandOffController
             playSound(Resources.Load<AudioClip>("Audio/SoundEffects/run"));
         }
 
-            GameObject.Destroy(GameObject.Find("uI_StandOffAttackeeSide_Object"));
+        GameObject.Destroy(GameObject.Find("uI_StandOffAttackeeSide_Object"));
         this.transform.position = new Vector2(GameObject.Find("Main Camera").transform.position.x + 20, GameObject.Find("Main Camera").transform.position.y + 5);
 
     }

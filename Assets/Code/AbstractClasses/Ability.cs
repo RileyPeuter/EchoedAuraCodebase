@@ -96,7 +96,7 @@ public abstract class Ability
         if (modType == ModType.Melee) { return "Me"; }
         if (modType == ModType.Ranged) { return "Rn"; }
         if (modType == ModType.Mind) { return "Mi"; }
-        return "t";
+        return "NA";
     }
 
     public virtual string getCostString()

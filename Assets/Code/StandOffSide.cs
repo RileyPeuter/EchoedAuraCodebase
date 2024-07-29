@@ -107,7 +107,9 @@ public class StandOffSide
                     break;
 
                 case "uI_StandOffCharacter_Image":
+                    
                     characterAnimator = image.gameObject.AddComponent<Animator>();
+                    StandOffController.print(characterAnimator.name);
                     AnimatorOverrideController AOC = Resources.Load<AnimatorOverrideController>("GeneralCharacterAssets/AOC" + characterSide.getCharacter().getResourceString());
                     characterAnimator.runtimeAnimatorController = AOC;
                     break;

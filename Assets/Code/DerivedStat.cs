@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum derivedStat
@@ -54,21 +55,8 @@ public class DerivedStat
 
     public void removeBuff(int ID)
     {
-        foreach (KeyValuePair<int, int> values in additionBuffs)
-        {
-            if (ID == values.Key)
-            {
-                additionBuffs.Remove(ID);
-            }
-        }
-
-        foreach (KeyValuePair<int, int> values in multiplictiveBuffs)
-        {
-            if (ID == values.Key)
-            {
-                additionBuffs.Remove(ID);
-            }
-        }
+        additionBuffs.Remove(ID);
+        multiplictiveBuffs.Remove(ID);
     }
 
     //###Constructor###

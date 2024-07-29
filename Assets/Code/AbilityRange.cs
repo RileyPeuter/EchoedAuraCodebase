@@ -5,7 +5,8 @@ using UnityEngine;
 public enum RangeMode
 {
     Simple,
-    Move
+    Move, 
+    Global
 }
 
 public class AbilityRange : MonoBehaviour

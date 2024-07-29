@@ -44,6 +44,7 @@ public class ExWhyBridge : ExWhy
                     cell.resourceName = "Water";
                     cell.makeAltable();
                     cell.setAltRate(70);
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     break;
                     
                 case 'g':
@@ -51,6 +52,7 @@ public class ExWhyBridge : ExWhy
                     cell.resourceName = "Grass";
                     cell.makeAltable();
                     cell.setAltRate(20);
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     break;
 
                 case 'd':
@@ -58,11 +60,13 @@ public class ExWhyBridge : ExWhy
                     cell.resourceName = "Dirt";
                     cell.makeAltable();
                     cell.setAltRate(20);
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     break;
 
                 case 'b':
                     instantiateCell(cell, true, 0, 0);
-                    cell.resourceName = "Bridge";   
+                    cell.resourceName = "Bridge";
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     break;
 
                 case 't':
@@ -70,6 +74,7 @@ public class ExWhyBridge : ExWhy
                     cell.resourceName = "Forest";
                     cell.makeAltable();
                     cell.setAltRate(50);
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     break;
             }
         }

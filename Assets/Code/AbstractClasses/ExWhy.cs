@@ -43,8 +43,7 @@ public abstract class ExWhy
     //###Utilities###
 
     //This bit of code may look complicated, but it's simple. It gets a cell in a grid, then checks the surrounding cells to see whether they're the same type. 
-    // If you want some grass next to some water, then it'll show a shoreline, instead of the two sprites next to each other. 
-    //0 = middle, 1-4 = North South Left Right, 5-8 = NW, SW, SE, NE, 9-12 = INW, ISW, ISE, INE, 13-14 = NS, WE 15 = Pillar
+    // If you want some grass next to some water, then it'll show a shoreline, instead of the two sprites next to each other
     public static int getConsolidationID(ExWhy gs, int x, int y)
     {
         char tileChar = gs.worldData[x, y];
@@ -62,14 +61,12 @@ public abstract class ExWhy
         if (y == 0){down = true;}
         else{down = (gs.worldData[x, y - 1] == tileChar);}
 
-
         if (x + 1 == gs.xMax){right = true;}
-        {right = (gs.worldData[x + 1, y] == tileChar);}
+        else{right = (gs.worldData[x + 1, y] == tileChar);}
 
         if (y + 1 == gs.yMax){up = true;}
         else
         {up = (gs.worldData[x, y + 1] == tileChar);}
-
 
         if (!up){output += 1;}
         if (!down){output += 2;}

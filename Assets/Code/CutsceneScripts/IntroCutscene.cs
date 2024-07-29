@@ -9,6 +9,7 @@ public class IntroCutscene : Cutscene
     {
         GameObject.Instantiate(Resources.Load<GameObject>("CutsceneAssets/CutsceneVisualObjectIntro"));
     }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,11 +20,8 @@ public class IntroCutscene : Cutscene
         speakerSprites.Add("Iraden", Resources.Load<Sprite>("CutsceneSpeakerSprites/Iraden"));
         speakerSprites.Add("Jayf", Resources.Load<Sprite>("CutsceneSpeakerSprites/Jayf"));
         frames = new List<CutsceneFrame>();
-
         
         frames.Add(new CutsceneFrame("Jayf", "Hmm? Who might you be?", getSprite("Jayf"), 1));
-
-        print(speakerSprites.Count);
 
         frames.Add(new CutsceneFrame("Iraden", "I heard there was a...a vacancy of those who are...uhh \n Inclined towards that of military academia...ahh \n via magical tal...", getSprite("Iraden")));
         frames.Add(new CutsceneFrame("Jayf", "That's an impressive amount of big words, but perhaps try speaking plainly. \n Who are you?", getSprite("Jayf")));
@@ -44,6 +42,8 @@ public class IntroCutscene : Cutscene
         frames.Add(new CutsceneFrame("Jayf", "Walk with me to the training ground and show me what you can do.", getSprite("Jayf")));
 
         bigTextBox = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_Dialogue_GameObject"));
+
+        spawnVisuals();
     }
 
     // Update is called once per frame
@@ -62,10 +62,8 @@ public class IntroCutscene : Cutscene
 
     public override void endCutscene()
     {
-        print("kappa");
         GlobalGameController.GGC.mapToBeLoaded = new ExWhyTrainingGround();
 
-        print("stan");
         GlobalGameController.GGC.BCToBeLoaded = 0;
         GlobalGameController.GGC.startBattle();
     }

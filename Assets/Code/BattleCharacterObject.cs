@@ -22,7 +22,11 @@ public enum CharacterState
 
 public class BattleCharacterObject : MonoBehaviour
 {
+
     //###MemberVariables###
+
+    CellBuff currentCellBuff;
+
     CharacterAllegiance allegiance;
     ExWhyCell occupying;
     Character character;
@@ -180,6 +184,8 @@ public class BattleCharacterObject : MonoBehaviour
         occupying = grid.gridCells[spawnX, spawnY];
         grid.gridCells[spawnX, spawnY].occupier = this;
         setGraphicalPosition();
+        currentCellBuff = grid.gridCells[spawnX, spawnY].getCellBuff().Clone(character);
+        character.addBuff(currentCellBuff);
     }
 
     public void spendMana(int cost)
@@ -218,10 +224,13 @@ public class BattleCharacterObject : MonoBehaviour
 
     public void move(ExWhyCell newCell)
     {
+        character.removeBuff(currentCellBuff);
         occupying.occupier = null;
         occupying = newCell;
         newCell.occupier = this;
         setGraphicalPosition();
+        currentCellBuff = newCell.getCellBuff().Clone(character);
+        character.addBuff(currentCellBuff);
     }
 
     public void setAniRun(bool running)
@@ -314,7 +323,6 @@ public class BattleCharacterObject : MonoBehaviour
         getAI().initialize(this);
     }
 
-    // Update is called once per frame
     void Update()
     {
         timer = timer + Time.deltaTime;

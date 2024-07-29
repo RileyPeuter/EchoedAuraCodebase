@@ -49,6 +49,7 @@ public class ExWhyRulessDog : ExWhy
                     cell.resourceName = "Grass";
                     cell.makeAltable();
                     cell.setAltRate(20);
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     break;
 
                 case 'd':
@@ -56,6 +57,7 @@ public class ExWhyRulessDog : ExWhy
                     cell.resourceName = "Dirt";
                     cell.makeAltable();
                     cell.setAltRate(20);
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     break;
 
                 case 't':
@@ -63,6 +65,7 @@ public class ExWhyRulessDog : ExWhy
                     cell.resourceName = "Forest";
                     cell.makeAltable();
                     cell.setAltRate(50);
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     break;
             }
         }
@@ -70,18 +73,6 @@ public class ExWhyRulessDog : ExWhy
 
     protected override void instantiateEvents()
     {
-        throw new System.NotImplementedException();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    
     }
 }

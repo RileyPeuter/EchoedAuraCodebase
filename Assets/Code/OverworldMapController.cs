@@ -63,13 +63,22 @@ public class OverworldMapController : MonoBehaviour
     
     public void startMission(List<StoredCharacterObject> characters)
     {
+
         gameController.mapToBeLoaded = selectedMission.map;
         gameController.BCToBeLoaded = selectedMission.BCID;
         gameController.setCharactersToBeLoaded(characters);
 
         print(characterSelect.GetComponent<CharacterSelectController>().getCharacterCount());
 
-        gameController.startBattle();
+        if (selectedMission.cutsceneInt == 0)
+        {
+            gameController.startBattle();
+        }
+        else
+        {
+            gameController.CutsceneToBeLoaded = selectedMission.cutsceneInt;
+            gameController.startCutscene();
+        }
     }
 
     public void deselctCharacter(StoredCharacterObject characterObject)

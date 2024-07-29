@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 public class DualStandOffController : StandOffController
@@ -30,10 +31,10 @@ public class DualStandOffController : StandOffController
         BUIC = BC.GetBattleUIController();
         rollPanel = BUIC.openWindow("uI_StandOffRoll_Panel", true, "Canvas", false);
         spawnAbilitySnippet("uI_StandOffRoll_Panel(Clone)");
-
+        
         attackAttempt = AA;
-        leftSide = new StandOffSide(attackAttempt.getAttacker(), resourceName, GameObject.Find("uI_StandOffAttackerSide_Object"));
-        rightSide = new StandOffSide(attackAttempt.getAttackee(), resourceName, GameObject.Find("uI_StandOffAttackeeSide_Object"));
+        leftSide = new StandOffSide(attackAttempt.getAttacker(), resourceName, GetComponentsInChildren<MsSuperSecretScriptThatImUsingAsAFlag>().ToList().Find(x => x.gameObject.name == "uI_StandOffAttackerSide_Object").gameObject);
+        rightSide = new StandOffSide(attackAttempt.getAttackee(), resourceName, GetComponentsInChildren<MsSuperSecretScriptThatImUsingAsAFlag>().ToList().Find(x => x.gameObject.name == "uI_StandOffAttackeeSide_Object").gameObject);
         damageText = GameObject.Find("uI_Damage_Text").GetComponent<Text>();
 
 
@@ -72,7 +73,7 @@ public class DualStandOffController : StandOffController
     // Update is called once per frame
     void Update()
     {
-        print(sideFinished);
+        print(SOS);
         timer = timer + Time.deltaTime;
         messageTimer = messageTimer - Time.deltaTime;
         if (leftSide != null)
@@ -140,7 +141,7 @@ public class DualStandOffController : StandOffController
         {
             backPanel.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0.40f);
         }
-        if(timer > 1 && right)
+        if((timer > 1 && right )|| timer > 3)
         {
             timer = 0;
             SOS = StandOffStage.EndAttack;

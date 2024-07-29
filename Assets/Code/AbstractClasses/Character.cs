@@ -101,6 +101,10 @@ public abstract class Character {
         buff.start();
     }
 
+    public void removeBuff(Buff buff) {
+        buff.cleanup();
+        buffs.Remove(buff);
+    }
 
     public void dealDamage(int amount, int type)
     {

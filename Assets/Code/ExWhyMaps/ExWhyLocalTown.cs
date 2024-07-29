@@ -45,27 +45,32 @@ public class  ExWhyLocalTown : ExWhy
                     cell.resourceName = "Dirt";
                     cell.makeAltable();
                     cell.setAltRate(30);
-                break;
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
+                    break;
 
                 case 'g':
                     instantiateCell(cell, true, 1, 1);
                     cell.resourceName = "Grass";
                     cell.makeAltable();
                     cell.setAltRate(30);
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     break;
 
                 case 's':
                     instantiateCell(cell, true, 2, 2);
                     cell.resourceName = "Plaster";
-                break;
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
+                    break;
 
                 case 'w':
                     instantiateCell(cell, true, 3, 3);
                     cell.resourceName = "WoodenBoard";
-                break;
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
+                    break;
 
                 case 'h':
                     instantiateCell(cell, true, 4, 4);
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     cell.resourceName = "Shop";
                 break;
             }

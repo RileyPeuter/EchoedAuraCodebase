@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExWhyCell 
+public class ExWhyCell
 {
     //###MemberVariables###
     public int xPosition;
@@ -19,10 +20,20 @@ public class ExWhyCell
 
     public bool walkable;
 
+    CellBuff cellBuff;
+    
+    
+
+    
     //###Getters###
     public Transform getTransform()
     {
         return cellGO.transform;
+    }
+
+    public CellBuff getCellBuff()
+    {
+        return cellBuff;
     }
 
     BattleCharacterObject getOccupied()
@@ -33,6 +44,11 @@ public class ExWhyCell
     public void setAltRate(int rate)
     {
         altRate = rate;
+    }
+    
+    public void setCellBuff(CellBuff nCellBuff)
+    {
+        cellBuff = nCellBuff;
     }
     public void makeAltable()
     {

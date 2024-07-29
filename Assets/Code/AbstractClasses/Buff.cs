@@ -25,10 +25,11 @@ public abstract class Buff
 
 
     //###Member Variables###
-
-    protected Character target;
     public int magnitude;
     public int duration;
+    public bool visible = true;
+    protected Character target;
+
     protected int id;
 
     protected string resourceName;
@@ -63,6 +64,9 @@ public abstract class Buff
     {
         target = nTarget;
     }
+
+    public Buff() { }
+
     public abstract void start();
     public abstract void tick();
     public abstract void cleanup();

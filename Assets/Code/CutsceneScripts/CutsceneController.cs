@@ -7,7 +7,7 @@ public class CutsceneController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-                
+        loadCutscene(GlobalGameController.GGC.CutsceneToBeLoaded);
     }
 
     void loadCutscene(int cutSceneID)

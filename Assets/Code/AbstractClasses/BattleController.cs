@@ -7,7 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 
 public abstract class BattleController : MonoBehaviour
 {
-
+    //###MemberVariables###
     public static BattleController ActiveBattleController;
 
     public List<BattleCharacterObject> characters;
@@ -43,8 +43,6 @@ public abstract class BattleController : MonoBehaviour
     protected int turnTimer = 0;
     public bool hasControl = true;
 
-    
-
     protected GameObject hoverCursor;
     protected GameObject cursor;
     protected ExWhyCell cursorCell;
@@ -53,24 +51,66 @@ public abstract class BattleController : MonoBehaviour
     BattleCharacterObject activeCharacter;
     protected BattleUIController BUIC;
 
-    public abstract void loadCharacters();
-
-    public abstract void endBattle();
-
-    public abstract void objectiveComplete(string id);
-
-    public abstract void GBCTexecutions(int index);
-
     Vector3 lastMousePosition;
 
     protected List<ExWhyCell> spawnCells;
 
     Camera mainCamera;
 
+    List<StoredCharacterObject> charactersToSpawn;
+
+    protected List<TacticalAbility> baseTacticalAbilities;
+
+    CellInformationController activeCellInformation;
+    CellInformationController hoverCellInformationController;
+
+
+    int tacticalPoints = 0;
+
+    //###Getters###
+    public string getMapResourceString()
+    {
+        return map.GetResourceName();
+    }
+    public BattleUIController GetBattleUIController()
+    {
+        return BUIC;
+    }
+
+    public BattleCharacterObject getActiveCharacter()
+    {
+        return activeCharacter;
+    }
+
+    //###Setters###
     public void addCharactersToLoad(List<StoredCharacterObject> SCOs)
     {
         charactersToSpawn = SCOs;
         print(charactersToSpawn.Count);
+    }
+    public void setCharactersToSpawn(List<StoredCharacterObject> nCharactersToSpawn)
+    {
+        charactersToSpawn = nCharactersToSpawn;
+    }
+
+    //###Utilities###
+    public void addTacticalPoints()
+    {
+
+    }
+
+
+    public List<BattleCharacterObject> getAllAllegiance(CharacterAllegiance allegiance)
+    {
+        List<BattleCharacterObject> output = new List<BattleCharacterObject>();
+        foreach (BattleCharacterObject character in characters)
+        {
+            if (character.GetAllegiance() == allegiance)
+            {
+                output.Add(character);
+            }
+        }
+        return output;
     }
 
     public List<GameObject> getCharacterGOsFromStored()
@@ -87,23 +127,7 @@ public abstract class BattleController : MonoBehaviour
 
         return output;
     }
-
-    List<StoredCharacterObject> charactersToSpawn;
-
-    public void setCharactersToSpawn(List<StoredCharacterObject>nCharactersToSpawn)
-    {
-        charactersToSpawn = nCharactersToSpawn;
-    }
-
-    public string getMapResourceString()
-    {
-        return map.GetResourceName();
-    }
-
-    public BattleUIController GetBattleUIController()
-    {
-        return BUIC;
-    }
+    
 
     public bool getCastable(Ability abi, CharacterAllegiance targetAllegiance = CharacterAllegiance.Controlled)
     {
@@ -174,11 +198,7 @@ public abstract class BattleController : MonoBehaviour
         }
     }
 
-    public BattleCharacterObject getActiveCharacter()
-    {
-        return activeCharacter; 
-    }
-
+    //###InitalizationMethods
     protected void initializeGameState()
     {
         enemyMaterial = Resources.Load<Material>("BattleAssets/EnemyRenderer");
@@ -187,6 +207,41 @@ public abstract class BattleController : MonoBehaviour
         timerTick();
     }
 
+    public void initializeBattleController()
+    {
+        activeCellInformation = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_CurrentActiveCell_Panel"), GameObject.Find("Canvas").transform).GetComponent<CellInformationController>();
+        baseTacticalAbilities = new List<TacticalAbility>();
+        mainCamera = Camera.main;
+        ActiveBattleController = this;
+        characters = new List<BattleCharacterObject>();
+        BUIC = GameObject.Find("MapController").GetComponent<BattleUIController>();
+        BUIC.initialize(this);
+        map = this.gameObject.GetComponent<MapController>();
+        cursor = GameObject.Instantiate(Resources.Load<GameObject>("MapTiles/Prefabs/General/TileCursor"));
+        hoverCursor = GameObject.Instantiate(Resources.Load<GameObject>("MapTiles/Prefabs/General/HoverCursor"));
+        loadCharacters();
+        AIClusters = new List<AICluster>();
+    }
+
+    protected void initializeAdditionalElements()
+    {
+        objList = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_Objectives_Panel"), GameObject.Find("Canvas").transform).GetComponent<ObjectiveList>();
+        objList.initialize(this);
+
+        GameObject charSheet = BUIC.openWindow("uI_CharacterSheet_Panel", false, "Canvas", false);
+        CSS = charSheet.GetComponent<CharacterSheetScript>();
+        CSS.initialize(BattleUIController.HighestWindow, new BattleCharacterObject());
+        GameObject combatLog = BUIC.openWindow("uI_CombatLog_Panel", false, "Canvas", false);
+
+        miscMenu = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_MiscMenus_Panel"), GameObject.Find("Canvas").transform);
+        miscMenu.GetComponent<MiscMenuController>().initialize(BUIC, this, objList.gameObject, combatLog, charSheet);
+        BEL = combatLog.GetComponent<BattleEventLog>();
+        BEL.initialize(objList);
+
+        GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_Timer_Panel"), GameObject.Find("Canvas").transform).GetComponent<TimerUIScript>().initialize(this);
+    }
+
+    //###UIOperation###
     public void CreateAttackAttempt(BattleCharacterObject attacker, BattleCharacterObject attackee, Ability ab)
     {
         aa = new AttackAttempt(attacker, attackee, ab);
@@ -249,18 +304,6 @@ public abstract class BattleController : MonoBehaviour
         return AR;
     }
 
-    public  List<BattleCharacterObject> getAllAllegiance(CharacterAllegiance allegiance)
-    {
-        List<BattleCharacterObject> output = new List<BattleCharacterObject>();
-        foreach(BattleCharacterObject character in characters)
-        {
-            if (character.GetAllegiance() == allegiance) {
-                output.Add(character);
-            }
-        }
-        return output;
-    }
-
     public void timerTick()
     {
         if(!(activeCharacter is null)) {
@@ -309,7 +352,7 @@ public abstract class BattleController : MonoBehaviour
                 hasControl = true;
             }
         }
-        
+        activeCellInformation.initialize(activeCharacter.getOccupying(), true);
         cursorCell = activeCharacter.getOccupying();
     }
 
@@ -366,6 +409,8 @@ public abstract class BattleController : MonoBehaviour
         {
             setActiveCharacter(activeCharacter);
         }
+
+
     }
 
     public void toggleCutscene(bool toggle)
@@ -379,23 +424,15 @@ public abstract class BattleController : MonoBehaviour
         }
     }
 
-    void backButtonChecks()
-    {
-
-    }
-
     protected void controls()
     { 
-
         cursor.transform.position = cursorCell.cellGO.transform.position;
 
         //This should be moved to a function which moves the cursor cells. 
         if(Vector3.Distance(cursor.transform.position, mainCamera.transform.position) > 25)
         {
-            print("nandayo");
             //mainCamera.transform.position =  cursor.transform.position + new Vector3(0,0,-10);
             mainCamera.transform.position = ((mainCamera.transform.position  + cursor.transform.position) / 2) + new Vector3(0, 0, -10);
-
         }
 
         if (!hasControl) 
@@ -461,6 +498,18 @@ public abstract class BattleController : MonoBehaviour
             tryCast(); 
         }
         
+        if(!Input.GetKey("left alt"))
+        {
+            hoverCellInformationController = null;
+        }
+
+        if(Input.GetKeyDown("left alt"))
+        {
+            GameObject GO = BUIC.openWindow("uI_HoverCell_Panel");
+            GO.GetComponent<RectTransform>().position = mainCamera.WorldToScreenPoint(hoverCursor.transform.position) + new Vector3(-130, 0, 0);
+            hoverCellInformationController = GO.GetComponent<CellInformationController>();
+            hoverCellInformationController.initialize(map.getMouseCell());
+        }
     }
 
     //I think this method is gonna be wacky
@@ -492,6 +541,7 @@ public abstract class BattleController : MonoBehaviour
         selectAbility(activeCharacter.getMovementAbility());
     }
 
+    //This is horrible, we need to change it
     void tryCast()
     {
         timer = 1;
@@ -509,6 +559,7 @@ public abstract class BattleController : MonoBehaviour
                 if(cursorCell.occupier != null)
                 {
                     ticking = true;
+                    quickSelectCheck(cursorCell);
                     return;
                 }
                 BEL.addEvent(activeCharacter.getName(), "Movement", "Move", "X:" + cursorCell.xPosition.ToString() + " Y:"+ cursorCell.yPosition.ToString());
@@ -546,8 +597,9 @@ public abstract class BattleController : MonoBehaviour
                 if (!AR.findCharactersInRange().Contains(cursorCell.occupier) || cursorCell == activeCharacter.getOccupying())
                 {
 
-                    deSelectAbility();  
-                  //  BEL.addEvent(activeCh aracter, "TargetedAbility", selectedAbility.name, cursorCell.occupier.name)
+                    deSelectAbility();
+                    quickSelectCheck(cursorCell);
+                    //  BEL.addEvent(activeCh aracter, "TargetedAbility", selectedAbility.name, cursorCell.occupier.name)
                     return;
                 }
                 else
@@ -575,7 +627,6 @@ public abstract class BattleController : MonoBehaviour
                 break;
         }
         
-
         destroyARVisual();
         BUIC.closeAllTransient();
         destroyTurnUI();
@@ -685,43 +736,6 @@ public abstract class BattleController : MonoBehaviour
         }
     }
 
-    public void initializeBattleController()
-    {
-        mainCamera = Camera.main;
-        ActiveBattleController = this;
-        characters = new List<BattleCharacterObject>();
-        BUIC = GameObject.Find("MapController").GetComponent<BattleUIController>();
-        BUIC.initialize(this);
-        map = this.gameObject.GetComponent<MapController>();
-        cursor = GameObject.Instantiate(Resources.Load<GameObject>("MapTiles/Prefabs/General/TileCursor"));
-        hoverCursor = GameObject.Instantiate(Resources.Load<GameObject>("MapTiles/Prefabs/General/HoverCursor"));
-        loadCharacters();
-        AIClusters = new List<AICluster>();
-
-    }
-
-    protected void initializeAdditionalElements()
-    {
-
-        objList = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_Objectives_Panel"), GameObject.Find("Canvas").transform).GetComponent<ObjectiveList>();
-        objList.initialize(this);
-
-
-        GameObject charSheet = BUIC.openWindow("uI_CharacterSheet_Panel", false, "Canvas", false);
-        CSS = charSheet.GetComponent<CharacterSheetScript>();
-        CSS.initialize(BattleUIController.HighestWindow, new BattleCharacterObject());
-        GameObject combatLog = BUIC.openWindow("uI_CombatLog_Panel", false, "Canvas", false);
-
-
-        miscMenu = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_MiscMenus_Panel"), GameObject.Find("Canvas").transform);
-        miscMenu.GetComponent<MiscMenuController>().initialize(BUIC, this, objList.gameObject, combatLog, charSheet);
-        BEL = combatLog.GetComponent<BattleEventLog>();
-        BEL.initialize(objList);
-
-        GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_Timer_Panel"), GameObject.Find("Canvas").transform).GetComponent<TimerUIScript>().initialize(this);
-
-    }
-
     //Obscelete for now
     public void getMouseCell()
     {
@@ -738,8 +752,27 @@ public abstract class BattleController : MonoBehaviour
             return;
         }
 
-
         cursorCell = map.gridObject.gridCells[x, y];
     }
 
+
+
+    //###Abstracts###
+    public virtual List<TacticalAbility> getTacticalAbilities()
+    {
+        return baseTacticalAbilities;
+    }
+
+    public virtual void interact(int index)
+    {
+
+    }
+
+    public abstract void loadCharacters();
+
+    public abstract void endBattle();
+
+    public abstract void objectiveComplete(string id);
+
+    public abstract void GBCTexecutions(int index);
 }

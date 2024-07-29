@@ -51,11 +51,13 @@ public class ExWhyTrainingGround : ExWhy
                     cell.resourceName = "Dirt";
                     cell.makeAltable();
                     cell.setAltRate(20);
+                    cell.setCellBuff(new GenericCellBuff(0, 4, 0));
                 break;
 
                 case 'f':
                     instantiateCell(cell, false, 1, 1);
                     cell.resourceName = "Fence";
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     break;
 
                 case 'g':
@@ -63,6 +65,8 @@ public class ExWhyTrainingGround : ExWhy
                     cell.resourceName = "Grass";
                     cell.makeAltable();
                     cell.setAltRate(10);
+
+                    cell.setCellBuff(new GenericCellBuff(3, 0, -2));
                     break;
             }
         }
