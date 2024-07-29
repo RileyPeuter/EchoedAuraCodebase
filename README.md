@@ -7,5 +7,5 @@ My code isn't perfect. I'm always getting better. More importantly, getting clea
 
 Check rileysmachinations.com to play it. 
 
-If you wanna roast me, or give contrustive criticism(cringe) email me at riley@rileysmachinations.com
+If you wanna roast my code, or give contrustive criticism(cringe) email me at riley@rileysmachinations.com
 
