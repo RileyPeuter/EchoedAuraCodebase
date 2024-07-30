@@ -209,26 +209,10 @@ public class ObjectiveListElement
 
 
 
-public class ObjectiveList : MonoBehaviour
+public class ObjectiveList : MonoBehaviour, BattleEventListener
 {
 
     float yOffset = 0;
-
-    public void checkObjecitve(BattleEvent BE)
-    {
-        foreach(ObjectiveListElement OLE in objectives.ToArray())
-        {
-            if (OLE.checkObjective(BE.eventType, BE.subject, BE.verb, BE.target, BE.result))
-            {
-                if (OLE.increment() && !OLE.completed)
-                {
-                    OLE.completed = true; 
-                    BC.objectiveComplete(OLE.objectiveID);
-                }
-                updateList();
-            }
-        }
-    }
 
     //This constructor turned into something horrible and unweirdly. So i added one below, that's a little more usable. 
     public void addObjective(string id, string dsc, int maxComp, ObjectiveType ot, string sub,string eveTyp , string verb, string target, string result, int curComp = 0, ObjectiveModifier OM = ObjectiveModifier.None, int modThresh = 0)
@@ -278,6 +262,22 @@ public class ObjectiveList : MonoBehaviour
         BC = BatCont;
         objectiveGameObject = Resources.Load<GameObject>("UIElements/uI_Objective_Parent");
 
+    }
+
+    public void hearEvent(BattleEvent nBattleEvent)
+    {
+        foreach (ObjectiveListElement OLE in objectives.ToArray())
+        {
+            if (OLE.checkObjective(nBattleEvent.eventType, nBattleEvent.subject, nBattleEvent.verb, nBattleEvent.target, nBattleEvent.result))
+            {
+                if (OLE.increment() && !OLE.completed)
+                {
+                    OLE.completed = true;
+                    BC.objectiveComplete(OLE.objectiveID);
+                }
+                updateList();
+            }
+        }
     }
 }
 

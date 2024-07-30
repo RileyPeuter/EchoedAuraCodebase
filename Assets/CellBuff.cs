@@ -17,5 +17,9 @@ public abstract class CellBuff : Buff
 
     public abstract string getDescriptionString();
         
+    public virtual GameObject getDisplayGameObject()
+    {
+        return Resources.Load<GameObject>("UIElements/uI_CellEffects_Panel"); 
+    }
 }
 

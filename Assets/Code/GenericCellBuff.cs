@@ -5,9 +5,9 @@ using UnityEngine;
 public class GenericCellBuff : CellBuff
 {
     //###MemberVeriables###
-    int dodgeBonus;
-    int blockBonus;
-    int parryBonus;
+    public int dodgeBonus;
+    public int blockBonus;
+    public int parryBonus;
 
     //###Overrides###
     public override void cleanup()
@@ -28,6 +28,11 @@ public class GenericCellBuff : CellBuff
     public override string getDescriptionString()
     {
         return ("D: " + dodgeBonus + "B: " + blockBonus + "P: " + parryBonus);
+    }
+
+    public override GameObject getDisplayGameObject()
+    {
+        return Resources.Load<GameObject>("UIElements/uI_CellEffects_Panel 1");
     }
 
     public override void tick(){}

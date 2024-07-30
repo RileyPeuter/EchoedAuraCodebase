@@ -12,6 +12,7 @@ public class TrainingGroundBattleController : BattleController
         {
             case "tgAtk0":
                 objList.addObjective("tgAtk1", "Use a Ranged Strike at the target", 1, ObjectiveType.Attack, null, "Hit", "RangedStrike", characters[2].getName(), null );
+                addTacticalPoints();
 
                 activeCutscene = gameObject.AddComponent<GenericBattleCutscene>();
                 activeCutscene.initialize(this);
@@ -28,6 +29,7 @@ public class TrainingGroundBattleController : BattleController
 
             case "tgAtk1":
                 objList.addObjective("tgAtk2", "Throw your spell at the  tartget", 1, ObjectiveType.Attack, null, "Hit", "IceShuriken", characters[2].getName(), null);
+                addTacticalPoints();
 
                 activeCutscene = gameObject.AddComponent<GenericBattleCutscene>();
                 activeCutscene.initialize(this);

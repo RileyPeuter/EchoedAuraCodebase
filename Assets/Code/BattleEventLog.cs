@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.WebSockets;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,14 +9,19 @@ public class BattleEventLog : MonoBehaviour
     //###MemeberVariables###   
     List<BattleEvent> eventLog;
     Text listText;
-    ObjectiveList OL;
+
+    List<BattleEventListener> listeners;
 
     //###Utilities###
     public void addEvent(string S = "", string ET = "", string V = "", string T = "", string R = "")
     {
         BattleEvent BE = new BattleEvent(S, ET, V, T, R);
+        
+        foreach (BattleEventListener listener in listeners) { 
+            listener.hearEvent(BE);
+        }
+
         eventLog.Add(BE);
-        OL.checkObjecitve(BE);
         appendText(BE);
     }
 
@@ -24,10 +30,15 @@ public class BattleEventLog : MonoBehaviour
         listText.text += "\n \n" + BE.toString();
     }
 
-    //###Initializer###
-    public void initialize(ObjectiveList ObLi)
+    public void addListener(BattleEventListener nListener)
     {
-        OL = ObLi;
+        listeners.Add(nListener);
+    }
+
+    //###Initializer###
+    public void initialze()
+    {
+        listeners = new List<BattleEventListener>();
     }
 
     //###UnityMessages###
@@ -35,6 +46,5 @@ public class BattleEventLog : MonoBehaviour
     {
         eventLog = new List<BattleEvent>();
         listText = GetComponentInChildren<Text>();  
-
     }    
 }   

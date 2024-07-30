@@ -12,11 +12,10 @@ public class DamageTextController : MonoBehaviour
     }
 
     void Update()
-            
     {
-        gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 4 * Time.deltaTime, gameObject.transform.position.z);
-
+        gameObject.transform.position += new Vector3(0, 4 * Time.deltaTime, 0);
     }
+
     void Start()
     {
         GameObject.Destroy(gameObject, 2f);

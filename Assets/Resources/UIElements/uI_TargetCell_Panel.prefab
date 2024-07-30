@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 5808069033571132749}
   - component: {fileID: 4339251372108257733}
   m_Layer: 5
-  m_Name: uI_HoverCell_Panel
+  m_Name: uI_TargetCell_Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113,10 +113,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -130, y: 0}
-  m_SizeDelta: {x: 148.2547, y: 73.028595}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -400, y: -36.514}
+  m_SizeDelta: {x: 148.25464, y: 73.0286}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8265595261158524405
 CanvasRenderer:

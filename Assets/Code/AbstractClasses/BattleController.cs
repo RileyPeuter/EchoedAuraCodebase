@@ -51,6 +51,8 @@ public abstract class BattleController : MonoBehaviour
     BattleCharacterObject activeCharacter;
     protected BattleUIController BUIC;
 
+    protected TimerUIScript turnTimerUI;
+
     Vector3 lastMousePosition;
 
     protected List<ExWhyCell> spawnCells;
@@ -63,7 +65,7 @@ public abstract class BattleController : MonoBehaviour
 
     CellInformationController activeCellInformation;
     CellInformationController hoverCellInformationController;
-
+    CellInformationController targetCellInformation;
 
     int tacticalPoints = 0;
 
@@ -96,9 +98,11 @@ public abstract class BattleController : MonoBehaviour
     //###Utilities###
     public void addTacticalPoints()
     {
-
+        GameObject.Instantiate(Resources.Load<GameObject>("TacticalPointsPopup")).transform.position = (mainCamera.ScreenToWorldPoint(turnTimerUI.GetComponent<RectTransform>().position) + new Vector3(-4,0,9));
+        tacticalPoints += 1;
+        turnTimerUI.updateTacticalPoints(tacticalPoints);
+        print(tacticalPoints);
     }
-
 
     public List<BattleCharacterObject> getAllAllegiance(CharacterAllegiance allegiance)
     {
@@ -128,7 +132,6 @@ public abstract class BattleController : MonoBehaviour
         return output;
     }
     
-
     public bool getCastable(Ability abi, CharacterAllegiance targetAllegiance = CharacterAllegiance.Controlled)
     {
         //I'm not sure we're removing this AR
@@ -181,7 +184,6 @@ public abstract class BattleController : MonoBehaviour
         {
             AIC.setMemeberModes();
         }
-        
     }
 
     public void spawnCharacter(GameObject GO, CharacterAllegiance CA, ExWhyCell EWC, Character CH, AICluster AIC = null)
@@ -194,7 +196,6 @@ public abstract class BattleController : MonoBehaviour
         if(AIC != null)
         {
             AIC.ClusterMembers.Add(BCO.getAI());
-           
         }
     }
 
@@ -236,9 +237,11 @@ public abstract class BattleController : MonoBehaviour
         miscMenu = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_MiscMenus_Panel"), GameObject.Find("Canvas").transform);
         miscMenu.GetComponent<MiscMenuController>().initialize(BUIC, this, objList.gameObject, combatLog, charSheet);
         BEL = combatLog.GetComponent<BattleEventLog>();
-        BEL.initialize(objList);
+        BEL.initialze();
+        BEL.addListener(objList);
 
-        GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_Timer_Panel"), GameObject.Find("Canvas").transform).GetComponent<TimerUIScript>().initialize(this);
+        turnTimerUI = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_Timer_Panel"), GameObject.Find("Canvas").transform).GetComponent<TimerUIScript>();
+        turnTimerUI.initialize(this);
     }
 
     //###UIOperation###
@@ -316,7 +319,6 @@ public abstract class BattleController : MonoBehaviour
                     activeCharacter.GetComponent<SpriteRenderer>().material = enemyMaterial;
                     break;
             }
-
         }
 
         foreach (BattleCharacterObject character in characters) 
@@ -333,10 +335,9 @@ public abstract class BattleController : MonoBehaviour
                 Instantiate(Resources.Load<GameObject>("Gameover"), GameObject.Find("Canvas").transform);
                 Destroy(this.gameObject); return;
             }
-            
         }
         turnTimer++;
-        GameObject.Find("uI_Timer_Text").GetComponent<Text>().text = turnTimer.ToString();
+        turnTimerUI.updateTime(turnTimer);
         timerTick();
     }
 
@@ -665,6 +666,12 @@ public abstract class BattleController : MonoBehaviour
             Destroy(selectedSatsPanel);
         }
 
+        if(targetCellInformation != null){
+            targetCellInformation.closeWindow();
+        }
+
+        targetCellInformation = BUIC.openWindow("uI_TargetCell_Panel").GetComponent<CellInformationController>();
+        targetCellInformation.initialize(cursorCell, true);
 
         if (!(cursorCell.occupier is null))
         {

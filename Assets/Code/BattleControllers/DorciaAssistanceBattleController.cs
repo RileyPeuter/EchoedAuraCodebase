@@ -41,7 +41,10 @@ public class DorciaAssistanceBattleController : BattleController
 
     public override void interact(int index)
     {
-        dorciaObject.move(map.gridObject.gridCells[dorciaObject.getOccupying().xPosition + 1, dorciaObject.getOccupying().yPosition]);
+        if (map.gridObject.gridCells[dorciaObject.getOccupying().xPosition + 1, dorciaObject.getOccupying().yPosition].occupier == null)
+        {
+            dorciaObject.move(map.gridObject.gridCells[dorciaObject.getOccupying().xPosition + 1, dorciaObject.getOccupying().yPosition]);
+        }
     }
 
     // Start is called before the first frame update

@@ -70,10 +70,8 @@ public class DualStandOffController : StandOffController
         leftSide.getAnimator().SetTrigger("attack");
     }
 
-    // Update is called once per frame
     void Update()
     {
-        print(SOS);
         timer = timer + Time.deltaTime;
         messageTimer = messageTimer - Time.deltaTime;
         if (leftSide != null)

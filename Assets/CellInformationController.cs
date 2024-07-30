@@ -1,14 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CellInformationController : Window
 {
     bool mainstay;
+    GameObject effectObject;
+
     public void initialize(ExWhyCell cell, bool nMainstay = false)
     {
+
+        if(effectObject != null)
+        {
+            Destroy(effectObject);
+        }
         mainstay = nMainstay;
+
+        effectObject = GameObject.Instantiate(cell.getCellBuff().getDisplayGameObject(), this.transform);
+        effectObject.GetComponent<GenericCellEffectController>().initialize((GenericCellBuff)cell.getCellBuff());
+        GetComponentsInChildren<Text>().ToList().Find(x => x.name == "uI_CellTypeName_Text").text = cell.resourceName;
+
+
+        /*
         foreach(Text text in GetComponentsInChildren<Text>()){
             if(text.gameObject.name == "uI_CellTypeName_Text")
             {
@@ -19,6 +34,7 @@ public class CellInformationController : Window
                 text.text = cell.getCellBuff().getDescriptionString();
             }
         }
+        */
     }
 
     // Start is called before the first frame update
