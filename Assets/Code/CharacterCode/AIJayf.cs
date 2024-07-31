@@ -55,7 +55,7 @@ public class AIJayf : BattleCharacterAI
 
     public override ExWhyCell getTarget(Ability ability, AbilityRange AR)
     {
-        if(ability.name == "Move") { return moveTowardsEnemy(true); }
+        if(ability.name == "Move") { return moveTowardsControlled(true); }
 
         return GetMurderousTarget(BattleController.ActiveBattleController.AR.findCharactersInRange(), murderousIntent);
 
@@ -70,7 +70,7 @@ public class AIJayf : BattleCharacterAI
                // }
                // break;
             case "MeleeStrike":
-                return moveTowardsEnemy();
+                return moveTowardsControlled();
         }
         return null;
     }

@@ -26,10 +26,11 @@ public class AttackPointAI : BattleCharacterAI
             targeting = true;
         }
 
+        /*
         if (targeting)
         {
-            immediateTargeting = true;
-            if (!BattleController.ActiveBattleController.getCastable(output, CharacterAllegiance.Dormant))
+            immediateTargeting = targeting;
+            if (!BattleController.ActiveBattleController.getCastable(output))
             {
                 immediateTargeting = false;
                 if (!BattleController.ActiveBattleController.getCastable(output)){
@@ -40,11 +41,12 @@ public class AttackPointAI : BattleCharacterAI
         }
         else
         {
-            if(!BattleController.ActiveBattleController.getCastable(output, CharacterAllegiance.Dormant))
-            {
-                output = BCO.getMovementAbility();
-            }
+        */
+        if(!BattleController.ActiveBattleController.getCastable(output))
+        {
+            output = BCO.getMovementAbility();
         }
+//        }
 
 
         return output;
@@ -63,24 +65,25 @@ public class AttackPointAI : BattleCharacterAI
            switch (ability.name)
             {
                 case "Move":
-                    output = moveTowardsTarget(true);
+                    output = moveTowardsAlliedAndControlled(true);
                     break;
 
                 case "MeleeStrike":
-                    output = moveTowardsTarget(false);
+                    output = getTarget(BattleController.ActiveBattleController.AR.findCharactersInRange());
                     break;
             }
         }
+
         else
         {
             switch (ability.name)
             {   
                 case "Move":
-                    output = moveTowardsEnemy(true);
+                    output = moveTowardsAlliedAndControlled(true);
                     break;
 
                 case "MeleeStrike":
-                    output = moveTowardsEnemy(false);
+                    output = getTarget(BattleController.ActiveBattleController.AR.findCharactersInRange());
                     break;
             }
         }

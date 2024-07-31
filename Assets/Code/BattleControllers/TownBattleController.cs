@@ -36,7 +36,8 @@ public class TownBattleController : BattleController
         
         characters[0].initialize(4, 1, new Iraden(), CharacterAllegiance.Controlled);
         characters[1].initialize(7, 7, new Fray(), CharacterAllegiance.Controlled);
-        characters[2].initialize(6, 5, new Drunk(), CharacterAllegiance.Dormant);
+        characters[2].initialize(6, 5, new Drunk(), CharacterAllegiance.Enemey);
+        characters[2].makeDormant();
         characters[3].initialize(4, 6, new Morthred(), CharacterAllegiance.Controlled);
 
         foreach (GameObject character in clones)

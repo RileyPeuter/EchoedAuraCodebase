@@ -21,6 +21,10 @@ public class CutsceneController : MonoBehaviour
             case 2:
                 this.gameObject.AddComponent<RulessDogCutscene>();
                 break;
+
+            case 3:
+                this.gameObject.AddComponent<DorciaMeetCutscene>();
+                break;
         }
     }
 

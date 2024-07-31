@@ -41,9 +41,10 @@ public class RulessDeogBattleController : BattleController
 
 
         characters.Add(GameObject.Instantiate(Resources.Load<GameObject>("TestAssets/TradeCart")).GetComponent<BattleCharacterObject>());
-        characters[characters.Count - 1].initialize(8, 3, new TradeCart(), CharacterAllegiance.Dormant);
+        characters[characters.Count - 1].initialize(8, 3, new TradeCart(), CharacterAllegiance.Allied);
         characters[characters.Count - 1].spawnCharacter(map.gridObject);
         cart = characters[characters.Count -1];
+        cart.makeDormant();
 
         characters.Add(GameObject.Instantiate(Resources.Load<GameObject>("TestAssets/Ruless")).GetComponent<BattleCharacterObject>());
         characters[characters.Count - 1].initialize(7, 3, new Ruless(), CharacterAllegiance.Controlled);
@@ -65,7 +66,7 @@ public class RulessDeogBattleController : BattleController
     void spawnKahund()
     {
         if (Random.Range(0, 2) != 1) { 
-            spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[0, 9]), new Kahund());
+            spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[0, 9]), new Kahund(cart.getOccupying()));
         }
         else
         {

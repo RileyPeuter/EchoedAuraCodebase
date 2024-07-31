@@ -104,6 +104,26 @@ public abstract class BattleController : MonoBehaviour
         print(tacticalPoints);
     }
 
+    //These should be moved to antoehr one
+    public List<BattleCharacterObject> getAllAlliegiances (List<CharacterAllegiance> allegiances)
+    {
+        List<BattleCharacterObject> output = new List<BattleCharacterObject>();
+        foreach (CharacterAllegiance allegiance in allegiances)
+        {
+            foreach (BattleCharacterObject character in characters)
+            {
+                if (character.GetAllegiance() == allegiance)
+                {
+                    output.Add(character);
+                }
+            }
+        }
+
+        return output;
+    }
+
+
+
     public List<BattleCharacterObject> getAllAllegiance(CharacterAllegiance allegiance)
     {
         List<BattleCharacterObject> output = new List<BattleCharacterObject>();
@@ -132,7 +152,7 @@ public abstract class BattleController : MonoBehaviour
         return output;
     }
     
-    public bool getCastable(Ability abi, CharacterAllegiance targetAllegiance = CharacterAllegiance.Controlled)
+    public bool getCastable(Ability abi, CharacterAllegiance targetAllegiance)
     {
         //I'm not sure we're removing this AR
         AbilityRange AbRa = gameObject.AddComponent<AbilityRange>();
@@ -151,6 +171,28 @@ public abstract class BattleController : MonoBehaviour
         }
 
         Destroy(AbRa);  
+        return false;
+    }
+
+    public bool getCastable(Ability abi)
+    {
+        //I'm not sure we're removing this AR
+        AbilityRange AbRa = gameObject.AddComponent<AbilityRange>();
+        print(abi.name);
+        print(activeCharacter.getName());
+
+        AbRa.initalize(abi.GetRange(), activeCharacter.getOccupying(), ExWhy.activeExWhy);
+        AbRa.findCellsInRange(RangeMode.Simple);
+        foreach (BattleCharacterObject BCO in AbRa.findCharactersInRange())
+        {
+            if (BCO.GetAllegiance() == CharacterAllegiance.Allied || BCO.GetAllegiance() == CharacterAllegiance.Controlled)
+            {
+                Destroy(AbRa);
+                return true;
+            }
+        }
+
+        Destroy(AbRa);
         return false;
     }
 
@@ -324,7 +366,7 @@ public abstract class BattleController : MonoBehaviour
         foreach (BattleCharacterObject character in characters) 
         {
             print(character.getName());
-            if (character.isNextTurn(turnTimer) && character.GetAllegiance() != CharacterAllegiance.Dormant) {
+            if (character.isNextTurn(turnTimer)) {
                 setActiveCharacter(character);
                 GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_TurnName_Panel"), GameObject.Find("Canvas").transform).GetComponent<TurnNameController>().initialize(activeCharacter.getName());
                 return;

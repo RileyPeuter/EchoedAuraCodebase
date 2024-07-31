@@ -8,8 +8,7 @@ public enum CharacterAllegiance
     Controlled,
     Allied,
     Neutral,
-    Enemey,
-    Dormant
+    Enemey
 }
 
 //Unused at the moment
@@ -178,6 +177,11 @@ public class BattleCharacterObject : MonoBehaviour
     }
 
     //###Utilities###
+
+    public void makeDormant()
+    {
+        nextTurn = -1;
+    }
     public void spawnCharacter(ExWhy grid)
     {
         characterObject = this.gameObject;

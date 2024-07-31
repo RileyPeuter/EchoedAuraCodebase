@@ -100,9 +100,12 @@ public class TrainingGroundBattleController : BattleController
          characters.Add(GameObject.Find("TargetDummy(Clone)").GetComponent<BattleCharacterObject>());//.initiate(4, 6, new TrainingDummy(), CharacterAllegiance.Enemey);
          characters.Add(GameObject.Find("Iraden(Clone)").GetComponent<BattleCharacterObject>());//.initiate(4, 1, new Iraden(), CharacterAllegiance.Allied);
 
-        characters[0].initialize(7, 7, new Jayf(), CharacterAllegiance.Dormant);
-        characters[1].initialize(6, 5, new TrainingDummy(), CharacterAllegiance.Dormant);
-        characters[2].initialize(4, 6, new TrainingTarget(), CharacterAllegiance.Dormant);
+        characters[0].initialize(7, 7, new Jayf(), CharacterAllegiance.Allied);
+        characters[0].makeDormant();
+        characters[1].initialize(6, 5, new TrainingDummy(), CharacterAllegiance.Allied);
+        characters[1].makeDormant();
+        characters[2].initialize(4, 6, new TrainingTarget(), CharacterAllegiance.Allied);
+        characters[2].makeDormant();
         characters[3].initialize(4, 1, new Iraden(), CharacterAllegiance.Controlled);
 
         foreach (GameObject character in clones)

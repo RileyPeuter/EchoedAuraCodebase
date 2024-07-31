@@ -56,9 +56,9 @@ public abstract class Cutscene : MonoBehaviour
         }
     }
 
-    public void addSprite(string speakerName, string location)
+    public void addSprite(string spriteName, string location)
     {
-        speakerSprites.Add(speakerName, Resources.Load<Sprite>("CutsceneSpeakerSprites/" + location));
+        speakerSprites.Add(spriteName, Resources.Load<Sprite>("CutsceneSpeakerSprites/" + location));
     }
 
     public void addSprite(string speakerName, Sprite sprite)

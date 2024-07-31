@@ -77,7 +77,42 @@ public abstract class BattleCharacterAI
         return output;
     }
 
-    public virtual ExWhyCell moveTowardsEnemy(bool requiresAbailable = false)
+    public virtual ExWhyCell moveTowardsAlliedAndControlled(bool requiresAbailable = false)
+    {
+        List<CharacterAllegiance> alliegances = new List<CharacterAllegiance>();
+        alliegances.Add(CharacterAllegiance.Allied);
+        alliegances.Add(CharacterAllegiance.Controlled);
+        return AbilityRange.getClosestCell(BattleController.ActiveBattleController.getAllAlliegiances(alliegances)[0].getOccupying(), BattleController.ActiveBattleController.AR.findCellsInRange(RangeMode.Move), requiresAbailable);
+    }
+
+    public virtual ExWhyCell getTarget(List<ExWhyCell> range)
+    {
+        foreach (ExWhyCell cell in range)
+        {
+            if (cell.occupier != null)
+            {
+                if (cell.occupier.GetAllegiance() == CharacterAllegiance.Allied || cell.occupier.GetAllegiance() == CharacterAllegiance.Controlled)
+                {
+                    return cell;
+                }
+            }
+        }
+        return null;
+    }
+
+        public virtual ExWhyCell getTarget(List<BattleCharacterObject> range)
+    {
+        foreach (BattleCharacterObject cell in range)
+        {
+                if (cell.GetAllegiance() == CharacterAllegiance.Allied || cell.GetAllegiance() == CharacterAllegiance.Controlled)
+                {
+                    return cell.getOccupying();
+                }
+        }
+        return null;
+    }
+
+    public virtual ExWhyCell moveTowardsControlled(bool requiresAbailable = false)
     {
         return AbilityRange.getClosestCell(BattleController.ActiveBattleController.getAllAllegiance(CharacterAllegiance.Controlled)[0].getOccupying(), BattleController.ActiveBattleController.AR.findCellsInRange(RangeMode.Move), requiresAbailable);
     }
