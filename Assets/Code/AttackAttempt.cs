@@ -82,8 +82,7 @@ public class AttackAttempt
 
     public int cast(StandOffSide SOF) 
     {
-
-        attackee.takeDamage(damage);
+        //attackee.takeDamage(damage);
         ability.cast(attackee.getOccupying(), attacker, SOF);
         return damage;
         

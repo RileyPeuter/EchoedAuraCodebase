@@ -767,7 +767,7 @@ public abstract class BattleController : MonoBehaviour
     {
         characters.Remove(character);
         BEL.addEvent(character.getName(), "Kill");
-        Destroy(character.characterObject);
+        Destroy(character.characterObject, 2f);
         character.getOccupying().occupier = null;
         if(character == activeCharacter) {  activeCharacter = null; }   
     }

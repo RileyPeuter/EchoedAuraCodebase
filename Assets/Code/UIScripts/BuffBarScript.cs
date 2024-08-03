@@ -13,6 +13,11 @@ public class BuffBarScript : MonoBehaviour
     //###Utlities###
     public void addBuff(Buff buff)
     {
+        if (!buff.visible)
+        {
+            return;
+        }
+
         GameObject go = GameObject.Instantiate(buffPrefab, this.gameObject.transform);
         go.GetComponent<Image>().sprite = buff.getSprite();
         buffObjects.Add(go , buff);

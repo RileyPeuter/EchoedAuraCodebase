@@ -109,7 +109,8 @@ public abstract class Ability
 
     public virtual void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
     {
-        target.occupier.takeDamage(getDamage(caster.getCharacter()));
+        int damage = getDamage(caster.getCharacter());
+        target.occupier.takeDamage(damage);
     }
 
     public virtual void spendMana(BattleCharacterObject BCO)

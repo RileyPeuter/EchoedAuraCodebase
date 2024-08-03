@@ -8,7 +8,7 @@ public class TacticalPointsTextController : MonoBehaviour
     void Start()
     {
         GetComponent<AudioSource>().Play();
-        GameObject.Destroy(gameObject, 3f);        
+        GameObject.Destroy(gameObject, 2f);        
     }
 
     // Update is called once per frame

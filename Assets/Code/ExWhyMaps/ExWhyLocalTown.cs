@@ -57,7 +57,7 @@ public class  ExWhyLocalTown : ExWhy
                     break;
 
                 case 's':
-                    instantiateCell(cell, true, 2, 2);
+                    instantiateCell(cell, false, 2, 2);
                     cell.resourceName = "Plaster";
                     cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     break;
@@ -69,7 +69,7 @@ public class  ExWhyLocalTown : ExWhy
                     break;
 
                 case 'h':
-                    instantiateCell(cell, true, 4, 4);
+                    instantiateCell(cell, false, 4, 4);
                     cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     cell.resourceName = "Shop";
                 break;

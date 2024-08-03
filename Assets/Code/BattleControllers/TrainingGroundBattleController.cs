@@ -102,9 +102,9 @@ public class TrainingGroundBattleController : BattleController
 
         characters[0].initialize(7, 7, new Jayf(), CharacterAllegiance.Allied);
         characters[0].makeDormant();
-        characters[1].initialize(6, 5, new TrainingDummy(), CharacterAllegiance.Allied);
+        characters[1].initialize(6, 5, new TrainingDummy(), CharacterAllegiance.Enemey);
         characters[1].makeDormant();
-        characters[2].initialize(4, 6, new TrainingTarget(), CharacterAllegiance.Allied);
+        characters[2].initialize(4, 6, new TrainingTarget(), CharacterAllegiance.Enemey);
         characters[2].makeDormant();
         characters[3].initialize(4, 1, new Iraden(), CharacterAllegiance.Controlled);
 

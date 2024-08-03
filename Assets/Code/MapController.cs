@@ -91,6 +91,12 @@ BattleController battleController;
             case 3:
                 battleController = this.gameObject.AddComponent<RulessDeogBattleController>();
             break;
+            case 4:
+                battleController = this.gameObject.AddComponent<KimsTrainingBattleController>();
+            break;
+            case 5:
+                battleController = this.gameObject.AddComponent<DorciaAssistanceBattleController>();
+            break;
 
         }
         if(GGC.getMissionCharacters() != null)

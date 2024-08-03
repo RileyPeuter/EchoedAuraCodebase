@@ -92,6 +92,18 @@ public abstract class ExWhy
         return true;
     }
 
+    //Simple Utility for checking if coordinates are walkable
+    public bool checkIfCordsAreWalkable(int x, int y)
+    {
+        if(!checkIfCordsAreValid (x, y))
+        {
+            return false;
+        }
+        ExWhyCell targetMoveCell = ExWhy.activeExWhy.gridCells[x, y];
+
+        return (targetMoveCell.occupier == null && targetMoveCell.walkable);
+    }
+
     public ExWhyCell getClosestAvailableCell(ExWhyCell epicentre)
     {
         bool flag = true;
@@ -256,6 +268,11 @@ public abstract class ExWhy
         gridCells = new ExWhyCell[xMax, yMax];
         spriteSheet = new Sprite[16, 16];
         altSpriteSheet = new Sprite[16, 16];
+    }
+
+    public void initialize()
+    {
+
 
         loadPrefabs();
         loadSpriteMap();

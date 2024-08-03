@@ -11,11 +11,6 @@ public class MeleeStrike : Ability
 
         baseDamage = 1;
     }
-
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
-    {
-
-    }
 }
 
 public class RangedStrike: Ability
@@ -25,10 +20,6 @@ public class RangedStrike: Ability
     {
         baseDamage = 1;
         description = "A simple Ranged Strike";
-    }
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null )
-    {
-
     }
 }
 

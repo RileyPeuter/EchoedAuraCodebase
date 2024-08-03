@@ -200,7 +200,6 @@ public class DualStandOffController : StandOffController
                         rightSide.effectMessage("Dodged " + (10 + toHitNumber - rollAmount).ToString());
                         playSound(Resources.Load<AudioClip>("Audio/SoundEffects/dodge"));
                         attackAttempt.getAttackee().getCharacter().addBuff(new DodgeFatigue(attackAttempt.getAttackee().getCharacter()));
-
                     }
                     break;
 
@@ -240,14 +239,9 @@ public class DualStandOffController : StandOffController
                         leftSide.effectMessage(attackAttempt.getAttackee().getMeleeBonus().ToString());
                     }
                     break;
-
-
             }
-
-
             showDifference(toHitNumber - rollAmount, false);
             SOS = StandOffStage.EndAttack;
-
         }
     }
 
