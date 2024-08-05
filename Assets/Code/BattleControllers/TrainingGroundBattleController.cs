@@ -116,7 +116,7 @@ public class TrainingGroundBattleController : BattleController
 
     } 
 
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -148,6 +148,8 @@ public class TrainingGroundBattleController : BattleController
         objList.addObjective("tgAtk0", "Use your melee strike on the Training Dummy", 1, ObjectiveType.Attack, null, "Hit", "MeleeStrike", "Training Dummy", null);
 
         GlobalGameController.GGC.playMusic(Resources.Load<AudioClip>("Audio/Music/HonkHonk"));
+
+        goldRewards = 4;
     }
 
     // Update is called once per frame
@@ -165,7 +167,7 @@ public class TrainingGroundBattleController : BattleController
         switch (index)
         {
             case 2:
-                endBattle();
+                openEndWindow();
                 break;
         }
 

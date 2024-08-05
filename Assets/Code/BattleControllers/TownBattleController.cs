@@ -147,6 +147,8 @@ public class TownBattleController : BattleController
         //  activeCutscene.preInitializeTextbox();
         //   activeCutscene.setFrame(0);
         // toggleCutscene(true);
+
+        goldRewards = 20;
       }
 
     // Update is called once per frame
@@ -162,7 +164,7 @@ public class TownBattleController : BattleController
         switch (index)
         {
             case 1:
-                endBattle();
+                openEndWindow();
             break;
         }
     }

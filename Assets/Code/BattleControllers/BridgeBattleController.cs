@@ -6,6 +6,7 @@ public class BridgeBattleController : BattleController
 {
     public override void endBattle()
     {
+        GlobalGameController.GGC.openManagment();   
     }
 
     public override void GBCTexecutions(int index)
@@ -56,9 +57,22 @@ public class BridgeBattleController : BattleController
                 activeCutscene.initialize(this);
                 activeCutscene.addSprite("Jayf", "Jayf");
                 activeCutscene.addSprite("Iraden", "Iraden");
+                activeCutscene.addSprite("Fray", "Fray");
+                activeCutscene.addSprite("Morthred", "Morthred");
+
+                activeCutscene.addFrame("Jayf", "Alright. That should be enough. You've proven yourself", "Jayf");
                 activeCutscene.addFrame("Jayf", "One last thing. Why here specifically? \nWhy not a mercenary troup like your father? \n Or just a normal life. You have the skill with Magic to live comfortable. ", "Jayf");
                 activeCutscene.addFrame("Iraden", "As a kid traveling with them, I saw some thing. \nVillages beind wipes out in wars that had nothing to do with them", "Iraden");
-                activeCutscene.addFrame("Iraden", "I want a say in what happens to me", "Iraden");
+                activeCutscene.addFrame("Iraden", "I want a say in what happens to me. I'd like to help others have a say \nHere you stop battles. Or ensure they end quickly. \nLeaves people around safe", "Iraden");
+                activeCutscene.addFrame("Jayf", "A fair desire. And a fair assessment of what we do. \n Lack the stomach to carry our what's required of you and you won't live \n to try to find a place here. I'll make sure of that", "Jayf");
+                activeCutscene.addFrame("Jayf", "Waxing poetic about the morality is right to do before and after missions. \nNever question the mission once you're on it.", "Jayf");
+                activeCutscene.addFrame("Jayf", "Accept that, and you have a place here", "Jayf");
+                activeCutscene.addFrame("Jayf", "Morthred. See to his wounds \nFray, when you're finished with your duties, find some quaters for Iraden", "Jayf");
+                activeCutscene.addFrame("Morthred", "Ooh, a chance to treat someone with hydro mana!", "Morthred");
+                activeCutscene.addFrame("Fray", "Fine. Lets go check on the others. Let me know when you start getting tired", "Fray");
+                activeCutscene.addFrame("Fray", "Try not to get too weirded out by Morts enthusiam. ", "Fray");
+                activeCutscene.addFrame("Fray", "Mort, don't go and try getting blood", "Fray");
+
                 activeCutscene.createDialogueObject();
                 initializeAdditionalElements();
 
@@ -84,7 +98,7 @@ public class BridgeBattleController : BattleController
         activeCutscene.addSprite("Tutorial", "Tutorials3");
         activeCutscene.addFrame("Jayf", "An adequete dispaly. I think I've gotten a read on your ability", "Jayf");
         activeCutscene.addFrame("Jayf", "Now, to see how you stand in the face of violence", "Jayf");
-        activeCutscene.addFrame("Tutorial", "When attacked you will attempt to react. \n Either by dodging, bloocking or parrying", "Tutorial");
+        activeCutscene.addFrame("Tutorial", "When attacked you will attempt to react. \n Either by dodging, blocking or parrying", "Tutorial");
         activeCutscene.addFrame("Tutorial", "Blocking is safest, reducing some damage even if hit \n Dodge is also safe, adding you movement to make the difference should it fail. \n Parry will perform a counter should it succeed", "Tutorial");
         activeCutscene.createDialogueObject();
         initializeAdditionalElements();

@@ -69,6 +69,10 @@ public abstract class BattleController : MonoBehaviour
 
     int tacticalPoints = 0;
 
+    protected int goldRewards = 0;
+
+    protected int casualties = 0;
+
     //###Getters###
     public string getMapResourceString()
     {
@@ -815,6 +819,11 @@ public abstract class BattleController : MonoBehaviour
     public virtual void interact(int index)
     {
 
+    }
+
+    public virtual void openEndWindow()
+    {
+        GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_MissionComplete_Panel"), GameObject.Find("Canvas").transform).GetComponent<EndMissionController>().initialize(this, goldRewards, casualties, turnTimer);
     }
 
     public abstract void loadCharacters();
