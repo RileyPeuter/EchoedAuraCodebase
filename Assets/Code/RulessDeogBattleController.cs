@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class RulessDeogBattleController : BattleController
 {
     GameObject kahundPrefab;
     BattleCharacterObject cart;
+    BattleCharacterObject shrub;
 
     public override void endBattle()
     {
@@ -16,6 +18,7 @@ public class RulessDeogBattleController : BattleController
     {
 
     }
+
 
     public override void loadCharacters()
     {
@@ -38,7 +41,7 @@ public class RulessDeogBattleController : BattleController
             print(bco.getName());
         }
 
-
+        //Please please please redo this some time, atleast take away the list refernces
         characters.Add(GameObject.Instantiate(Resources.Load<GameObject>("TestAssets/TradeCart")).GetComponent<BattleCharacterObject>());
         characters[characters.Count - 1].initialize(8, 3, new TradeCart(), CharacterAllegiance.Allied);
         characters[characters.Count - 1].spawnCharacter(map.gridObject);
@@ -48,6 +51,12 @@ public class RulessDeogBattleController : BattleController
         characters.Add(GameObject.Instantiate(Resources.Load<GameObject>("TestAssets/Ruless")).GetComponent<BattleCharacterObject>());
         characters[characters.Count - 1].initialize(7, 3, new Ruless(), CharacterAllegiance.Controlled);
         characters[characters.Count - 1].spawnCharacter(map.gridObject);
+
+        characters.Add(GameObject.Instantiate(Resources.Load<GameObject>("TestAssets/Shrub")).GetComponent<BattleCharacterObject>());
+        characters[characters.Count - 1].initialize(9, 7, new Shrubs(), CharacterAllegiance.Allied);
+        characters[characters.Count - 1].spawnCharacter(map.gridObject);
+        shrub = characters[characters.Count - 1];
+        characters[characters.Count - 1].makeDormant();
     }
 
     public override void objectiveComplete(string id)
@@ -55,21 +64,22 @@ public class RulessDeogBattleController : BattleController
         switch (id)
         {
             case "etKahund0":
-                spawnKahund();
-                objList.addObjective(new ObjectiveListElement("etKahund0", 1, ObjectiveType.Time).addEventType("End Turn").addVerb(CharacterAllegiance.Controlled.ToString()));
-                break;
 
+                spawnKahund();
+                objList.addObjective(new Objective("etKahund0", 1, BattleEventType.EndTurn).addVerb(CharacterAllegiance.Controlled.ToString()));
+                break;
         }
-    }
+    }   
 
     void spawnKahund()
     {
+        return;
         if (Random.Range(0, 2) != 1) { 
-            spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[0, 9]), new Kahund(cart.getOccupying()));
+            spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[9, 8]), new Kahund(cart.getOccupying()));
         }
         else
         {
-            spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[0, 9]), new Kahund(cart.getOccupying()));
+            spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[9, 8]), new Kahund(cart.getOccupying()));
         }
     }
 
@@ -90,7 +100,19 @@ public class RulessDeogBattleController : BattleController
 
         initializeAdditionalElements();
 
-        objList.addObjective(new ObjectiveListElement("etKahund0", 1, ObjectiveType.Time).addEventType("End Turn").addVerb(CharacterAllegiance.Controlled.ToString()).addDescription("You shouldn't be able to see this"));
+        objList.addObjective(new Objective("etKahund0", 1, BattleEventType.EndTurn).addVerb(CharacterAllegiance.Controlled.ToString()));
+    }
+
+    public override List<TacticalAbility> getTacticalAbilities()
+    {
+        List<TacticalAbility> output =  new List<TacticalAbility>();
+
+        if(ExWhy.getDistanceBetweenCells(getActiveCharacter().getOccupying(), shrub.getOccupying()) < 2)
+        {
+            output.Add(new Interact(this, 1));
+        }
+
+        return output;
     }
 
     // Update is called once per frame

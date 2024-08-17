@@ -33,7 +33,7 @@ public class DorciaAssistanceBattleController : BattleController
 
         if(ExWhy.getDistanceBetweenCells(getActiveCharacter().getOccupying(),dorciaObject.getOccupying()) == 1)
         {
-            output.Add(new Interact(this));
+            output.Add(new Interact(this, 1));
         }
 
         return base.getTacticalAbilities();

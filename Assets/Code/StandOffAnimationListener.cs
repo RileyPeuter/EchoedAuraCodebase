@@ -29,8 +29,6 @@ public class StandOffAnimationListener : MonoBehaviour
                 kappa.functionName = "test";
                 aniClip.AddEvent(kappa);
             }
-
-
         }
     }
 

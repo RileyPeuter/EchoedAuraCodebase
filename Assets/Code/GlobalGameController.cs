@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class GlobalGameController : MonoBehaviour
 {
@@ -86,7 +87,7 @@ public class GlobalGameController : MonoBehaviour
 
     public void test()
     {
-        SceneManager.LoadScene(4, LoadSceneMode.Single);
+        openManagment();
     }
 
     public void newGame()

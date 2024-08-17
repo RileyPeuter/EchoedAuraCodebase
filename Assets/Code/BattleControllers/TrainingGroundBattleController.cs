@@ -11,7 +11,8 @@ public class TrainingGroundBattleController : BattleController
         switch (id)
         {
             case "tgAtk0":
-                objList.addObjective("tgAtk1", "Use a Ranged Strike at the target", 1, ObjectiveType.Attack, null, "Hit", "RangedStrike", characters[2].getName(), null );
+                Objective nObjective1 = new Objective("tgAtk1", 1, BattleEventType.Hit).addDescription("Use a Ranged Strike at the target").addTarget(characters[2].getName()).addVerb("RangedStrike");
+                objList.addObjective(nObjective1);
                 addTacticalPoints();
 
                 activeCutscene = gameObject.AddComponent<GenericBattleCutscene>();
@@ -28,7 +29,8 @@ public class TrainingGroundBattleController : BattleController
 
 
             case "tgAtk1":
-                objList.addObjective("tgAtk2", "Throw your spell at the  tartget", 1, ObjectiveType.Attack, null, "Hit", "IceShuriken", characters[2].getName(), null);
+                Objective nObjective2 = new Objective("tgAtk2", 1, BattleEventType.Hit).addDescription("Use your Ice Shuriken at the target").addTarget(characters[2].getName()).addVerb("IceShuriken");
+                objList.addObjective(nObjective2);
                 addTacticalPoints();
 
                 activeCutscene = gameObject.AddComponent<GenericBattleCutscene>();
@@ -54,7 +56,7 @@ public class TrainingGroundBattleController : BattleController
                 activeCutscene.addFrame("Jayf", "...but seems too cumbersome to use. Not a great weapon at the moment. ", "Jayf");
                 activeCutscene.addFrame("Jayf", "And I have no intention of 'taking you in'. \n We expect people to pull their own weight here", "Jayf");
                 activeCutscene.addFrame("Jayf", "Hmm. I do have two people on an errand in a town. \n Go and find them. I'll be watching to see how you do", "Jayf");
-                activeCutscene.addFrame("Iraden", "Ok", "Iraden", 2);
+                activeCutscene.addFrame("Iraden", "", "Iraden", 2);
                 activeCutscene.createDialogueObject();
                 activeCutscene.preInitializeTextbox();
                 activeCutscene.setFrame(0);
@@ -133,9 +135,9 @@ public class TrainingGroundBattleController : BattleController
         activeCutscene.addSprite("Tutorial1", "Tutorials1");
         activeCutscene.addSprite("Tutorial2", "Tutorials2");
 
-        activeCutscene.addFrame("Jayf", "Now, let's start off with a simple strike with your, so called, long sword. \nGo up and slash the currias.", "Jayf");
-        activeCutscene.addFrame("Tutorial", "Use WASD/Left Click to move the cursor. \n Use Space/Right Click with a selected ability to act.", "Tutorial1");
-        activeCutscene.addFrame("Tutorial", "Your actions each turn are limited by your Movement and Mana Flow. \n Hit 'End Turn' to refil", "Tutorial2");
+        activeCutscene.addFrame("Jayf", "Now, let's start off with a simple strike with your, so called, long sword. \nGo up and slash the cuirass.", "Jayf");
+        activeCutscene.addFrame("Tutorial", "Use WASD/Left Click to move the cursor. \nUse Space/Right Click with a selected ability to act.", "Tutorial1");
+        activeCutscene.addFrame("Tutorial", "Your actions each turn are limited by your Movement and Mana Flow. \nHit 'End Turn' to refil", "Tutorial2");
 
         activeCutscene.createDialogueObject();
 
@@ -145,8 +147,8 @@ public class TrainingGroundBattleController : BattleController
         activeCutscene.preInitializeTextbox();
         activeCutscene.setFrame(0);
         toggleCutscene(true);
-        objList.addObjective("tgAtk0", "Use your melee strike on the Training Dummy", 1, ObjectiveType.Attack, null, "Hit", "MeleeStrike", "Training Dummy", null);
-
+        Objective nObjective = new Objective("tgAtk0", 1, BattleEventType.Hit).addDescription("Use a MeleeStrike on the cuirass").addTarget(characters[1].getName()).addVerb("MeleeStrike");
+        objList.addObjective(nObjective);
         GlobalGameController.GGC.playMusic(Resources.Load<AudioClip>("Audio/Music/HonkHonk"));
 
         goldRewards = 4;

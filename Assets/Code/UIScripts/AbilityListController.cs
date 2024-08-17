@@ -11,8 +11,12 @@ public class AbilityListController : Window
     // Start is called before the first frame update
     void Start()
     {
-
         PopulateList();
+    }
+
+    public void initialize()
+    {
+        abilities = new List<Ability>();
     }
 
     // Update is called once per frame

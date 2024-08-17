@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.WebSockets;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,24 +9,24 @@ public class BattleEventLog : MonoBehaviour
     List<BattleEvent> eventLog;
     Text listText;
 
+    //Subscribers
     List<BattleEventListener> listeners;
 
     //###Utilities###
-    public void addEvent(string S = "", string ET = "", string V = "", string T = "", string R = "")
+    public void addEvent(BattleEventType nBattleEventType, string nSubject = "",  string nVerb = "", string nTarget = "", string nResult = "")
     {
-        BattleEvent BE = new BattleEvent(S, ET, V, T, R);
+        BattleEvent BE = new BattleEvent(nBattleEventType, nSubject, nVerb, nTarget, nResult);
         
         foreach (BattleEventListener listener in listeners) { 
             listener.hearEvent(BE);
         }
-
         eventLog.Add(BE);
         appendText(BE);
     }
 
     public void appendText(BattleEvent BE)
     {
-        listText.text += "\n \n" + BE.toString();
+        listText.text += "\n \n" + BE.ToString();
     }
 
     public void addListener(BattleEventListener nListener)
@@ -35,16 +34,11 @@ public class BattleEventLog : MonoBehaviour
         listeners.Add(nListener);
     }
 
-    //###Initializer###
+    //###Initializer### 
     public void initialze()
     {
         listeners = new List<BattleEventListener>();
-    }
-
-    //###UnityMessages###
-    public void Start()
-    {
         eventLog = new List<BattleEvent>();
-        listText = GetComponentInChildren<Text>();  
-    }    
+        listText = GetComponentInChildren<Text>();
+    }
 }   

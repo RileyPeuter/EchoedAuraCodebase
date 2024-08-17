@@ -237,6 +237,12 @@ public class BattleCharacterObject : MonoBehaviour
         character.addBuff(currentCellBuff);
     }
 
+    public void clearAniBools()
+    {
+        setAniAnticipate(false);
+        setAniRun(false);
+    }
+
     public void setAniRun(bool running)
     {
         if (characterAnimator != null)
@@ -263,7 +269,6 @@ public class BattleCharacterObject : MonoBehaviour
 
     public bool isNextTurn(int turn)
     {
-        print(getName() + "Next Turn" + nextTurn.ToString());
         if (nextTurn == turn) { return true; }
         return false;
     }

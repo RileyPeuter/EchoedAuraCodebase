@@ -112,7 +112,8 @@ public class BridgeBattleController : BattleController
         AIClusters.Add(new AICluster(999, 0, 1));
         AIClusters[0].ClusterMembers.Add(characters[0].getAI());
 
-        objList.addObjective("clnKil0", "Deafet Jayf's Phantasms", 3, ObjectiveType.Kill, "Jayf", "Kill", null, null, null);
+        Objective nBattleObjective = new Objective("clnKil0", 3, BattleEventType.Kill).addDescription("Defeat Jay's Phantasmas").addSubject("Jayf");
+        objList.addObjective(nBattleObjective);
     }
 
     // Update is called once per frame

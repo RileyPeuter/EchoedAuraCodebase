@@ -115,7 +115,7 @@ public class AbilityRange : MonoBehaviour
 
         //Up    
         if (currentCell.yPosition < (grid.yMax - 1)){
-            if (grid.gridCells[currentCell.xPosition, currentCell.yPosition + 1].walkable) {
+            if (grid.gridCells[currentCell.xPosition, currentCell.yPosition + 1].walkable && grid.gridCells[currentCell.xPosition, currentCell.yPosition + 1].occupier == null) {
                 jumperRange(grid.gridCells[currentCell.xPosition, currentCell.yPosition + 1], jumpsLeft - 1);
             }
         }
@@ -123,7 +123,7 @@ public class AbilityRange : MonoBehaviour
         //Down
         if (currentCell.yPosition != 0)
         {
-            if (grid.gridCells[currentCell.xPosition, currentCell.yPosition - 1].walkable)
+            if (grid.gridCells[currentCell.xPosition, currentCell.yPosition - 1].walkable && grid.gridCells[currentCell.xPosition, currentCell.yPosition - 1].occupier == null)
             {
                 jumperRange(grid.gridCells[currentCell.xPosition, currentCell.yPosition - 1], jumpsLeft - 1);
             }
@@ -132,7 +132,7 @@ public class AbilityRange : MonoBehaviour
         //Left
         if (currentCell.xPosition != 0)
         {
-            if (grid.gridCells[currentCell.xPosition - 1, currentCell.yPosition].walkable)
+            if (grid.gridCells[currentCell.xPosition - 1, currentCell.yPosition].walkable && grid.gridCells[currentCell.xPosition - 1, currentCell.yPosition].occupier == null)
             {
                 jumperRange(grid.gridCells[currentCell.xPosition - 1 , currentCell.yPosition], jumpsLeft - 1);
             }
@@ -141,7 +141,7 @@ public class AbilityRange : MonoBehaviour
         //Right
         if (currentCell.xPosition < (grid.xMax - 1))
         {
-            if (grid.gridCells[currentCell.xPosition + 1, currentCell.yPosition].walkable)
+            if (grid.gridCells[currentCell.xPosition + 1, currentCell.yPosition].walkable && grid.gridCells[currentCell.xPosition + 1, currentCell.yPosition].occupier == null)
             {
                 jumperRange(grid.gridCells[currentCell.xPosition + 1, currentCell.yPosition], jumpsLeft - 1);
             }

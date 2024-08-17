@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 public class StandOffSide
 {
@@ -82,6 +83,43 @@ public class StandOffSide
         setGraphics();
         SOAL = sideGO.GetComponentInChildren<StandOffAnimationListener>();
         SOAL.initialize();
+    }
+
+    public StandOffSide(TacticalAbility nAbility, GameObject nGameObject)
+    {
+        messageQueue = new Dictionary<string, Sprite>();
+        sideGO = nGameObject;
+
+        foreach (SpriteRenderer image in sideGO.GetComponentsInChildren<SpriteRenderer>())
+        {
+            switch (image.gameObject.name)
+            {
+                case "uI_StandOffFrontTile_Image":
+                    image.sprite = frontTileSprite;
+                    break;
+
+                case "uI_StandOffBackTile_Image":
+                    image.sprite = backTileSprite;
+                    break;
+
+                case "uI_StandOffBackGround_Image":
+                    image.sprite = backgroundSprite;
+                    break;
+                case "uI_StandOffCharacter_Image":
+
+                    //This is horrible, but I think it should work
+                    Animator ani = image.gameObject.AddComponent<Animator>();
+                    ani.runtimeAnimatorController = Resources.Load<AnimatorOverrideController>("TacticalAbilityController");
+                    List<KeyValuePair<AnimationClip, AnimationClip>> aniClips = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+                    aniClips.Add(new KeyValuePair<AnimationClip, AnimationClip>(ani.runtimeAnimatorController.animationClips[0], Resources.Load<AnimationClip>("TacticalAnimations/" + nAbility.getAniID().ToString())));
+                    AnimatorOverrideController aoc = new AnimatorOverrideController(ani.runtimeAnimatorController);
+                    aoc.ApplyOverrides(aniClips);
+
+                    //ani.runtimeAnimatorController.anim
+                    nAbility.getAniID();
+                    break;
+            }
+        }
     }
 
     public void spawnEffectOnCharacter(string effectName)

@@ -2,33 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class BattleEvent
 {
     //###MemberVariables###
+    public BattleEventType eventType;
     public string subject = null;
-    public string eventType = null;
     public string verb = null;
     public string target = null;
     public string result = null;
 
     //###Utilities###
-    public string toString()
+    public override string ToString()
     {
-        return (subject + "  " + eventType + " " + verb + " " + target + " " + result);
+        return (eventType + " " + subject + "  " + verb + " " + target + " " + result);
     }
 
     //###Constructors###
-    public BattleEvent()
-    {
+    public BattleEvent() { }
 
-    }
-
-    public BattleEvent(string S = "", string ET = "", string V = "", string T = "", string R = "")
+    public BattleEvent(BattleEventType nEventType, string nSubject = "", string nVerb = "", string nTarget = "", string nResult = "")
     {
-        subject = S;
-        eventType = ET;
-        verb = V;
-        target = T;
-        result = R;
+        eventType = nEventType;
+        subject = nSubject;
+        verb = nVerb;
+        target = nTarget;
+        result = nResult;
     }
+}
+
+public enum BattleEventType
+{
+    Attack, Hit, Kill, Occupy, Interact, Time, EndTurn, Movement
 }

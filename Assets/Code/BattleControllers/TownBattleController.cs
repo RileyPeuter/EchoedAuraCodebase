@@ -54,7 +54,9 @@ public class TownBattleController : BattleController
         {
 
             case "dkAtk0":
-              objList.addObjective("dkHit0", "Deal damage to the drunk (use Fray's Shadow to reduce dodge)", 1, ObjectiveType.Hit, null, "Hit", null, null, null, 0, ObjectiveModifier.GreaterThan, 1);
+                Objective nBattleObjective = new Objective("dkHit0", 1, BattleEventType.Hit).addDescription("Deal damage to the drunk (use Fray's Shadow to reduce dodge)").addModifier(ObjectiveModifier.GreaterThan, 1).addTarget("Drunk");
+                objList.addObjective(nBattleObjective);
+                
                 activeCutscene = gameObject.AddComponent<GenericBattleCutscene>();
                 activeCutscene.initialize(this);
 
@@ -142,7 +144,8 @@ public class TownBattleController : BattleController
         toggleCutscene(true);
 
 
-        objList.addObjective("dkAtk0", "Attack, the drunk in the middle of the street", 1, ObjectiveType.Hit, null, "Attack", null, "Drunk", null);
+        Objective nBattleObjective = new Objective("dkAtk0", 1, BattleEventType.Attack).addDescription("Attack the drunk. Drive him away").addTarget("Drunk");
+        objList.addObjective(nBattleObjective);
 
         //  activeCutscene.preInitializeTextbox();
         //   activeCutscene.setFrame(0);

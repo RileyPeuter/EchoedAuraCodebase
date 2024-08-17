@@ -331,7 +331,7 @@ public class DualStandOffController : StandOffController
     {
         storedDamage = attackAttempt.cast(rightSide);
         damageText.text = storedDamage.ToString();
-        BattleController.ActiveBattleController.BEL.addEvent(attackAttempt.getAttacker().getName(), "Hit", attackAttempt.getAbility().name, attackAttempt.getAttackee().getName(), storedDamage.ToString());
+        BattleController.ActiveBattleController.BEL.addEvent(BattleEventType.Hit,  attackAttempt.getAttacker().getName(), attackAttempt.getAbility().name, attackAttempt.getAttackee().getName(), storedDamage.ToString());
 
         rightSide.effectMessage(damageText.text);
     }

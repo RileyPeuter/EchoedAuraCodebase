@@ -26,7 +26,14 @@ public class ActionMenuController : Window
                 break;
 
             case 2:
-                BUIC.openWindow("uI_AbilityMenu_Panel", true, "uI_Actions_Panel(Clone)").GetComponent<AbilityListController>().abilities = character.getCharacter().CharacterAbilities;
+                
+                AbilityListController ALC  = BUIC.openWindow("uI_AbilityMenu_Panel", true, "uI_Actions_Panel(Clone)").GetComponent<AbilityListController>();
+                ALC.initialize();
+                foreach(TacticalAbility tacticalAbility in BC.getTacticalAbilities())
+                {
+                    ALC.abilities.Add(tacticalAbility);
+                }
+                
                 break;
         }
     }
@@ -38,7 +45,6 @@ public class ActionMenuController : Window
 
     public void checkHotkeys()
     {
-        print("wam");
         int index = 0;
         
         if(quickSelectButtons is null) { return; }

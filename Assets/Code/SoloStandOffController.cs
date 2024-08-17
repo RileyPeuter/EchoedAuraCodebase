@@ -56,7 +56,6 @@ public class SoloStandOffController : StandOffController
 
         side = new StandOffSide(BCO, resourceName, GetComponentsInChildren<MsSuperSecretScriptThatImUsingAsAFlag>().ToList().Find(x => x.gameObject.name == "uI_StandOffAttackerSide_Object").gameObject);
         caster = BCO;
-
         if (ability.name == "Move")
         {
             side.getAnimator().SetTrigger("movement");
@@ -81,7 +80,6 @@ public class SoloStandOffController : StandOffController
 
         GameObject.Destroy(GameObject.Find("uI_StandOffAttackeeSide_Object"));
         this.transform.position = new Vector2(GameObject.Find("Main Camera").transform.position.x + 20, GameObject.Find("Main Camera").transform.position.y + 5);
-
     }
 
     // Update is called once per frame

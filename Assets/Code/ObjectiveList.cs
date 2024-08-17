@@ -1,15 +1,9 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.UI;
 
-public enum ObjectiveType{
-    Attack, Hit, Kill, Occupy, Interact, Time
-    }
 
 public enum ObjectiveModifier
 {
@@ -17,25 +11,26 @@ public enum ObjectiveModifier
     GreaterThan
 }
 
-public class ObjectiveListElement
+public class Objective
 {
-    //Broooo, why did i do this like this
+    //###MemberVariables###
     ObjectiveModifier modifier = ObjectiveModifier.None;
     int modifierThreshold;
 
-    ObjectiveType objectiveType;
     public string objectiveID;
-    public string description;
-    public string stringData;
-    public int maxCompletions;
-    public int currentCompletions = 0;
+    string description;
+    string stringData;
+    int maxCompletions;
+    int currentCompletions = 0;
 
+    BattleEventType objectiveType;
+    
     string subject = null;
-    string eventType = null;
     string verb = null;
     string target = null;
     string result = null;
 
+    //Non Visible objectives are used for triggers
     bool visible = true;
 
     public bool completed = false;
@@ -45,36 +40,35 @@ public class ObjectiveListElement
     Text completedText;
     float yOffset;
 
-    public bool checkObjective(string ET, string S = null, string V = null, string T = null, string R = null)
+    //###Utilities###
+    public bool checkObjective(BattleEventType nBattleEventType, string nSubject = null, string nVerb = null, string nTarget = null, string nResult = null)
     {
-        
-        //This is gonna be a horrible stack of if nesting, but I think it's the best way to go
-        //^^^Don't listen to the other guy, probably just need to use interafces or inheritance or some shit
-        if (subject == null || subject == S)
+
+        //This block just checks if the event checks if something is equal to the objecitve
+        if(objectiveType != nBattleEventType){return false;}
+        if(subject != null && subject != nSubject){return false;}
+        if(verb != null && verb != nVerb){return false;}
+        if(target != null && target != nTarget) {return false;}
+        if(result != null && result != nResult){return false;}
+             
+        if (testModifier(modifier, nResult, modifierThreshold))
         {
-           if (eventType == ET)
-            {
-                if (verb == null || V == verb)
-                {
-                    if (target == null || target == T) {
-                           if(result == null || result  == R)
-                        {
-                           if (testModifier(modifier, R, modifierThreshold))
-                              {
-                                return true;
-                          }
-                        }
-                    }
-                }
-            }
+            return true;
         }
-        return false;
+             
+        return true;
     }
 
-    //This is going to be very Wack. Might be better if we use templates, but fuck that for now
-    public bool testModifier(ObjectiveModifier OM, string result, int threshHold)
+    //Added this to make it cleaner elsewhere
+    public bool checkObjective(BattleEvent nBattleEvent)
     {
-        switch (OM)
+        return checkObjective(nBattleEvent.eventType, nBattleEvent.subject, nBattleEvent.verb, nBattleEvent.target, nBattleEvent.result);
+    }
+
+    //Checks modifiers like "Deal MORE than 6 damage"
+    public bool testModifier(ObjectiveModifier objectiveModifier, string result, int threshHold)
+    {
+        switch (objectiveModifier)
         {
             case ObjectiveModifier.None:
                 return true;
@@ -86,8 +80,6 @@ public class ObjectiveListElement
                 }
                 break;
         }
-        
-
         return false;
     }
 
@@ -96,78 +88,57 @@ public class ObjectiveListElement
         parent.SetActive(visible);
     }
 
-    public ObjectiveListElement(string nID, int nMaxCompletion, ObjectiveType nObjectiveType)
+    //###Setters###
+    //These are writen like this so you can easily chain them together
+    public Objective makeInvisible()
     {
-        objectiveID = nID;
-        maxCompletions = nMaxCompletion;
-        objectiveType = nObjectiveType;
+        visible = false;
+        return this;
 
-        
-        //setInfo(yOffset);
-        //setText();
     }
 
-    //These all return themselves so that you can optionally chain the methods together (look at how fancy I am)
-    public ObjectiveListElement addSubject(string nSubject)
+    public Objective addSubject(string nSubject)
     {
         subject = nSubject;
         return this;
     }
-    public ObjectiveListElement addEventType(string nEventType)
-    {
-        eventType = nEventType;
-        return this;
-    }
-    public ObjectiveListElement addVerb(string nVerb)
+
+    public Objective addVerb(string nVerb)
     {
         verb = nVerb;
         return this;
     }
-    public ObjectiveListElement addTarget(string nTarget)
+    public Objective addTarget(string nTarget)
     {
         target = nTarget;
         return this;
     }
 
-    public ObjectiveListElement addParent(GameObject nParent)
+    public Objective addParent(GameObject nParent)
     {
         parent = nParent;
         return this;
     }
-    public ObjectiveListElement addOffset(float nOffset)
+    public Objective addOffset(float nOffset)
     {
         yOffset = nOffset;
         return this;
     }
 
-    public ObjectiveListElement addDescription(string nDescription)
+    public Objective addDescription(string nDescription)
     {
         description = nDescription;
         return this;
     }
 
-    public ObjectiveListElement(string id, string dsc, int maxComp, ObjectiveType ot, GameObject prnt, float offset, string sub = null, string evetyp = null,string ver = null, string tar = null, string res = null, int currentComp = 0, ObjectiveModifier OM = ObjectiveModifier.None, int modThresHold = 0)
+    public Objective addModifier(ObjectiveModifier nObjectiveModifer, int nThreshold)
     {
-        subject = sub;
-        eventType = evetyp;
-        verb = ver;
-        target = tar;
-        result = res;
-
-        modifier = OM;
-        modifierThreshold = modThresHold;
-
-        objectiveID = id;
-        description = dsc;
-        maxCompletions = maxComp;       
-        objectiveType = ot;
-        currentCompletions = currentComp;
-        parent = prnt;
-
-        setInfo(offset);
-        setText();
+        modifier = nObjectiveModifer;
+        modifierThreshold = nThreshold; 
+        return this;
     }
 
+    //###Utilities###
     public void setInfo(float offset)
     {
         parent.transform.Translate(0, offset, 0);
@@ -186,48 +157,63 @@ public class ObjectiveListElement
 
     public void setText()
     {
+        if (!visible) { return; }
+
         descriptionText.text = description;
         completedText.text = currentCompletions.ToString() + "/" + maxCompletions.ToString();
-        if(currentCompletions >= maxCompletions)
+        if (currentCompletions >= maxCompletions)
         {
             descriptionText.color = Color.green;
             completedText.color = Color.green;
         }
     }
 
+    //Used for when you get closer to an objective, returns true if it's completed
     public bool increment(int amount = 1)
     {
         currentCompletions += amount;
         return (currentCompletions >= maxCompletions);
     }
+
+    //###Constructors###
+    public Objective(string nID, int nMaxCompletion, BattleEventType nObjectiveType)
+    {
+        objectiveID = nID;
+        maxCompletions = nMaxCompletion;
+        objectiveType = nObjectiveType;
+    }
+
+    public Objective(string nObjectiveID, string nDescription, int nMaxCompletion, BattleEventType nObjectiveType, GameObject nParent, float offset, int nCurrentCompletion = 0)
+    {
+        objectiveID = nObjectiveID;
+        description = nDescription;
+        maxCompletions = nMaxCompletion;       
+        objectiveType = nObjectiveType;
+        currentCompletions = nCurrentCompletion;
+        parent = nParent;
+
+        setInfo(offset);
+        setText();
+    }
 }
-
-
-
-
-
-
-
 
 public class ObjectiveList : MonoBehaviour, BattleEventListener
 {
+    //###MemberVariables###
+    List<Objective> objectives;
+    GameObject objectiveGameObject;
+    GameObject listObject;
+    BattleController BC;
 
     float yOffset = 0;
 
-    //This constructor turned into something horrible and unweirdly. So i added one below, that's a little more usable. 
-    public void addObjective(string id, string dsc, int maxComp, ObjectiveType ot, string sub,string eveTyp , string verb, string target, string result, int curComp = 0, ObjectiveModifier OM = ObjectiveModifier.None, int modThresh = 0)
+    //###Utilities###
+    public void addObjective(Objective nObjectiveListElement)
     {
-        ObjectiveListElement newOLE = new ObjectiveListElement(id, dsc, maxComp, ot, GameObject.Instantiate(objectiveGameObject, this.gameObject.transform), yOffset, sub, eveTyp, verb, target, result, curComp, OM, modThresh);
-        objectives.Add(newOLE);
-        yOffset = yOffset - 80;
-    }
-
-    public void addObjective(ObjectiveListElement OLE)
-    {
-        OLE.addParent(GameObject.Instantiate(objectiveGameObject, this.gameObject.transform)).addOffset(yOffset);
-        objectives.Add(OLE);
-        OLE.setInfo(yOffset);
-        OLE.setText();
+        nObjectiveListElement.addParent(GameObject.Instantiate(objectiveGameObject, this.gameObject.transform)).addOffset(yOffset);
+        objectives.Add(nObjectiveListElement);
+        nObjectiveListElement.setInfo(yOffset);
+        nObjectiveListElement.setText();
 
 
         yOffset = yOffset - 80;
@@ -235,216 +221,38 @@ public class ObjectiveList : MonoBehaviour, BattleEventListener
 
     public void updateList()
     {
-        
-        foreach(ObjectiveListElement objective in objectives)
+        foreach(Objective objective in objectives)
         {
             objective.setText();
         }
     }
 
-    public void displayList()
-    {
-        foreach(ObjectiveListElement objective in objectives)
-        {
-
-            
-        }
-    }
-
-    List<ObjectiveListElement> objectives;
-    GameObject objectiveGameObject;
-    GameObject listObject;
-    BattleController BC;
-
-
-    public void initialize(BattleController BatCont) {
-        objectives = new List<ObjectiveListElement>();
-        BC = BatCont;
-        objectiveGameObject = Resources.Load<GameObject>("UIElements/uI_Objective_Parent");
-
-    }
-
     public void hearEvent(BattleEvent nBattleEvent)
     {
-        foreach (ObjectiveListElement OLE in objectives.ToArray())
+        Debug.Log("kam");
+        foreach (Objective objective in objectives.ToArray())
         {
-            if (OLE.checkObjective(nBattleEvent.eventType, nBattleEvent.subject, nBattleEvent.verb, nBattleEvent.target, nBattleEvent.result))
+            Debug.Log("sam");
+            if (objective.checkObjective(nBattleEvent.eventType, nBattleEvent.subject, nBattleEvent.verb, nBattleEvent.target, nBattleEvent.result))
             {
-                if (OLE.increment() && !OLE.completed)
+                Debug.Log("fam");
+                if (objective.increment() && !objective.completed)
                 {
-                    OLE.completed = true;
-                    BC.objectiveComplete(OLE.objectiveID);
+                    Debug.Log("dam");
+                    objective.completed = true;
+                    BC.objectiveComplete(objective.objectiveID);
                 }
                 updateList();
             }
         }
     }
+
+    //###Initializer###
+    public void initialize(BattleController BatCont)
+    {
+        objectives = new List<Objective>();
+        BC = BatCont;
+        objectiveGameObject = Resources.Load<GameObject>("UIElements/uI_Objective_Parent");
+    }
+
 }
-
-/*
- * 
- * 
- * 
-//Dump for old code taht may still be needed
- 
-
-
-
-    public class AttackObjective : ObjectiveListElement
-{
-    public BattleCharacterObject target;
-    public AttackObjective(BattleCharacterObject BCO, string id, string dsc, int maxComp, ObjectiveType ot, GameObject prnt, float offset, int currentComp = 0) : base(id, dsc, maxComp, ot, prnt, offset, currentComp)
-    {
-        target = BCO;
-    }
-}
-
-public class OccupyObjective : ObjectiveListElement
-{
-    public OccupyObjective(string id, string dsc, int maxComp, ObjectiveType ot, GameObject prnt, float offset, int currentComp = 0) : base(id, dsc, maxComp, ot, prnt, offset, currentComp)
-    {
-
-    }
-}
-
-public class HitObjetive: ObjectiveListElement
-{
-    public BattleCharacterObject target;
-    public HitObjetive(BattleCharacterObject BCO, string id, string dsc, int maxComp, ObjectiveType ot, GameObject prnt, float offset, int currentComp = 0) : base(id, dsc, maxComp, ot, prnt, offset, currentComp)
-    {
-        target = BCO;
-    }
-}
-
-public class InteractObjective : ObjectiveListElement
-{
-    public InteractObjective(string id, string dsc, int maxComp, ObjectiveType ot, GameObject prnt, float offset, int currentComp = 0) : base(id, dsc, maxComp, ot, prnt, offset, currentComp)
-    {
-
-    }
-}
-
-public class TimeObjective : ObjectiveListElement
-{
-    public TimeObjective(string id, string dsc, int maxComp, ObjectiveType ot, GameObject prnt, float offset, int currentComp = 0) : base(id, dsc, maxComp, ot, prnt, offset, currentComp)
-    {
-       
-    }
-}
-
-public class KillObjective : ObjectiveListElement
-{
-    public BattleCharacterObject target;
-    public KillObjective(BattleCharacterObject BCO, string id, string dsc, int maxComp, ObjectiveType ot, GameObject prnt, float offset, int currentComp = 0) : base(id, dsc, maxComp, ot, prnt, offset, currentComp)
-    {
-        target = BCO;
-    }
-}
-     * 
-     * //These should be a better way of doing this. Maybe just bite the bullet and add another abstract class
-    public void checkKillObjectives(BattleCharacterObject BCO)
-    {
-        foreach(KillObjective objective in objectives)
-        {
-            if(objective.target == BCO)
-            {
-                if (objective.increment())
-                {
-                    BC.objectiveComplete(objective.objectiveID);
-
-                }
-                objective.setText();
-            }
-        }
-    }
-
-    public void checkAttackObjectives(BattleCharacterObject BCO) {
-        foreach (AttackObjective objective in objectives.ToArray())
-        {
-            if (objective.target == BCO)
-            {
-                if (objective.increment())
-                {
-                    BC.objectiveComplete(objective.objectiveID);
-                }
-                objective.setText();
-
-            }
-        }
-    }
-
-    public void checkHitObjectives(BattleCharacterObject BCO)
-    {
-        foreach (HitObjetive objective in objectives)
-        {
-            if (objective.target == BCO)
-            {
-                objective.increment();
-                objective.setText();
-            }
-        }
-    }
-
-    public void addKillObjectives(BattleCharacterObject BCO, string id, string dsc, int maxComp, ObjectiveType ot, int currentComp = 0)
-    {
-        foreach(ObjectiveListElement OLE in objectives){if (OLE.objectiveID == id) { return; }}
-
-        objectives.Add(new KillObjective(BCO, id, dsc, maxComp, ot, GameObject.Instantiate(objectiveGameObject, this.gameObject.transform), yOffset));
-        yOffset = yOffset - 70;
-    }
-
-    public void addAttackObjectives(BattleCharacterObject BCO, string id, string dsc, int maxComp, ObjectiveType ot, int currentComp = 0)
-    {
-        foreach (ObjectiveListElement OLE in objectives) { if (OLE.objectiveID == id) { return; } }
-
-        objectives.Add(new AttackObjective(BCO, id, dsc, maxComp, ot, GameObject.Instantiate(objectiveGameObject, this.gameObject.transform), yOffset));
-        yOffset = yOffset - 70;
-    }
-
-    public void addOccupyObjectives(BattleCharacterObject BCO, string id, string dsc, int maxComp, ObjectiveType ot, int currentComp = 0)
-    {
-        foreach (ObjectiveListElement OLE in objectives) { if (OLE.objectiveID == id) { return; } }
-
-        objectives.Add(new OccupyObjective(id, dsc, maxComp, ot, GameObject.Instantiate(objectiveGameObject, this.gameObject.transform), yOffset));
-        yOffset = yOffset - 70;
-    }
-
-    public void addHitObjective(BattleCharacterObject BCO, string id, string dsc, int maxComp, ObjectiveType ot, int currentComp = 0)
-    {
-        foreach (ObjectiveListElement OLE in objectives) { if (OLE.objectiveID == id) { return; } }
-
-        objectives.Add(new HitObjetive(BCO, id, dsc, maxComp, ot, GameObject.Instantiate(objectiveGameObject, this.gameObject.transform), yOffset));
-        yOffset = yOffset - 70;
-    }
-
-    public void addTimeObjective(BattleCharacterObject BCO, string id, string dsc, int maxComp, ObjectiveType ot, int currentComp = 0)
-    {
-        foreach (ObjectiveListElement OLE in objectives) { if (OLE.objectiveID == id) { return; } }
-
-        objectives.Add(new TimeObjective(id, dsc, maxComp, ot, GameObject.Instantiate(objectiveGameObject, this.gameObject.transform), yOffset));
-        yOffset = yOffset - 70;
-    }
-
-
-    public void addInteratObjective(string id, string dsc, int maxComp, ObjectiveType ot, int currentComp = 0)
-    {
-        foreach (ObjectiveListElement OLE in objectives) { if (OLE.objectiveID == id) { return; } }
-
-        objectives.Add(new InteractObjective(id, dsc, maxComp, ot, GameObject.Instantiate(objectiveGameObject, this.gameObject.transform), yOffset));
-        yOffset = yOffset - 70;
-    }
-
-    
-     * 
-     * 
-     * 
-     * 
-     * 
-     * * 
-     * /
-
-    */
-
-    
-
-

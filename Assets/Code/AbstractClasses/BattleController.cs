@@ -220,16 +220,18 @@ public abstract class BattleController : MonoBehaviour
         }
         selectedAbility = null;
 
-        BEL.addEvent(activeCharacter.getName(), "End Turn", activeCharacter.GetAllegiance().ToString());
+        BEL.addEvent( BattleEventType.EndTurn, activeCharacter.getName(), activeCharacter.GetAllegiance().ToString());
 
         activeCharacter.endTurn();
-
+        activeCharacter.clearAniBools();
         destroyTurnUI();
         timerTick();
+
         foreach(AICluster AIC in AIClusters)
         {
             AIC.setMemeberModes();
         }
+        ticking = true;
     }
 
     public void spawnCharacter(GameObject GO, CharacterAllegiance CA, ExWhyCell EWC, Character CH, AICluster AIC = null)
@@ -340,7 +342,7 @@ public abstract class BattleController : MonoBehaviour
 
         BUIC.lockFocus(GO.GetComponent<AbilitySnippetController>());
         checkTarget();
-        if(ability.abilityType == AbilityType.Self) { tryCast(); }
+        if(ability.abilityType == AbilityType.Self) { tryCast(selectedAbility); }
     }
 
     AbilityRange createRange(Ability ability)
@@ -369,7 +371,6 @@ public abstract class BattleController : MonoBehaviour
 
         foreach (BattleCharacterObject character in characters) 
         {
-            print(character.getName());
             if (character.isNextTurn(turnTimer)) {
                 setActiveCharacter(character);
                 GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_TurnName_Panel"), GameObject.Find("Canvas").transform).GetComponent<TurnNameController>().initialize(activeCharacter.getName());
@@ -542,7 +543,7 @@ public abstract class BattleController : MonoBehaviour
         {
             cursorCell = map.getMouseCell();
             checkTarget();
-            tryCast(); 
+            tryCast(selectedAbility); 
         }
         
         if(!Input.GetKey("left alt"))
@@ -589,19 +590,31 @@ public abstract class BattleController : MonoBehaviour
     }
 
     //This is horrible, we need to change it
-    void tryCast()
+    void tryCast(Ability ability)
     {
         timer = 1;
-        if (selectedAbility is null)
+        if (ability is null)
         {
             cursorCell = map.getMouseCell();
             quickSelectCheck(cursorCell);
             return;
         }
         ticking = false;
-        if(selectedAbility.name == "Move")
+
+        if(ability.GetType().IsSubclassOf(typeof(TacticalAbility)))
         {
-            if (AR.findCellsInRange(selectedAbility.GetRangeMode()).Contains(cursorCell))
+            
+            destroyTurnUI();
+
+            GameObject AC = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/S"), mainCamera.transform);
+            AC.AddComponent<TacticalStandOffController>().initialize((TacticalAbility)ability, activeCharacter, map.GetResourceName(), BUIC);
+            return;
+        }
+
+
+        if(ability.name == "Move")
+        {
+            if (AR.findCellsInRange(ability.GetRangeMode()).Contains(cursorCell))
             {
                 if(cursorCell.occupier != null)
                 {
@@ -609,13 +622,13 @@ public abstract class BattleController : MonoBehaviour
                     quickSelectCheck(cursorCell);
                     return;
                 }
-                BEL.addEvent(activeCharacter.getName(), "Movement", "Move", "X:" + cursorCell.xPosition.ToString() + " Y:"+ cursorCell.yPosition.ToString());
+                BEL.addEvent(BattleEventType.Movement, activeCharacter.getName(), "Move", "X:" + cursorCell.xPosition.ToString() + " Y:"+ cursorCell.yPosition.ToString());
 
                 destroyTurnUI();
 
                 GameObject AC = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/S"), GameObject.Find("Main Camera").transform);
-                AC.AddComponent<SoloStandOffController>().initialize(selectedAbility, activeCharacter, map.GetResourceName(), BUIC);
-                selectedAbility.cast(cursorCell, activeCharacter);
+                AC.AddComponent<SoloStandOffController>().initialize(ability, activeCharacter, map.GetResourceName(), BUIC);
+                ability.cast(cursorCell, activeCharacter);
                 destroyARVisual();
                 checkTarget();
                 hasControl = false;
@@ -624,19 +637,21 @@ public abstract class BattleController : MonoBehaviour
         }
         
         //This has to be fixed, this doesn't work in some way
-        switch (selectedAbility.abilityType)
+        switch (ability.abilityType)
         {
         
-    case AbilityType.Area:
+            
 
-                if (!AR.findCellsInRange(selectedAbility.GetRangeMode()).Contains(cursorCell))
+        case AbilityType.Area:
+
+                if (!AR.findCellsInRange(ability.GetRangeMode()).Contains(cursorCell))
                 {
 
                     return;           
                 }
                 else
                 {
-                    BEL.addEvent(activeCharacter.getName(), "Attack", selectedAbility.name, "X:" + cursorCell.xPosition.ToString() + " Y:" + cursorCell.yPosition.ToString());
+                    BEL.addEvent(BattleEventType.Attack, activeCharacter.getName(), ability.name, "X:" + cursorCell.xPosition.ToString() + " Y:" + cursorCell.yPosition.ToString());
                 }
                 break;
             case AbilityType.Targeted:
@@ -655,7 +670,7 @@ public abstract class BattleController : MonoBehaviour
                     {
                         return;
                     }
-                    BEL.addEvent(activeCharacter.getName(), "Attack", selectedAbility.name, cursorCell.occupier.getName());
+                    BEL.addEvent(BattleEventType.Attack, activeCharacter.getName(), ability.name, cursorCell.occupier.getName());
                 }
                 break;
 
@@ -668,7 +683,7 @@ public abstract class BattleController : MonoBehaviour
                 hasControl = false;
 
                 GameObject Thing = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/S"), GameObject.Find("Main Camera").transform);
-                Thing.AddComponent<SoloStandOffController>().initialize( selectedAbility, activeCharacter, map.GetResourceName(), BUIC);
+                Thing.AddComponent<SoloStandOffController>().initialize( ability, activeCharacter, map.GetResourceName(), BUIC);
                 return;
 
                 break;
@@ -764,13 +779,14 @@ public abstract class BattleController : MonoBehaviour
             return;
         }
 
-        tryCast();
+        tryCast(selectedAbility);
     }
 
     public void killCharacter(BattleCharacterObject character)
     {
+        BEL.addEvent(BattleEventType.Kill, character.getName());
+        character.setAniDie();
         characters.Remove(character);
-        BEL.addEvent(character.getName(), "Kill");
         Destroy(character.characterObject, 2f);
         character.getOccupying().occupier = null;
         if(character == activeCharacter) {  activeCharacter = null; }   
