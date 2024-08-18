@@ -19,6 +19,10 @@ public class RulessDeogBattleController : BattleController
 
     }
 
+    public override void interact(int index)
+    {
+        shrub.heal(10);
+    }
 
     public override void loadCharacters()
     {
@@ -73,7 +77,6 @@ public class RulessDeogBattleController : BattleController
 
     void spawnKahund()
     {
-        return;
         if (Random.Range(0, 2) != 1) { 
             spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[9, 8]), new Kahund(cart.getOccupying()));
         }
@@ -100,13 +103,17 @@ public class RulessDeogBattleController : BattleController
 
         initializeAdditionalElements();
 
+
+        baseTacticalAbilities.Add(new Supposititious(this));
         objList.addObjective(new Objective("etKahund0", 1, BattleEventType.EndTurn).addVerb(CharacterAllegiance.Controlled.ToString()));
+
+        lookForBattleEventListeners();
     }
 
     public override List<TacticalAbility> getTacticalAbilities()
     {
         List<TacticalAbility> output =  new List<TacticalAbility>();
-
+        output.AddRange(baseTacticalAbilities);
         if(ExWhy.getDistanceBetweenCells(getActiveCharacter().getOccupying(), shrub.getOccupying()) < 2)
         {
             output.Add(new Interact(this, 1));

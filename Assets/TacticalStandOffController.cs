@@ -9,29 +9,39 @@ public class TacticalStandOffController : StandOffController {
 
     StandOffSide side;
     BattleCharacterObject caster;
+
+    ExWhyCell target = null;
+
     TacticalAbility tAbility;
+    bool finished = false;
+
     public override void standOffUpdate()
     {
-        throw new System.NotImplementedException();
+        if (timer > 1 && !finished)
+        {
+            cast();
+            end();
+            finished = true;
+        }
     }
 
     protected override void cast()
     {
-        ability.cast(null, caster);
+        tAbility.cast(target, caster);
     }
 
-    public void initialize(TacticalAbility nAbility, BattleCharacterObject nCaster, string recName, BattleUIController nBUIC, BattleCharacterObject target = null)
+    public void initialize(TacticalAbility nAbility, BattleCharacterObject nCaster, string recName, BattleUIController nBUIC, ExWhyCell nTarget = null)
     {
         tAbility = nAbility;
 
         BUIC = nBUIC;
 
-        spawnAbilitySnippet("Canvas");
+        target = nTarget;
+
         SOS = StandOffStage.SoloCast;
 
         side = new StandOffSide(tAbility, GetComponentsInChildren<MsSuperSecretScriptThatImUsingAsAFlag>().ToList().Find(x => x.gameObject.name == "uI_StandOffAttackerSide_Object").gameObject);
         caster = nCaster;
-
     }
 
     private void Start()
@@ -45,6 +55,9 @@ public class TacticalStandOffController : StandOffController {
     // Update is called once per frame
     void Update()
     {
+
+        standOffUpdate();
+        timer = timer + Time.deltaTime;
 
     }
 }

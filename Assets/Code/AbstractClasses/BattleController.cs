@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Security.Cryptography.X509Certificates;
 
 public abstract class BattleController : MonoBehaviour
 {
@@ -105,7 +104,6 @@ public abstract class BattleController : MonoBehaviour
         GameObject.Instantiate(Resources.Load<GameObject>("TacticalPointsPopup")).transform.position = (mainCamera.ScreenToWorldPoint(turnTimerUI.GetComponent<RectTransform>().position) + new Vector3(-4,0,9));
         tacticalPoints += 1;
         turnTimerUI.updateTacticalPoints(tacticalPoints);
-        print(tacticalPoints);
     }
 
     //These should be moved to antoehr one
@@ -122,7 +120,6 @@ public abstract class BattleController : MonoBehaviour
                 }
             }
         }
-
         return output;
     }
 
@@ -288,8 +285,20 @@ public abstract class BattleController : MonoBehaviour
         BEL.initialze();
         BEL.addListener(objList);
 
+
         turnTimerUI = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_Timer_Panel"), GameObject.Find("Canvas").transform).GetComponent<TimerUIScript>();
         turnTimerUI.initialize(this);
+    }
+
+    public void lookForBattleEventListeners()
+    {
+        foreach(TacticalAbility tacticalAbility in baseTacticalAbilities)
+        {
+            if (tacticalAbility is BattleEventListener)
+            {
+                BEL.addListener((BattleEventListener)tacticalAbility);
+            }
+        }
     }
 
     //###UIOperation###
@@ -349,7 +358,18 @@ public abstract class BattleController : MonoBehaviour
     {
         AR = this.gameObject.AddComponent<AbilityRange>();
         AR.initalize(ability.GetRange(), activeCharacter.getOccupying(), map.gridObject);
-        AR.findCellsInRange(ability.GetRangeMode());
+
+        RangeMode rangeMode = ability.GetRangeMode();
+
+        if (rangeMode == RangeMode.Custom)
+        {
+            AR.setCellsInRange(ability.getCustomRange());
+        }
+        else 
+        {
+            AR.findCellsInRange(rangeMode);
+        }
+
         AR.spawnVisuals();
 
         return AR;
@@ -427,18 +447,8 @@ public abstract class BattleController : MonoBehaviour
         ticking = true;
         if (amount > 0)
         {
+            //Might Need a switch Statement here
 
-        switch (selectedAbility.abilityType)
-            {
-            case AbilityType.Self:
-                break;
-
-            case AbilityType.Area:
-                break;
-
-            case AbilityType.Targeted:
-                break;
-            }
         }
 
         deSelectAbility();
@@ -457,8 +467,6 @@ public abstract class BattleController : MonoBehaviour
         {
             setActiveCharacter(activeCharacter);
         }
-
-
     }
 
     public void toggleCutscene(bool toggle)
@@ -589,6 +597,19 @@ public abstract class BattleController : MonoBehaviour
         selectAbility(activeCharacter.getMovementAbility());
     }
 
+    public bool checkValidTarget(AbilityRange range, ExWhyCell target, bool needsOccupied, bool needsUnoccpied, AbilityType abilityType)
+    {
+        if (abilityType == AbilityType.Self) { return true; }
+        
+        if(needsOccupied && target.occupier == null) { return false;}
+
+        if(needsUnoccpied && target.occupier != null) { return false; }
+
+        if (range.findCellsInRange(RangeMode.Custom).Contains(target)) { return true; }
+
+        return false;
+    }
+
     //This is horrible, we need to change it
     void tryCast(Ability ability)
     {
@@ -601,104 +622,93 @@ public abstract class BattleController : MonoBehaviour
         }
         ticking = false;
 
-        if(ability.GetType().IsSubclassOf(typeof(TacticalAbility)))
-        {
-            
-            destroyTurnUI();
-
-            GameObject AC = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/S"), mainCamera.transform);
-            AC.AddComponent<TacticalStandOffController>().initialize((TacticalAbility)ability, activeCharacter, map.GetResourceName(), BUIC);
-            return;
-        }
-
+        List<ExWhyCell> range = AR.findCellsInRange(ability.GetRangeMode());
 
         if(ability.name == "Move")
         {
-            if (AR.findCellsInRange(ability.GetRangeMode()).Contains(cursorCell))
+            if(checkValidTarget(AR, cursorCell, false, true, AbilityType.Targeted))
             {
-                if(cursorCell.occupier != null)
-                {
-                    ticking = true;
-                    quickSelectCheck(cursorCell);
-                    return;
-                }
-                BEL.addEvent(BattleEventType.Movement, activeCharacter.getName(), "Move", "X:" + cursorCell.xPosition.ToString() + " Y:"+ cursorCell.yPosition.ToString());
+                BEL.addEvent(BattleEventType.Movement, activeCharacter.getName(), "Move", "X:" + cursorCell.xPosition.ToString() + " Y:" + cursorCell.yPosition.ToString());
 
-                destroyTurnUI();
-
-                GameObject AC = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/S"), GameObject.Find("Main Camera").transform);
-                AC.AddComponent<SoloStandOffController>().initialize(ability, activeCharacter, map.GetResourceName(), BUIC);
                 ability.cast(cursorCell, activeCharacter);
-                destroyARVisual();
-                checkTarget();
-                hasControl = false;
+                createStandOff(null, ability, activeCharacter, null);
+                return;
             }
-            return;
+            else
+            {
+                ticking = true;
+                quickSelectCheck(cursorCell);
+                return;
+            }
         }
-        
-        //This has to be fixed, this doesn't work in some way
+
         switch (ability.abilityType)
         {
-        
-            
-
-        case AbilityType.Area:
-
-                if (!AR.findCellsInRange(ability.GetRangeMode()).Contains(cursorCell))
-                {
-
-                    return;           
-                }
-                else
-                {
-                    BEL.addEvent(BattleEventType.Attack, activeCharacter.getName(), ability.name, "X:" + cursorCell.xPosition.ToString() + " Y:" + cursorCell.yPosition.ToString());
-                }
-                break;
-            case AbilityType.Targeted:
-                
-                if (!AR.findCharactersInRange().Contains(cursorCell.occupier) || cursorCell == activeCharacter.getOccupying())
-                {
-
-                    deSelectAbility();
-                    quickSelectCheck(cursorCell);
-                    //  BEL.addEvent(activeCh aracter, "TargetedAbility", selectedAbility.name, cursorCell.occupier.name)
-                    return;
-                }
-                else
-                {
-                    if(aa is null)
-                    {
-                        return;
-                    }
-                    BEL.addEvent(BattleEventType.Attack, activeCharacter.getName(), ability.name, cursorCell.occupier.getName());
-                }
-                break;
-
             case AbilityType.Self:
-                destroyTurnUI();
-                BUIC.closeAllTransient();
-
-                destroyARVisual();
-
-                hasControl = false;
-
-                GameObject Thing = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/S"), GameObject.Find("Main Camera").transform);
-                Thing.AddComponent<SoloStandOffController>().initialize( ability, activeCharacter, map.GetResourceName(), BUIC);
+                BEL.addEvent(BattleEventType.Attack, activeCharacter.getName(), ability.name);
+                if (ability is TacticalAbility)
+                {
+                    createStandOff(null, null, activeCharacter, (TacticalAbility)ability);
+                }
+                else
+                {
+                    createStandOff(null, ability, activeCharacter);
+                }
                 return;
 
-                break;
+            case AbilityType.Targeted:
+                if(checkValidTarget(AR, cursorCell, true, false, AbilityType.Targeted))
+                {   
+                    BEL.addEvent(BattleEventType.Attack, activeCharacter.getName(), ability.name, cursorCell.occupier.getName());
+                    if (ability is TacticalAbility)
+                    {
+                        createStandOff(null, null, activeCharacter, (TacticalAbility)ability);
+                    }
+                    else
+                    {
+                        createStandOff(aa);
+                    }
+                    return;
+                }
+            break;
         }
-        
+       
+        deSelectAbility();
+        quickSelectCheck(cursorCell);
+    }
+
+    public void createStandOff(AttackAttempt nAttackAttempt = null,  Ability nAbility = null, BattleCharacterObject nBCO = null, TacticalAbility nTacticalAbility = null)
+    {
+        hasControl = false;
         destroyARVisual();
         BUIC.closeAllTransient();
         destroyTurnUI();
 
-        hasControl = false;
-        GameObject AAC = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/S"), GameObject.Find("Main Camera").transform);
-        AAC.AddComponent<DualStandOffController>().initialize(aa, this, BUIC);
-        aa = null;
 
+
+        GameObject AAC = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/S"), GameObject.Find("Main Camera").transform);
+
+        if (nTacticalAbility != null)
+        {
+            AAC.AddComponent<TacticalStandOffController>().initialize(nTacticalAbility, activeCharacter, map.GetResourceName(), BUIC, cursorCell);
+            return;
+        }
+
+        if (nAbility != null)
+        {
+            AAC.AddComponent<SoloStandOffController>().initialize(nAbility, activeCharacter, map.GetResourceName(), BUIC);
+            return;
+        }
+
+        if (nAttackAttempt != null)
+        {
+            AAC.AddComponent<DualStandOffController>().initialize(aa, this, BUIC);
+            aa = null;
+            return;
+        }
+        Debug.Log("Hey, fam. You didn't make a StandOff for some reason");
     }
+
 
     public void destroyTurnUI()
     {
@@ -803,6 +813,22 @@ public abstract class BattleController : MonoBehaviour
             timer = tickTime;
             aiTick();
         }
+    }
+
+    //Bro, this won't work for duplicates, don't over rely on this.
+    public BattleCharacterObject getCharacterFromName(string name)
+    {
+        foreach (BattleCharacterObject battleCharacterObject in characters) 
+        {
+            if (battleCharacterObject.getName() == name)
+            {
+
+            return battleCharacterObject; 
+            }
+        }
+
+        Debug.Log("Fam, there's a wrong character name. maybe they died");
+        return null;
     }
 
     //Obscelete for now

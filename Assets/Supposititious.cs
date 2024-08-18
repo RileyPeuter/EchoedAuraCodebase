@@ -2,11 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Supposititious : TacticalAbility
+public class Supposititious : TacticalAbility, BattleEventListener
 {
-    public Supposititious(string nName, ModType nModType, int nBlockTH, int nParryTH, int nDodgeTH, int nBaseManaCost, AbilityType nAbilityType, int nAnimationID = 0, bool nHasSubAbilities = false, int nRange = 1) : base(nName, nModType, nBlockTH, nParryTH, nDodgeTH, nBaseManaCost, nAbilityType, nAnimationID, nHasSubAbilities, nRange)
-    {
 
+    BattleController BC;
+    Dictionary<BattleCharacterObject, int> lastCharacterDamages = new Dictionary<BattleCharacterObject, int>();
+
+    public Supposititious(BattleController nBC) : base("Supposititious Technique", ModType.None, 0, 0, 0, 1, AbilityType.Targeted, 102, false)
+    {
+        BC = nBC;
+        rangeMode = RangeMode.Custom;
+        friendly = true;
     }
 
+    public override List<ExWhyCell> getCustomRange()
+    {
+        List<ExWhyCell> output = new List<ExWhyCell>();
+
+        foreach (BattleCharacterObject character in lastCharacterDamages.Keys)
+        {
+            output.Add(character.getOccupying());
+        }
+
+        return output;
+    }
+
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
+    {
+        BattleCharacterObject BCO = target.occupier;
+        BCO.heal(lastCharacterDamages[BCO]);
+    }
+
+    public void hearEvent(BattleEvent nBattleEvent)
+    {
+        if (nBattleEvent.eventType != BattleEventType.Hit)
+        {
+            return;
+        }
+
+        BattleCharacterObject BCO = BC.getCharacterFromName(nBattleEvent.target);
+        if(BCO is null){ return; }
+
+        if(BCO.GetAllegiance() != CharacterAllegiance.Controlled)
+        {
+            return;
+        }
+
+        lastCharacterDamages.Add(BCO, int.Parse(nBattleEvent.result));
+    }
 }

@@ -32,6 +32,7 @@ public abstract class Ability
 
     bool hasSubAbilities = false;
 
+    public bool friendly = false;
 
     int range = 1;
     public string name;
@@ -85,6 +86,12 @@ public abstract class Ability
     }
 
     //###Utilities###
+    public virtual List<ExWhyCell> getCustomRange()
+    {
+        Debug.Log("fam, you're asking for a Custom Range from an ability that doesn't implment it");
+        return null;
+    }
+
     public virtual bool isCastable(BattleCharacterObject BCO)
     {
         if (BCO.getManaFlow() < baseManaCost) { return false; }

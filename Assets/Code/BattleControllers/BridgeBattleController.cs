@@ -11,7 +11,12 @@ public class BridgeBattleController : BattleController
 
     public override void GBCTexecutions(int index)
     {
-
+        switch (index)
+        {
+            case 2:
+                openEndWindow();
+            break;
+        }
     }
 
     public override void loadCharacters()
@@ -71,7 +76,7 @@ public class BridgeBattleController : BattleController
                 activeCutscene.addFrame("Morthred", "Ooh, a chance to treat someone with hydro mana!", "Morthred");
                 activeCutscene.addFrame("Fray", "Fine. Lets go check on the others. Let me know when you start getting tired", "Fray");
                 activeCutscene.addFrame("Fray", "Try not to get too weirded out by Morts enthusiam. ", "Fray");
-                activeCutscene.addFrame("Fray", "Mort, don't go and try getting blood", "Fray");
+                activeCutscene.addFrame("Fray", "Mort, don't go and try getting blood", "Fray", 2);
 
                 activeCutscene.createDialogueObject();
                 initializeAdditionalElements();

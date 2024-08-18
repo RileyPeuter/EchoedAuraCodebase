@@ -138,9 +138,9 @@ public abstract class Character {
             new DerivedStat(derivedStat.meleeBonus, getBasicStat(stat.strength),getBasicStat(stat.speed)),
             new DerivedStat(derivedStat.rangedBonus, getBasicStat(stat.precision)),
             new DerivedStat(derivedStat.magicBonus, getBasicStat(stat.ingenuity),getBasicStat(stat.focus)),
-            new DerivedStat(derivedStat.block, getBasicStat(stat.strength),getBasicStat(stat.vitality)),
-            new DerivedStat(derivedStat.dodge, getBasicStat(stat.speed),getBasicStat(stat.ingenuity)),
-            new DerivedStat(derivedStat.parry, getBasicStat(stat.precision),getBasicStat(stat.focus)),
+            new DerivedStat(derivedStat.block, getBasicStat(stat.strength),getBasicStat(stat.vitality), -5),
+            new DerivedStat(derivedStat.dodge, getBasicStat(stat.speed),getBasicStat(stat.ingenuity), -5),
+            new DerivedStat(derivedStat.parry, getBasicStat(stat.precision),getBasicStat(stat.focus), -5),
             new DerivedStat(derivedStat.blockTH, getBasicStat(stat.strength)),
             new DerivedStat(derivedStat.dodgeTH, getBasicStat(stat.speed)),
             new DerivedStat(derivedStat.parryTH, getBasicStat(stat.focus)),
@@ -150,6 +150,7 @@ public abstract class Character {
 
     public void tickBuffs()
     {
+        List<Buff> buffsToRemove = new List<Buff>();
         foreach (Buff buff in buffs)
         {
             buff.tick();
@@ -157,8 +158,13 @@ public abstract class Character {
             if (buff.duration <= 0)
             {
                 buff.cleanup();
-                buffs.Remove(buff);
+                buffsToRemove.Add(buff);
             }
+        }
+
+        foreach(Buff buff in buffsToRemove)
+        {
+            buffs.Remove(buff); 
         }
     }
 }

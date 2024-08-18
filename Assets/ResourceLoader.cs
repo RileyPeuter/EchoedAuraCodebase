@@ -34,6 +34,7 @@ public static class ResourceLoader
         
         GameObject output =  Resources.Load<GameObject>(path);
         gameObjectCache.Add(path, output);
+        if(output is null) { Debug.Log("Hey, fam. The load you just tried to load was null");}
         return output;
     }
 
@@ -45,6 +46,7 @@ public static class ResourceLoader
         }
 
         Sprite output = Resources.Load<Sprite>(path);
+        if (output is null) { Debug.Log("Hey, fam. The load you just tried to load was null"); }
         spriteCache.Add(path, sprite);
         return output;
     }

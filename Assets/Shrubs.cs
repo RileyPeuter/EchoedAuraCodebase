@@ -8,7 +8,7 @@ public class Shrubs : Character
     {
         initiateBasicStats(1, 1, 1, 1, 1, 1);
         initiateDerivedStats();
-        addBuff(new Barricade(this, 15));
+        addBuff(new Barricade(this, 1));
 
         HealthPoints = getDerivedStat(derivedStat.maxHealthPoints);
         ManaPoints = getDerivedStat(derivedStat.maxManaPoints);

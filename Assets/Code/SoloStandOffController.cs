@@ -86,10 +86,7 @@ public class SoloStandOffController : StandOffController
     void Update()
     {
         standOffUpdate();
-        print(ability.name);
         timer = timer + Time.deltaTime;
-        print(caster.getName());
-        print(caster.getOccupying());
     }
 
     protected override void cast()

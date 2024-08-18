@@ -6,7 +6,8 @@ public enum RangeMode
 {
     Simple,
     Move, 
-    Global
+    Global, 
+    Custom
 }
 
 public class AbilityRange : MonoBehaviour
@@ -31,17 +32,41 @@ public class AbilityRange : MonoBehaviour
     //Finds all cells in  range. 
     //It just uses a two dimensional for loop adding a cell to each quandrant. 
 
+    public void setCellsInRange(List<ExWhyCell> nCells)
+    {
+        cellsInRange = nCells;
+    }
+
     //###Utilities
     public List<ExWhyCell> findCellsInRange(RangeMode mode)
     {
+        if(mode == RangeMode.Custom)
+        {
+            return cellsInRange;
+        }
+
+        if(cellsInRange.Count > 0)
+        {
+            return cellsInRange;
+        }
+
         switch (mode)
         {
             case RangeMode.Move:
                 return jumperRange(epicentre, range);
-                break;
+            break;
         }
 
         return simpleRange();
+    }
+
+    public List<ExWhyCell> globalRange()
+    {
+        foreach (ExWhyCell cell in grid.gridCells)
+        {
+            cellsInRange.Add(cell);
+        }
+        return cellsInRange;
     }
 
     public List<ExWhyCell> simpleRange() { 

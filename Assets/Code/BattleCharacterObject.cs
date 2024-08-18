@@ -197,6 +197,12 @@ public class BattleCharacterObject : MonoBehaviour
         manaFlow = manaFlow - cost;
     }
 
+    public void heal(int healing)
+    {
+        character.HealthPoints = character.HealthPoints + healing;
+        if(character.HealthPoints >= character.getDerivedStat(derivedStat.maxHealthPoints)) { character.HealthPoints = character.getDerivedStat(derivedStat.maxHealthPoints); }
+    }
+
     public void takeDamage(int damage)
     {
         character.HealthPoints = character.HealthPoints - damage;
@@ -235,6 +241,7 @@ public class BattleCharacterObject : MonoBehaviour
         setGraphicalPosition();
         currentCellBuff = newCell.getCellBuff().Clone(character);
         character.addBuff(currentCellBuff);
+
     }
 
     public void clearAniBools()
@@ -278,8 +285,21 @@ public class BattleCharacterObject : MonoBehaviour
         nextTurn += 20 - character.getDerivedStat(derivedStat.turnFrequency);
         print(nextTurn);
         character.cleanUpBuffs();
-        manaFlow = character.getDerivedStat(derivedStat.manaFlow);
+
+        int manaRegenerated = character.getDerivedStat(derivedStat.manaFlow) - manaFlow;
+
+        if (character.getCurrentMana() < manaRegenerated)
+        {
+            manaFlow = manaFlow + getCurrentMana();
+            character.ManaPoints = 0;
+        }
+        else
+        {
+            manaFlow = character.getDerivedStat(derivedStat.manaFlow);
+            character.ManaPoints -= manaRegenerated;
+        }
         availableMovement = character.getDerivedStat(derivedStat.movement);
+        character.tickBuffs();
     }
 
     public void die()
