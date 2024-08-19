@@ -48,6 +48,7 @@ public class Supposititious : TacticalAbility, BattleEventListener
             return;
         }
 
-        lastCharacterDamages.Add(BCO, int.Parse(nBattleEvent.result));
+        lastCharacterDamages[BCO] = int.Parse(nBattleEvent.result);
+        //lastCharacterDamages.Add(BCO, int.Parse(nBattleEvent.result))
     }
 }

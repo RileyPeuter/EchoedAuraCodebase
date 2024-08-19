@@ -65,6 +65,7 @@ public class ExWhyTrainingGround : ExWhy
                     cell.resourceName = "Grass";
                     cell.makeAltable();
                     cell.setAltRate(10);
+                    cell.animatable = true;
 
                     cell.setCellBuff(new GenericCellBuff(3, 0, -2));
                     break;

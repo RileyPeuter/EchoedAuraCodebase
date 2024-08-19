@@ -38,6 +38,7 @@ public abstract class ExWhy
     public string resourceName;
 
     public Sprite[,] altSpriteSheet;
+    public GameObject animatedTiles;
 
 
     //###Utilities###
@@ -245,6 +246,12 @@ public abstract class ExWhy
 
     void consolidate(ExWhyCell cell)
     {
+        if((cell.colID == 0 &&  cell.animatable) && UnityEngine.Random.Range(0, 100) < cell.animatableRate)
+        {
+            GameObject.Instantiate(Resources.Load<GameObject>("GrassTileAni"), cell.cellGO.transform);
+            return;
+        }
+
         if (cell.altable && (UnityEngine.Random.Range(0, 100) < cell.altRate))
         {
             cell.cellGO.GetComponent<SpriteRenderer>().sprite = altSpriteSheet[cell.spriteID, cell.colID];

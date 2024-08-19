@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ExWhyCell
@@ -15,8 +16,12 @@ public class ExWhyCell
     public int spriteID;
     public string resourceName;
     public BattleCharacterObject occupier;
+
     public bool altable = false;
     public int altRate = 50;
+
+    public bool animatable = false;
+    public int animatableRate = 50;
 
     public bool walkable;
 

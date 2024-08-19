@@ -7,5 +7,5 @@ AnimatorOverrideController:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TacticalAbilityController
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 43a84cb60df334c4e9a6b6157b659a89, type: 2}
   m_Clips: []
