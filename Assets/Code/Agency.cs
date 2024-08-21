@@ -16,6 +16,11 @@ public class Agency
         characters.Add(new StoredCharacterObject(new Morthred()));
     }
 
+    public void addCharacter(Character nCharacter)
+    {
+        characters.Add(new StoredCharacterObject(nCharacter));
+    }
+
     public List<StoredCharacterObject> getCharacters()
     {
         return characters;

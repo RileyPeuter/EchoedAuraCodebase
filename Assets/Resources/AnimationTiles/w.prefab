@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2401324052572422368}
   - component: {fileID: 1796006553128713565}
   m_Layer: 0
-  m_Name: GrassTileAni
+  m_Name: w
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -94,7 +94,7 @@ Animator:
   m_GameObject: {fileID: 1027555520090216913}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 65ec6fd2445d6784193e6ed8f10ee576, type: 2}
+  m_Controller: {fileID: 9100000, guid: dd40b250161e167489ce0f44d10df5b4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

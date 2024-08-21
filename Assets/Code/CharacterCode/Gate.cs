@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gate : MonoBehaviour
+public class Gate : Character
 {
-    // Start is called before the first frame update
-    void Start()
+    public Gate() : base()
     {
-        
-    }
+        initiateBasicStats(1, 1, 1, 1, 1, 1);
+        initiateDerivedStats();
+        addBuff(new Barricade(this, 30));
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        HealthPoints = getDerivedStat(derivedStat.maxHealthPoints);
+        ManaPoints = getDerivedStat(derivedStat.maxManaPoints);
+
+        CharacterName = "Gate";
+        resourceString = "Gate";
     }
 }

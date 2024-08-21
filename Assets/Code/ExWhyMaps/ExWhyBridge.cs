@@ -45,6 +45,9 @@ public class ExWhyBridge : ExWhy
                     cell.makeAltable();
                     cell.setAltRate(70);
                     cell.setCellBuff(new GenericCellBuff(0, 0, 0));
+                    cell.animatable = true;
+                    cell.animatableRate = 5;
+                    
                     break;
                     
                 case 'g':
@@ -53,6 +56,7 @@ public class ExWhyBridge : ExWhy
                     cell.makeAltable();
                     cell.setAltRate(20);
                     cell.setCellBuff(new GenericCellBuff(0, 0, 0));
+                    cell.animatable = true;
                     break;
 
                 case 'd':

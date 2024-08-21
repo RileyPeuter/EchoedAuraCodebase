@@ -248,7 +248,8 @@ public abstract class ExWhy
     {
         if((cell.colID == 0 &&  cell.animatable) && UnityEngine.Random.Range(0, 100) < cell.animatableRate)
         {
-            GameObject.Instantiate(Resources.Load<GameObject>("GrassTileAni"), cell.cellGO.transform);
+            GameObject.Instantiate(Resources.Load<GameObject>("AnimationTiles/" + cell.cellType), cell.cellGO.transform);
+            Debug.Log("fambulence");
             return;
         }
 

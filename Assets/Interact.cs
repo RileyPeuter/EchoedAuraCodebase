@@ -11,10 +11,11 @@ public class Interact : TacticalAbility
     {
     }
 
-    public Interact(BattleController nBC, int nInteractionID) : base("Interact", ModType.None, 0,0,0,0,AbilityType.Self, 101)
+    public Interact(BattleController nBC, int nInteractionID, string nDescription = "") : base("Interact", ModType.None, 0,0,0,0,AbilityType.Self, 101)
     {
         BC = nBC;
         interactionID = nInteractionID;
+        description = nDescription;
     }
 
     public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)

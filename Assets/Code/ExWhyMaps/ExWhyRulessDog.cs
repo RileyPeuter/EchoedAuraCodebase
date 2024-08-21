@@ -66,6 +66,8 @@ public class ExWhyRulessDog : ExWhy
                     cell.makeAltable();
                     cell.setAltRate(50);
                     cell.setCellBuff(new GenericCellBuff(0, 0, 0));
+                    cell.animatable = true;
+                    cell.animatableRate = 5;
                     break;
             }
         }

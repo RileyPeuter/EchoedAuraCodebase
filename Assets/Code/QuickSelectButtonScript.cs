@@ -56,7 +56,6 @@ public class QuickSelectButtonScript : MonoBehaviour, IPointerEnterHandler, IPoi
             print(image.name);
             if(image.name == "uI_AbilityIcon_Button(Clone)")
             {
-                print("Bear");
                 image.sprite = ability.abilityIcon;
             }
         }

@@ -54,6 +54,7 @@ public class  ExWhyLocalTown : ExWhy
                     cell.makeAltable();
                     cell.setAltRate(30);
                     cell.setCellBuff(new GenericCellBuff(0, 0, 0));
+                    cell.animatable = true;
                     break;
 
                 case 's':
