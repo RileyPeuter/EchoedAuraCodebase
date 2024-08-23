@@ -21,10 +21,10 @@ public class Mission
     public MissionType type;
     public int BCID;
     public ExWhy map;
-
+    public bool hasSetCharacters = false;
 
     //###Constructor###
-    public Mission(string nName, string nDescription, string nIconPath, MissionType nType, int BCID, float nXMarkerPosition, float nYMarkerPosition, ExWhy nMap = null, int nCutsceneInt = 0)
+    public Mission(string nName, string nDescription, string nIconPath, MissionType nType, int BCID, float nXMarkerPosition, float nYMarkerPosition, ExWhy nMap = null, int nCutsceneInt = 0, bool hasSet = false)
     {
         name = nName;
         description = nDescription;
@@ -35,7 +35,7 @@ public class Mission
         cutsceneInt = nCutsceneInt;
         xMarkerPosition = nXMarkerPosition;
         yMarkerPosition = nYMarkerPosition; 
-
+        hasSetCharacters = hasSet;
     }
 
 }

@@ -27,6 +27,8 @@ public class RulessDeogBattleController : BattleController
     public override void loadCharacters()
     {
 
+
+
         spawnCells.Add(map.gridObject.gridCells[4, 4]);
         spawnCells.Add(map.gridObject.gridCells[5, 4]);
         spawnCells.Add(map.gridObject.gridCells[7, 4]);
@@ -71,6 +73,24 @@ public class RulessDeogBattleController : BattleController
 
                 spawnKahund();
                 objList.addObjective(new Objective("etKahund0", 1, BattleEventType.EndTurn).addVerb(CharacterAllegiance.Controlled.ToString()));
+                break;
+
+            case "etFinish":
+                activeCutscene = gameObject.AddComponent<GenericBattleCutscene>();
+                activeCutscene.initialize(this);
+
+                activeCutscene.addSprite("Fray", "Fray");
+                activeCutscene.addSprite("Ruless", "Ruless");
+                activeCutscene.addSprite("Iraden", "Iraden");
+
+
+                activeCutscene.addFrame("Fray", "We're getting nowhere.", "Fray");
+                activeCutscene.addFrame("Ruless", "I can keep this up. We musn't abbandon our duty.", "Ruless");
+                activeCutscene.addFrame("Fray", "Normally i'd agree, but your duty was to escort people who ran away hours ago", "Fray");
+                activeCutscene.addFrame("Fray", "I don't want to have to explain to our seniors how you died a some pests", "Fray");
+                activeCutscene.addFrame("Iraden", "Maybe we can break through the trees. They'll leave us alone for the cart", "Iraden");
+                activeCutscene.addFrame("Ruless", "...Fine. For your sakes", "Ruless", 1);
+
                 break;
         }
     }   

@@ -17,7 +17,7 @@ public class TacticalStandOffController : StandOffController {
 
     public override void standOffUpdate()
     {
-        if (timer > 1 && !finished)
+        if (timer > 1.5f && !finished)
         {
             cast();
             end();

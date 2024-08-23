@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 public enum AIMode{
     Passive,
@@ -13,6 +14,8 @@ public enum AIMode{
 public abstract class BattleCharacterAI
 {
     //###MemberVariables###
+
+    protected bool moved = false;
 
     protected BattleCharacterObject BCO;
     protected int murderousIntent = 1;

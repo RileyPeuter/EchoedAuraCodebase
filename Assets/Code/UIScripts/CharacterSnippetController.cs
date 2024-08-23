@@ -16,6 +16,11 @@ public class CharacterSnippetController : Window
         
     }
 
+    public void disable()
+    {
+        this.GetComponent<Button>().interactable = false;   
+    }
+
     public void reenable()
     {
         this.GetComponent<Button>().interactable = true;    

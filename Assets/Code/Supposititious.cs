@@ -13,6 +13,7 @@ public class Supposititious : TacticalAbility, BattleEventListener
         BC = nBC;
         rangeMode = RangeMode.Custom;
         friendly = true;
+        description = "Removes the last instance of damage from target. It was a Phantom all along!";
     }
 
     public override List<ExWhyCell> getCustomRange()

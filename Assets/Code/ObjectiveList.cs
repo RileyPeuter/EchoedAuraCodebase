@@ -157,7 +157,9 @@ public class Objective
 
     public void setText()
     {
-        if (!visible) { return; }
+        if (!visible) {
+            //completedText.gameObject.SetActive()
+            return; }
 
         descriptionText.text = description;
         completedText.text = currentCompletions.ToString() + "/" + maxCompletions.ToString();

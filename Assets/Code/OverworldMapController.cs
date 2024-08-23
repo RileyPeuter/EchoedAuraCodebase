@@ -27,10 +27,15 @@ public class OverworldMapController : MonoBehaviour
         selectedMission = mission;
         characterSelect = Instantiate(Resources.Load<GameObject>("UIElements/uI_SelectCharacters_Panel"), this.transform);
         characterSelect.GetComponent<CharacterSelectController>().initialize(BattleUIController.HighestWindow);
+        characterSelect.GetComponent<CharacterSelectController>().initialize(null, false);
+
         characterSelect.GetComponent<CharacterSelectController>().setOWMC(this);
     }
 
+    public void resetSelection()
+    {
 
+    }
 
     // Start is called before the first frame update
     void Start()

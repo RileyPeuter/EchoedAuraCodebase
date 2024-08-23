@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ public class CharacterSelectController : Window
     GameObject characterInfoPrefab;
     OverworldMapController OWMC;
     List<GameObject> characterButtons;
-
+    bool ATA = true;
     public int getCharacterSelectedCount()
     {
         return characterButtons.Count;
@@ -91,8 +92,7 @@ public class CharacterSelectController : Window
 
     public void confirmCharacters()
     {
-        print("Bakka");
-        if (getCharacterCount() > 0)
+        if (getCharacterCount() > 0 || ATA == false)
         {
             OWMC.startMission(characters.ToList());
         }
@@ -122,5 +122,9 @@ public class CharacterSelectController : Window
     void Update()
     {
         
+    }
+    public void initialize(List<StoredCharacterObject> forcedCharacters = null, bool ableToAdd = true)
+    {
+        ATA = ableToAdd;
     }
 }

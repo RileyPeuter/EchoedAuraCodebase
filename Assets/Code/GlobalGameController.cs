@@ -57,7 +57,7 @@ public class GlobalGameController : MonoBehaviour
         completed = new List<Mission>();
         available = new List<Mission>();
 
-        available.Add(new Mission("Kimmi's Training", "Assist the hand to hand specialist with his training", "Kimmi", MissionType.Character, 4, -217f, 89f, new ExWhyTrainingGround())); 
+        available.Add(new Mission("Kimmi's Training", "Assist the hand to hand specialist with his training", "Kimmi", MissionType.Character, 4, -217f, 89f, new ExWhyTrainingGround(), 0, true)); 
         available.Add(new Mission("Ruless' Standoff", "The swordswoman is beset by a group of beasts. Help her", "Ruless", MissionType.Character, 3, 165F, -94F, new ExWhyRulessDog(), 2));
         available.Add(new Mission("Scarci Retrival", "A girl in a suit of armour is stranded", "Scarci", MissionType.Character, 5, 264F, 13.3F, new ExWhyForestRoad(), 3));
         available.Add(new Mission("First Contracted Mission", "End the day and recieve your first Contracted mission", "Agency", MissionType.Character, 5, -258.4F, -40F));

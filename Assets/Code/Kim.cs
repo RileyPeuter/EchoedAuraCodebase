@@ -6,7 +6,7 @@ public class Kim : Character
 {
     public Kim() : base()
     {
-        initiateBasicStats(3, 2, 2, 1, 1, 1);
+        initiateBasicStats(2, 2, 2, 1, 1, 1);
         initiateDerivedStats();
         HealthPoints = getDerivedStat(derivedStat.maxHealthPoints);
         ManaPoints = getDerivedStat(derivedStat.maxManaPoints);
@@ -14,6 +14,8 @@ public class Kim : Character
         resourceString = "Kim";
         GeneralAbilities = new List<Ability>();
         CharacterAbilities = new List<Ability>();
+
+        DefaultCAI = new KimAI();
 
         GeneralAbilities.Add(new MeleeStrike());
         CharacterAbilities.Add(new ShikariKick());

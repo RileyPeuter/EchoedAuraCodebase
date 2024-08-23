@@ -32,6 +32,14 @@ public class MapCharacterListController : Window
         }
     }
 
+    public void disableSelection()
+    {
+        foreach(GameObject character in characterButtons)
+        {
+            character.GetComponent<CharacterSnippetController>().disable();
+        }
+    }
+
     public bool selectCharacter(StoredCharacterObject character)
     {
         return OWMC.selectCharacter(character);

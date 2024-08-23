@@ -108,14 +108,16 @@ public class StandOffSide
 
                     //This is horrible, but I think it should work
                     Animator ani = image.gameObject.AddComponent<Animator>();
-                    ani.runtimeAnimatorController = Resources.Load<AnimatorOverrideController>("TacticalAbilityController");
+                                        ani.runtimeAnimatorController = Resources.Load<AnimatorOverrideController>("TacticalAbilityController");
+                    AnimatorOverrideController AOC = new AnimatorOverrideController(ani.runtimeAnimatorController);
                     List<KeyValuePair<AnimationClip, AnimationClip>> aniClips = new List<KeyValuePair<AnimationClip, AnimationClip>>();
-                    aniClips.Add(new KeyValuePair<AnimationClip, AnimationClip>(ani.runtimeAnimatorController.animationClips[0], Resources.Load<AnimationClip>("TacticalAnimations/" + nAbility.getAniID().ToString())));
+                    
+                    aniClips.Add(new KeyValuePair<AnimationClip, AnimationClip>(AOC.animationClips[0], Resources.Load<AnimationClip>("TacticalAnimations/" + nAbility.getAniID().ToString())));
                     AnimatorOverrideController aoc = new AnimatorOverrideController(ani.runtimeAnimatorController);
-                    aoc.ApplyOverrides(aniClips);
+                    AOC.ApplyOverrides(aniClips);
 
-                    //ani.runtimeAnimatorController.anim
-                    nAbility.getAniID();
+                    ani.runtimeAnimatorController = AOC;
+
                     break;
             }
         }
