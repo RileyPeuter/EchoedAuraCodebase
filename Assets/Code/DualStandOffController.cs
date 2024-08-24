@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,7 +66,6 @@ public class DualStandOffController : StandOffController
         targetController.initialize(BattleUIController.HighestWindow, rightSide.characterSide);
         rightSide.getAnimator().SetTrigger("anticipate");
         leftSide.getAnimator().SetInteger("ability", attackAttempt.getAbilityAniID());
-        leftSide.getAnimator().SetTrigger("attack");
     }
 
     void Update()
@@ -260,6 +258,8 @@ public class DualStandOffController : StandOffController
 
             if (reactSelected)
             {
+                leftSide.getAnimator().SetTrigger("attack");
+
                 resetAnimationListeners();
                 initiateAttack();
                 timer = 0;
@@ -325,6 +325,16 @@ public class DualStandOffController : StandOffController
                     break;
             }
         }
+    }
+
+    protected override bool checkMessageInQueue()
+    {
+        if(!leftSide.checkIfMessagesInQueue() && !rightSide.checkIfMessagesInQueue())
+        {
+            return false;
+        }
+
+        return true;
     }
 
     protected override void cast()

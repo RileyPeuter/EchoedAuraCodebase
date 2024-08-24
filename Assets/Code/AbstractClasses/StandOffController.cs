@@ -96,11 +96,19 @@ public abstract class StandOffController : MonoBehaviour
     //We probably need to change this
     protected abstract void cast();
 
+    protected virtual bool checkMessageInQueue() { return false; }
+
     protected void end()
     {
-        Destroy(rollPanel, 0.5f);
-        Destroy(this.gameObject, 0.5f);
+        if (checkMessageInQueue())
+        {
+            return;
+        }
+
+        Destroy(rollPanel, 0.8f);
+        Destroy(this.gameObject, 0.8f);
         GameObject.Find("MapController").GetComponent<BattleController>().finishMove(1);
         SOS = StandOffStage.EmptyState;
+        
     }
 }

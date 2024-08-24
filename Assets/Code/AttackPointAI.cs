@@ -44,7 +44,16 @@ public class AttackPointAI : BattleCharacterAI
         */
         if(!BattleController.ActiveBattleController.getCastable(output))
         {
-            output = BCO.getMovementAbility();
+            if (!moved)
+            {
+                moved = true;
+                output = BCO.getMovementAbility();
+            }
+            else
+            {
+                moved = false;
+                return null;
+            }
         }
 //        }
 

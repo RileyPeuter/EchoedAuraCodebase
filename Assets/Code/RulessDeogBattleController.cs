@@ -11,12 +11,19 @@ public class RulessDeogBattleController : BattleController
 
     public override void endBattle()
     {
-
+        GlobalGameController.GGC.getAgency().addCharacter(getCharacterFromName("Ruless").getCharacter());
+        GlobalGameController.GGC.openManagment();
     }
 
     public override void GBCTexecutions(int index)
     {
+        switch (index)
+        {
+            case 1:
+                openEndWindow();
+                break;
 
+        }
     }
 
     public override void interact(int index)
@@ -91,11 +98,16 @@ public class RulessDeogBattleController : BattleController
                 activeCutscene.addFrame("Iraden", "Maybe we can break through the trees. They'll leave us alone for the cart", "Iraden");
                 activeCutscene.addFrame("Ruless", "...Fine. For your sakes", "Ruless", 1);
 
+                activeCutscene.createDialogueObject();
+                activeCutscene.preInitializeTextbox();
+                activeCutscene.setFrame(0);
+                toggleCutscene(true);
+
                 break;
         }
     }   
 
-    void spawnKahund()
+    void spawnKahund(bool extra = false)
     {
         if (Random.Range(0, 2) != 1) { 
             spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[9, 8]), new Kahund(cart.getOccupying()));
@@ -103,6 +115,12 @@ public class RulessDeogBattleController : BattleController
         else
         {
             spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[9, 8]), new Kahund(cart.getOccupying()));
+        }
+        if (extra)
+        {
+            spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[2, 13]), new Kahund(cart.getOccupying()));
+            spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[19, 13]), new Kahund(cart.getOccupying()));
+
         }
     }
 
@@ -125,9 +143,11 @@ public class RulessDeogBattleController : BattleController
 
 
         baseTacticalAbilities.Add(new Supposititious(this));
-        objList.addObjective(new Objective("etKahund0", 1, BattleEventType.EndTurn).addVerb(CharacterAllegiance.Controlled.ToString()));
+        objList.addObjective(new Objective("etKahund0", 1, BattleEventType.EndTurn).addVerb(CharacterAllegiance.Controlled.ToString()).makeInvisible());
+        objList.addObjective(new Objective("etFinish", 5, BattleEventType.EndTurn).addVerb(CharacterAllegiance.Controlled.ToString()).addSubject("Ruless").addDescription("Hold out"));
 
         lookForBattleEventListeners();
+        spawnKahund(true);
     }
 
     public override List<TacticalAbility> getTacticalAbilities()

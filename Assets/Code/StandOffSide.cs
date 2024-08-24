@@ -29,6 +29,15 @@ public class StandOffSide
         }
     }
 
+    public bool checkIfMessagesInQueue()
+    {
+        if(messageQueue.Count == 0)
+        {
+            return false;
+        }
+        return true;
+    }
+
     public void setReaction(int reaction)
     {
         characterAnimator.SetInteger("reactionType", reaction);

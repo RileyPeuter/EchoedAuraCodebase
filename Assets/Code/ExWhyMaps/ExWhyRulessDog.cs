@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ExWhyRulessDog : ExWhy
 {
-    public ExWhyRulessDog() : base(20, 13, "Bridge")
+    public ExWhyRulessDog() : base(20, 13, "Forest")
     {
         worldData = new char[20, 13]{
             {'t','t','t','t','t','t','t','t','t','g','t','t','t' },
@@ -48,7 +48,7 @@ public class ExWhyRulessDog : ExWhy
                     instantiateCell(cell, true, 3, 3);
                     cell.resourceName = "Grass";
                     cell.makeAltable();
-                    cell.setAltRate(20);
+                    cell.setAltRate(10);
                     cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     break;
 
