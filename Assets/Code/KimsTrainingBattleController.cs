@@ -28,7 +28,7 @@ public class KimsTrainingBattleController : BattleController
 
         characters[characters.Count - 1].spawnCharacter(map.gridObject);
     }
-
+            
     public override void objectiveComplete(string id)
     {
         switch (id)

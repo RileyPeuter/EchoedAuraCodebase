@@ -5,6 +5,7 @@ using UnityEngine;
 public class DorciaAssistanceBattleController : BattleController
 {
 
+    GameObject kahundPrefab;
     BattleCharacterObject dorciaObject;
     BattleCharacterObject gate;
     public override void endBattle()
@@ -49,9 +50,28 @@ public class DorciaAssistanceBattleController : BattleController
 
     }
 
+    public void spawnKahund(bool extra = false)
+    {
+        if (extra)
+        {
+            spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[19, 2]), new Kahund());
+        }
+        spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[1, 7]), new Kahund());
+    }
+
     public override void objectiveComplete(string id)
     {
+        switch (id)
+        {
+            case "khFSpawn01":
+                spawnKahund(true);
+                break;
 
+            case "khSpawn01":
+                spawnKahund(false);
+                objList.addObjective(new Objective("khSpawn01", 1, BattleEventType.Time).addModifier(ObjectiveModifier.GreaterThan, turnTimer + 10));
+                break;
+        }
     }
 
     public override List<TacticalAbility> getTacticalAbilities()
@@ -111,7 +131,21 @@ public class DorciaAssistanceBattleController : BattleController
 
         lookForBattleEventListeners();
 
-        //objList.addObjective(new Object("Dorcia "))
+        List<ExWhyCell> KahundSpawnField = new List<ExWhyCell>();
+
+        KahundSpawnField.Add(map.gridObject.gridCells[15, 1]);
+        KahundSpawnField.Add(map.gridObject.gridCells[16, 1]);
+        KahundSpawnField.Add(map.gridObject.gridCells[17, 1]);
+        KahundSpawnField.Add(map.gridObject.gridCells[18, 1]);
+        KahundSpawnField.Add(map.gridObject.gridCells[15, 2]);
+
+        kahundPrefab = Resources.Load<GameObject>("TestAssets/Kahund");
+
+        objList.addObjective(new Objective("khSpawn01", 1, BattleEventType.Time).addModifier(ObjectiveModifier.GreaterThan, 10));
+        spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[1, 7]), new Kahund());
+        spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[1, 7]), new Kahund());
+
+        objList.addObjective(new MovementObjective("khFSpawn01", KahundSpawnField, 1).addDescription("Teststests"));
     }
 
     // Update is called once per frame

@@ -26,11 +26,16 @@ public class ExWhyCell
     public bool walkable;
 
     CellBuff cellBuff;
-    
-    
 
-    
+
+
+
     //###Getters###
+    public override string ToString()
+    {
+        return "X:" + xPosition.ToString() + ",Y:" + yPosition.ToString();
+    }
+
     public Transform getTransform()
     {
         return cellGO.transform;

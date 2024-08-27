@@ -5,7 +5,7 @@ using UnityEngine;
 public class ExWhyForestRoad : ExWhy
 {
     
-        public ExWhyForestRoad() :base(20, 13, "Bridge")
+        public ExWhyForestRoad() :base(20, 13, "Forest")
         {
         worldData = new char[20, 13]{
             {'t','g','g','g','g','d','d','d','g','g','t','t','t' },

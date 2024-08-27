@@ -41,6 +41,13 @@ public class MissionInfoController : MonoBehaviour, IPointerEnterHandler, IPoint
                 childPanel = image.gameObject;
             }
         }
+
+
+
+        if(gameObject.GetComponent<RectTransform>().localPosition.x > 0)
+        {
+            childPanel.GetComponent<RectTransform>().position += new Vector3(-300, 0, 0);
+        }
         childPanel.SetActive(false);
     }
 

@@ -55,6 +55,15 @@ public class BuffInfoScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        trans.position = Input.mousePosition + new Vector3(0,-60,0) ;
+        Vector2 mousePos = Input.mousePosition;
+        if (mousePos.x < Screen.width / 2)
+        {
+            trans.position = Input.mousePosition + new Vector3( 100, -60, 0);
+        }
+        else
+        {
+            trans.position = Input.mousePosition + new Vector3(-100, -60, 0);
+        }
+
     }
-}
+    }

@@ -42,6 +42,7 @@ public abstract class BattleController : MonoBehaviour
     protected int turnTimer = 0;
     public bool hasControl = true;
 
+    protected GameObject objectiveHighlightPrefab;
     protected GameObject hoverCursor;
     protected GameObject cursor;
     protected ExWhyCell cursorCell;
@@ -59,6 +60,8 @@ public abstract class BattleController : MonoBehaviour
     Camera mainCamera;
 
     List<StoredCharacterObject> charactersToSpawn;
+
+    protected List<GameObject> objectiveHighlights;
 
     protected List<TacticalAbility> baseTacticalAbilities;
 
@@ -253,10 +256,17 @@ public abstract class BattleController : MonoBehaviour
         timerTick();
     }
 
+    void clearObjectiveHighlights()
+    {
+
+    }
+
     public void initializeBattleController()
     {
+        objectiveHighlightPrefab = Resources.Load<GameObject>("ObjectiveHighlight");
         activeCellInformation = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_CurrentActiveCell_Panel"), GameObject.Find("Canvas").transform).GetComponent<CellInformationController>();
         baseTacticalAbilities = new List<TacticalAbility>();
+        objectiveHighlights = new List<GameObject>();
         mainCamera = Camera.main;
         ActiveBattleController = this;
         characters = new List<BattleCharacterObject>();
@@ -392,6 +402,11 @@ public abstract class BattleController : MonoBehaviour
         foreach (BattleCharacterObject character in characters) 
         {
             if (character.isNextTurn(turnTimer)) {
+                
+                if(BEL != null) { 
+                    BEL.addEvent(BattleEventType.Time, "", "", "", turnTimer.ToString());
+                }
+
                 setActiveCharacter(character);
                 GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_TurnName_Panel"), GameObject.Find("Canvas").transform).GetComponent<TurnNameController>().initialize(activeCharacter.getName());
                 return;
@@ -459,7 +474,7 @@ public abstract class BattleController : MonoBehaviour
             return;
         }
 
-        if (activeCharacter.getManaFlow() > 0 && activeCharacter.getMovement() > 0)
+        if (activeCharacter.getManaFlow() <= 0 && activeCharacter.getMovement() <= 0)
         {
             timerTick();
         }
@@ -628,7 +643,7 @@ public abstract class BattleController : MonoBehaviour
         {
             if(checkValidTarget(AR, cursorCell, false, true, AbilityType.Targeted))
             {
-                BEL.addEvent(BattleEventType.Movement, activeCharacter.getName(), "Move", "X:" + cursorCell.xPosition.ToString() + " Y:" + cursorCell.yPosition.ToString());
+                BEL.addEvent(BattleEventType.Movement, activeCharacter.getName(), "Move", cursorCell.ToString());
 
                 ability.cast(cursorCell, activeCharacter);
                 createStandOff(null, ability, activeCharacter, null);

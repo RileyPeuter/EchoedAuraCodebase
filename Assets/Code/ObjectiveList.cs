@@ -38,10 +38,10 @@ public class Objective
     GameObject parent;
     Text descriptionText;
     Text completedText;
-    float yOffset;
+    protected float yOffset;
 
     //###Utilities###
-    public bool checkObjective(BattleEventType nBattleEventType, string nSubject = null, string nVerb = null, string nTarget = null, string nResult = null)
+    public virtual bool checkObjective(BattleEventType nBattleEventType, string nSubject = null, string nVerb = null, string nTarget = null, string nResult = null)
     {
 
         //This block just checks if the event checks if something is equal to the objecitve
@@ -56,7 +56,7 @@ public class Objective
             return true;
         }
              
-        return true;
+        return false;
     }
 
     //Added this to make it cleaner elsewhere

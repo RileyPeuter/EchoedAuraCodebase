@@ -20,7 +20,7 @@ public class CellInformationController : Window
 
         effectObject = GameObject.Instantiate(cell.getCellBuff().getDisplayGameObject(), this.transform);
         effectObject.GetComponent<GenericCellEffectController>().initialize((GenericCellBuff)cell.getCellBuff());
-        GetComponentsInChildren<Text>().ToList().Find(x => x.name == "uI_CellTypeName_Text").text = cell.resourceName;
+        GetComponentsInChildren<Text>().ToList().Find(x => x.name == "uI_CellTypeName_Text").text = cell.resourceName + " [" + cell.xPosition + " " + cell.yPosition +"]";
 
 
         /*
