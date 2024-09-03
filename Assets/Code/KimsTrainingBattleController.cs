@@ -80,6 +80,8 @@ public class KimsTrainingBattleController : BattleController
 
         initializeBattleController();
 
+        tacticalPoints = 2;
+
         cursor.transform.position.Set(3, 3, 1);
         cursorCell = map.gridObject.gridCells[3, 3];
 
@@ -125,12 +127,13 @@ public class KimsTrainingBattleController : BattleController
         objList.addObjective(new Objective("irdHit0", 1, BattleEventType.Hit).addDescription("Spar with Kim").addTarget("Iraden"));
 
         objList.addObjective(new Objective("kmKill0", 1, BattleEventType.Kill).addTarget("Kim").makeInvisible());
+        
+        baseTacticalAbilities.Add(new Supposititious(this));
+        baseTacticalAbilities.Add(new Distraction(this));
 
         lookForBattleEventListeners();
 
-        Supposititious supp = new Supposititious(this);
-        BEL.addListener(supp);
-        baseTacticalAbilities.Add(supp);
+        
     }
 
     // Update is called once per frame

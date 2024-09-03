@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -77,6 +78,22 @@ public class AttackAttemptUIController : Window
                     break;
 
             }
+        }
+
+
+        if (!attackAttempt.reactionsAvailalbe.Contains(reactionType.Dodge))
+        {
+            gameObject.GetComponentsInChildren<Image>(true).ToList().Find(x => x.name == "uI_DodgeRowCross_Image").gameObject.SetActive(true);
+        }
+
+        if (!attackAttempt.reactionsAvailalbe.Contains(reactionType.Block))
+        {
+            gameObject.GetComponentsInChildren<Image>(true).ToList().Find(x => x.name == "uI_BlockRowCross_Image").gameObject.SetActive(true);
+        }
+
+        if (!attackAttempt.reactionsAvailalbe.Contains(reactionType.Parry))
+        {
+            gameObject.GetComponentsInChildren<Image>(true).ToList().Find(x => x.name == "uI_ParryRowCross_Image").gameObject.SetActive(true);
         }
     }
 

@@ -18,6 +18,7 @@ public class RulessDeogBattleController : BattleController
         {
             GlobalGameController.GGC.getAgency().addCharacter(BCO.getCharacter());
         }
+        GlobalGameController.GGC.completeMission();
         GlobalGameController.GGC.openManagment();
     }
 
@@ -45,6 +46,7 @@ public class RulessDeogBattleController : BattleController
         spawnCells.Add(map.gridObject.gridCells[4, 4]);
         spawnCells.Add(map.gridObject.gridCells[5, 4]);
         spawnCells.Add(map.gridObject.gridCells[7, 4]);
+        spawnCells.Add(map.gridObject.gridCells[6, 4]);
 
         int spawnIndex = 0;
         foreach(GameObject GO in getCharacterGOsFromStored())
@@ -151,7 +153,8 @@ public class RulessDeogBattleController : BattleController
 
         baseTacticalAbilities.Add(new Supposititious(this));
         objList.addObjective(new Objective("etKahund0", 1, BattleEventType.EndTurn).addSubject("Ruless").makeInvisible());
-        objList.addObjective(new Objective("etFinish", 5, BattleEventType.EndTurn).addVerb(CharacterAllegiance.Controlled.ToString()).addSubject("Ruless").addDescription("Hold out"));
+        objList.addObjective(new Objective("etFinish", 1, BattleEventType.Time).addDescription("Hold out (till T:50)").addModifier(ObjectiveModifier.GreaterThan, 50));
+        objList.addObjective(new Objective("defCart0", 1, BattleEventType.Time).addDescription("Hold out (till T:50)").addModifier(ObjectiveModifier.GreaterThan, 50));
 
         lookForBattleEventListeners();
         spawnKahund(true);

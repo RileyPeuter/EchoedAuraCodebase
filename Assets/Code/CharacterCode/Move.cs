@@ -10,7 +10,7 @@ public class Move : Ability
     {
         rangeMode = RangeMode.Move;
     }
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
     {
         caster.spendMovement(ExWhy.getDistanceBetweenCells(caster.getOccupying(), target));
         caster.move(target);

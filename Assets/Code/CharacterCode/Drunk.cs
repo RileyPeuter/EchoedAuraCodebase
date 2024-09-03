@@ -15,5 +15,9 @@ public class Drunk : Character
     GeneralAbilities = new List<Ability>();
     CharacterAbilities = new List<Ability>();
     DefaultCAI = new AIDrunk();
+
+        reactionsAvailable = new List<reactionType>() {reactionType.Dodge};
     }
+
+ 
 }

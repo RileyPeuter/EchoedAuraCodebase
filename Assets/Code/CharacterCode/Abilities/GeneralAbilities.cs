@@ -31,7 +31,7 @@ public class ShadowClone: Ability
 
     }
 
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
     {
 
     }
@@ -43,7 +43,7 @@ public class Hide : Ability
     {
     }
 
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
     {
 
     }
@@ -56,7 +56,7 @@ public class Recover: Ability
     public Recover() : base("Recover", ModType.Ranged, 10, 10, 5, 2, AbilityType.Targeted)
     {
     }
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null )
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
     {
 
     }

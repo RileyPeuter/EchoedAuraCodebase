@@ -15,17 +15,19 @@ public class StandOffSide
     Dictionary<string, Sprite> messageQueue;
     StandOffAnimationListener SOAL;
     float messageTimer = 0;
+    
 
     public void tickMessage()
     {
+        messageTimer -= Time.deltaTime;
         if (messageQueue.Count != 0)
         {
 
             if (messageTimer <= 0)
             {
                 sendMessage();
+                messageTimer = 0.8f;
             }
-            messageTimer = 0.5f;
         }
     }
 

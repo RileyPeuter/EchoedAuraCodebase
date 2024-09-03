@@ -75,6 +75,8 @@ public class OverworldMapController : MonoBehaviour
 
         print(characterSelect.GetComponent<CharacterSelectController>().getCharacterCount());
 
+        GlobalGameController.GGC.activeMission = selectedMission;
+
         if (selectedMission.cutsceneInt == 0)
         {
             gameController.startBattle();

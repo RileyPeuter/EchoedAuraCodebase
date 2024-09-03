@@ -1,6 +1,8 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Scripting.APIUpdating;
 
 public enum AIMode{
@@ -37,7 +39,41 @@ public abstract class BattleCharacterAI
 
     public virtual reactionType getReaction()
     {
-        return getRandomReact();
+        Assert.IsFalse(BCO.getAvailableReactions().Contains(reactionType.None));
+
+        reactionType output = reactionType.None;
+
+        if (BCO.getAvailableReactions().Count > 0)
+        {
+            while (!BCO.getAvailableReactions().Contains(output))
+            {
+                output = getRandomReact();
+            }
+        }
+
+        return output;
+    }
+
+    public reactionType getDistributedReaction()
+    {
+        int dodgeReaction = BCO.getDodge() + 1;
+        int blockReaction = BCO.getBlock() + 1;
+        int parryReaction = BCO.getParry() + 1;
+
+        int roll = Random.Range(0, dodgeReaction + blockReaction + parryReaction);
+
+        if(roll < dodgeReaction)
+        {
+            return reactionType.Dodge;
+        }
+
+        if(roll < dodgeReaction + blockReaction)
+        {
+            return reactionType.Block;
+        }
+
+        return reactionType.Parry;
+
     }
 
 
@@ -60,6 +96,7 @@ public abstract class BattleCharacterAI
         switch (Random.Range(0, 3))
         {
             case 0:
+
                 return reactionType.Dodge;
             case 1:
 

@@ -13,7 +13,7 @@ public class Supposititious : TacticalAbility, BattleEventListener
         BC = nBC;
         rangeMode = RangeMode.Custom;
         friendly = true;
-        description = "Removes the last instance of damage from target. It was a Phantom all along!";
+        description = "It was a Phantom all along! Removes the last instance of damage from target.";
     }
 
     public override List<ExWhyCell> getCustomRange()
@@ -28,7 +28,7 @@ public class Supposititious : TacticalAbility, BattleEventListener
         return output;
     }
 
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
     {
         BattleCharacterObject BCO = target.occupier;
         BCO.heal(lastCharacterDamages[BCO]);

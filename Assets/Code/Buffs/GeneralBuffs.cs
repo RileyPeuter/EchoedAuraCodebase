@@ -6,7 +6,8 @@ public class BlockFatigue : Buff
 {
     public BlockFatigue(Character trgt) : base(trgt)
     {
-        magnitude = 4;
+        stackable = true;
+        magnitude = 5;
         name = "Block Fatigue";
         duration = 1;
         resourceName = "BlockFatigue";
@@ -21,7 +22,35 @@ public class BlockFatigue : Buff
     public override void start()
     {
         id = Buff.getID();
-        target.getDerivedStatObject(derivedStat.block).addAdditiveBuff(id, -4);
+        target.getDerivedStatObject(derivedStat.block).addAdditiveBuff(id, -magnitude);
+    }
+
+    public override void tick()
+    {
+
+    }
+
+}
+
+public class BlockDisabled : Buff
+{
+    public BlockDisabled(Character trgt) : base(trgt)
+    {
+        stackable = false;
+        magnitude = 1;
+        duration = 1;
+        resourceName = "BlockDisabled";
+        name = "Block Disabled";
+        description = "This character is unable to block";
+    }
+    public override void cleanup()
+    {
+        target.reactionsAvailable.Add(reactionType.Block);
+    }
+
+    public override void start()
+    {
+        target.reactionsAvailable.Remove(reactionType.Block);
     }
 
     public override void tick()
@@ -34,7 +63,9 @@ public class DodgeFatigue : Buff
 {
     public DodgeFatigue(Character trgt) : base(trgt)
     {
-        magnitude = 4;
+
+        stackable = true;
+        magnitude = 5;
         duration = 1;
         resourceName = "DodgeFatigue";
         name = "Dodge Fatigue";
@@ -49,7 +80,35 @@ public class DodgeFatigue : Buff
     public override void start()
     {
         id = Buff.getID();
-        target.getDerivedStatObject(derivedStat.dodge).addAdditiveBuff(id, -4);
+        target.getDerivedStatObject(derivedStat.dodge).addAdditiveBuff(id, -magnitude);
+    }
+
+    public override void tick()
+    {
+
+    }
+}
+
+public class DodgeDisabled : Buff
+{
+    public DodgeDisabled(Character trgt) : base(trgt)
+    {
+        stackable = false;
+        magnitude = 1;
+        duration = 1;
+        resourceName = "DodgeDisabled";
+        name = "Dodge Disabled";
+        description = "This character is unable to dodge";
+    }
+
+    public override void cleanup()
+    {
+        target.reactionsAvailable.Add(reactionType.Dodge);
+    }
+
+    public override void start()
+    {
+        target.reactionsAvailable.Remove(reactionType.Dodge);
     }
 
     public override void tick()
@@ -62,7 +121,9 @@ public class ParryFatigue : Buff
 {
     public ParryFatigue(Character trgt) : base(trgt)
     {
-        magnitude = 4;
+
+        stackable = true;
+        magnitude = 5;
         duration = 1;
         resourceName = "ParryFatigue";
         name = "Parry Fatigue";
@@ -77,7 +138,7 @@ public class ParryFatigue : Buff
     public override void start()
     {
         id = Buff.getID();
-        target.getDerivedStatObject(derivedStat.parry).addAdditiveBuff(id, -4);
+        target.getDerivedStatObject(derivedStat.parry).addAdditiveBuff(id, -magnitude);
     }
 
     public override void tick()
@@ -85,5 +146,34 @@ public class ParryFatigue : Buff
 
     }
 }
+
+public class ParryDisabled: Buff
+{
+    public ParryDisabled(Character trgt) : base(trgt)
+    {
+        stackable = false;
+        magnitude= 1;
+        duration = 1;
+        resourceName = "ParryDisabled";
+        name = "Parry Disabled";
+        description = "This character is unable to parry";
+    }
+
+    public override void cleanup()
+    {
+        target.reactionsAvailable.Add(reactionType.Dodge);
+    }
+
+    public override void start()
+    {
+        target.reactionsAvailable.Remove(reactionType.Dodge);
+    }
+
+    public override void tick()
+    {
+
+    }
+}
+
 
 

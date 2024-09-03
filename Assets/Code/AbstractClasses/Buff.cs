@@ -30,6 +30,8 @@ public abstract class Buff
     public bool visible = true;
     protected Character target;
 
+    public bool stackable = false;
+
     protected int id;
 
     protected string resourceName;

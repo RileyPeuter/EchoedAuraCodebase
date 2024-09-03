@@ -22,6 +22,7 @@ public class GlobalGameController : MonoBehaviour
 
     public List<Mission> completed;
     public List<Mission> available;
+    public Mission activeMission = null;
 
     //###Getters###
     public Agency getAgency()
@@ -41,6 +42,12 @@ public class GlobalGameController : MonoBehaviour
     public static void tick()
     {
         ticker.Play();
+    }
+
+    public void completeMission()
+    {
+        completed.Add(activeMission);
+        available.Remove(activeMission);
     }
 
     //###Setters

@@ -21,6 +21,7 @@ public class DorciaAssistanceBattleController : BattleController
     public override void loadCharacters()
     {
 
+        spawnCells.Add(map.gridObject.gridCells[6, 3]);
         spawnCells.Add(map.gridObject.gridCells[6, 4]);
         spawnCells.Add(map.gridObject.gridCells[5, 4]);
         spawnCells.Add(map.gridObject.gridCells[7, 4]);
@@ -65,6 +66,44 @@ public class DorciaAssistanceBattleController : BattleController
         {
             case "khFSpawn01":
                 spawnKahund(true);
+                break;
+
+            case "gtCts01":
+                activeCutscene = gameObject.AddComponent<GenericBattleCutscene>();
+                activeCutscene.initialize(this);
+
+                activeCutscene.addSprite("Fray", "Fray");
+                activeCutscene.addSprite("Morthred", "Morthred");
+                activeCutscene.addSprite("Iraden", "Iraden");
+
+                activeCutscene.addFrame("Fray", "Gate up ahead. ", "Fray");
+                activeCutscene.addFrame("Morthred", "It looks flimsy. We could just break it down", "Morthred");
+                activeCutscene.addFrame("Fray", "Not flimsy enough. If someone gets behind it, they could unbar it", "Fray");
+
+                activeCutscene.createDialogueObject();
+                activeCutscene.preInitializeTextbox();
+                activeCutscene.setFrame(0);
+                toggleCutscene(true);
+
+                break;
+
+            case "pshDorcia01":
+                activeCutscene = gameObject.AddComponent<GenericBattleCutscene>();
+                activeCutscene.initialize(this);
+
+                activeCutscene.addSprite("Fray", "Fray");
+                activeCutscene.addSprite("Dorcia", "Dorcia");
+                activeCutscene.addSprite("Iraden", "Iraden");
+
+                activeCutscene.addFrame("Fray", "Gate up ahead. ", "Fray");
+                activeCutscene.addFrame("Morthred", "It looks flimsy. We could just break it down", "Morthred");
+                activeCutscene.addFrame("Fray", "Not flimsy enough. If someone gets behind it, they could unbar it", "Fray");
+
+                activeCutscene.createDialogueObject();
+                activeCutscene.preInitializeTextbox();
+                activeCutscene.setFrame(0);
+                toggleCutscene(true);
+
                 break;
 
             case "khSpawn01":
@@ -139,6 +178,14 @@ public class DorciaAssistanceBattleController : BattleController
         KahundSpawnField.Add(map.gridObject.gridCells[18, 1]);
         KahundSpawnField.Add(map.gridObject.gridCells[15, 2]);
 
+        List<ExWhyCell> gateCutsceneField = new List<ExWhyCell>();
+
+        gateCutsceneField.Add(map.gridObject.gridCells[9, 6]);
+        gateCutsceneField.Add(map.gridObject.gridCells[10, 6]);
+        gateCutsceneField.Add(map.gridObject.gridCells[11, 6]);
+
+        objList.addObjective(new MovementObjective("gtCts01", gateCutsceneField, 1));
+
         kahundPrefab = Resources.Load<GameObject>("TestAssets/Kahund");
 
         objList.addObjective(new Objective("khSpawn01", 1, BattleEventType.Time).addModifier(ObjectiveModifier.GreaterThan, 10));
@@ -146,6 +193,8 @@ public class DorciaAssistanceBattleController : BattleController
         spawnCharacter(Instantiate(kahundPrefab), CharacterAllegiance.Enemey, map.gridObject.getClosestAvailableCell(map.gridObject.gridCells[1, 7]), new Kahund());
 
         objList.addObjective(new MovementObjective("khFSpawn01", KahundSpawnField, 1).addDescription("Teststests"));
+
+        objList.addObjective(new Objective("pshDorcia01", 1, BattleEventType.Movement).addDescription("Push Dorcia out of Danger"));
     }
 
     // Update is called once per frame

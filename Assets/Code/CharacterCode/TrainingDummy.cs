@@ -15,5 +15,7 @@ public class TrainingDummy : Character
 
         CharacterName = "Training Dummy";
         resourceString = "TrainingDummy";
+
+        reactionsAvailable = new List<reactionType>();
     }
 }

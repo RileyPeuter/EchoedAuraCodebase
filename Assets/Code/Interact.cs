@@ -18,7 +18,7 @@ public class Interact : TacticalAbility
         description = nDescription;
     }
 
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
     {
         BC.interact(interactionID);
     }

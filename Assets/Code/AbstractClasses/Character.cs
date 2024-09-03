@@ -5,6 +5,10 @@ using UnityEngine;
 
 public abstract class Character {
     //###MemberVariables
+
+    public List<reactionType> reactionsAvailable = new List<reactionType>() {reactionType.Block, reactionType.Dodge, reactionType.Parry};
+
+
     public string resourceString;
     int healthPoints;
     int manaPoints;
@@ -97,6 +101,20 @@ public abstract class Character {
     //Maybe add tick if we want that. 
     public void addBuff(Buff buff)
     {
+        if (buff.stackable)
+        {
+            foreach(Buff cBuff in buffs)
+            {
+                if(buff.name == cBuff.name)
+                {
+                    cBuff.cleanup();
+                    cBuff.magnitude += buff.magnitude;
+                    cBuff.start();
+                    return;
+                }
+            }
+        }
+
         buffs.Add(buff);
         buff.start();
     }

@@ -26,6 +26,8 @@ public class AttackAttempt
     int chance;
     int[,] hitMatrix;
 
+    public List<reactionType> reactionsAvailalbe;
+
     //###Getters###
     public AttackAttempt(BattleCharacterObject atckr, BattleCharacterObject atcke, Ability ab)
     {
@@ -35,9 +37,11 @@ public class AttackAttempt
         modType = ability.getModType();
         //Make this cleaner when you can
         hitMatrix = new int[3, 3]{
-         { atckr.getDodgeToHit() * ability.DodgeTH, atcke.getDodge(), (atckr.getDodgeToHit() * ability.DodgeTH) - atcke.getDodge()},
-          { atckr.getBlockToHit() * ability.BlockTH, atcke.getBlock(),atckr.getBlockToHit() * ability.BlockTH - atcke.getBlock()},
+        { atckr.getDodgeToHit() * ability.DodgeTH, atcke.getDodge(), (atckr.getDodgeToHit() * ability.DodgeTH) - atcke.getDodge()},
+        { atckr.getBlockToHit() * ability.BlockTH, atcke.getBlock(),atckr.getBlockToHit() * ability.BlockTH - atcke.getBlock()},
         { atckr.getParryToHit() * ability.ParryTH, atcke.getParry(),atckr.getParryToHit() * ability.ParryTH - atcke.getParry()}};
+
+        reactionsAvailalbe = attackee.getAvailableReactions();
 
     }
 
@@ -80,12 +84,10 @@ public class AttackAttempt
         return Random.Range(0, 10);
     }
 
-    public int cast(StandOffSide SOF) 
+    public int cast(StandOffSide SOF, int reduction = 0) 
     {
-        //attackee.takeDamage(damage);
-        ability.cast(attackee.getOccupying(), attacker, SOF);
-        return damage;
-        
+        ability.cast(attackee.getOccupying(), attacker, SOF, reduction);
+        return damage;   
     }
 
     public int getDamage()

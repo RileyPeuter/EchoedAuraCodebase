@@ -33,5 +33,5 @@ public class BattleEvent
 
 public enum BattleEventType
 {
-    Attack, Hit, Kill, Occupy, Interact, Time, EndTurn, Movement
+    Attack, Hit, Kill, Occupy, Interact, Time, EndTurn, Movement, React
 }

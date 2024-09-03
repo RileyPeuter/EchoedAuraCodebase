@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Runtime.InteropServices;
 
 public abstract class BattleController : MonoBehaviour
 {
@@ -36,8 +37,8 @@ public abstract class BattleController : MonoBehaviour
     public AbilityRange AR;
 
     protected MapController map;
-    
-    public List<AICluster> AIClusters; 
+
+    public List<AICluster> AIClusters;
 
     protected int turnTimer = 0;
     public bool hasControl = true;
@@ -69,7 +70,7 @@ public abstract class BattleController : MonoBehaviour
     CellInformationController hoverCellInformationController;
     CellInformationController targetCellInformation;
 
-    int tacticalPoints = 0;
+    public int tacticalPoints = 0;
 
     protected int goldRewards = 0;
 
@@ -90,6 +91,11 @@ public abstract class BattleController : MonoBehaviour
         return activeCharacter;
     }
 
+    public void spendTacticalPoints(int amount = 1)
+    {
+        tacticalPoints = tacticalPoints - amount;
+    }
+
     //###Setters###
     public void addCharactersToLoad(List<StoredCharacterObject> SCOs)
     {
@@ -104,13 +110,13 @@ public abstract class BattleController : MonoBehaviour
     //###Utilities###
     public void addTacticalPoints()
     {
-        GameObject.Instantiate(Resources.Load<GameObject>("TacticalPointsPopup")).transform.position = (mainCamera.ScreenToWorldPoint(turnTimerUI.GetComponent<RectTransform>().position) + new Vector3(-4,0,9));
+        GameObject.Instantiate(Resources.Load<GameObject>("TacticalPointsPopup")).transform.position = (mainCamera.ScreenToWorldPoint(turnTimerUI.GetComponent<RectTransform>().position) + new Vector3(-4, 0, 9));
         tacticalPoints += 1;
         turnTimerUI.updateTacticalPoints(tacticalPoints);
     }
 
     //These should be moved to antoehr one
-    public List<BattleCharacterObject> getAllAlliegiances (List<CharacterAllegiance> allegiances)
+    public List<BattleCharacterObject> getAllAlliegiances(List<CharacterAllegiance> allegiances)
     {
         List<BattleCharacterObject> output = new List<BattleCharacterObject>();
         foreach (CharacterAllegiance allegiance in allegiances)
@@ -145,7 +151,7 @@ public abstract class BattleController : MonoBehaviour
     {
         List<GameObject> output = new List<GameObject>();
 
-        foreach(StoredCharacterObject SCO in charactersToSpawn)
+        foreach (StoredCharacterObject SCO in charactersToSpawn)
         {
             GameObject GO = Resources.Load<GameObject>("TestAssets/" + SCO.GetCharacter().resourceString);
             GO = Instantiate(GO);
@@ -155,7 +161,16 @@ public abstract class BattleController : MonoBehaviour
 
         return output;
     }
-    
+
+    //M, use this function reponsibliy 0_0... I'm keeping my eyes on you.
+    public void forceCast(BattleCharacterObject caster, ExWhyCell target, Ability ab) 
+    {
+        if (ab.abilityType == AbilityType.Targeted && !(ab is TacticalAbility )) 
+        {
+            createStandOff(new AttackAttempt(caster, target.occupier, ab));
+        }
+    }
+
     public bool getCastable(Ability abi, CharacterAllegiance targetAllegiance)
     {
         //I'm not sure we're removing this AR
@@ -256,9 +271,18 @@ public abstract class BattleController : MonoBehaviour
         timerTick();
     }
 
-    void clearObjectiveHighlights()
+    protected void clearObjectiveHighlights()
     {
+        foreach(GameObject go in objectiveHighlights)
+        {
+            GameObject.Destroy(go);
+        }
+        objectiveHighlights.Clear();
+    }
 
+    protected void addObjectiveHighlight(BattleCharacterObject nBCO)
+    {
+        objectiveHighlights.Add(Instantiate(objectiveHighlightPrefab, nBCO.gameObject.transform));
     }
 
     public void initializeBattleController()
@@ -686,7 +710,22 @@ public abstract class BattleController : MonoBehaviour
                     return;
                 }
             break;
+
+            case AbilityType.Support:
+                if(checkValidTarget(AR, cursorCell, true, false, AbilityType.Support))
+                {
+                    BEL.addEvent(BattleEventType.Attack, activeCharacter.getName(), ability.name, cursorCell.occupier.getName());
+                    if(ability is TacticalAbility)
+                    {
+                        createStandOff(null, null, null, (TacticalAbility)ability);
+                    }
+                    return;
+                }
+
+            break;
         }
+
+        
        
         deSelectAbility();
         quickSelectCheck(cursorCell);
@@ -698,8 +737,6 @@ public abstract class BattleController : MonoBehaviour
         destroyARVisual();
         BUIC.closeAllTransient();
         destroyTurnUI();
-
-
 
         GameObject AAC = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/S"), GameObject.Find("Main Camera").transform);
 
@@ -717,7 +754,7 @@ public abstract class BattleController : MonoBehaviour
 
         if (nAttackAttempt != null)
         {
-            AAC.AddComponent<DualStandOffController>().initialize(aa, this, BUIC);
+            AAC.AddComponent<DualStandOffController>().initialize(nAttackAttempt, this, BUIC);
             aa = null;
             return;
         }

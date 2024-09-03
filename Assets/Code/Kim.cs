@@ -30,7 +30,7 @@ public class ShikariKick : Ability
         baseDamage = 3;
     }
 
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
     {
 
         int targetXCoordinate = target.xPosition;

@@ -61,11 +61,11 @@ public class BattleUIController : MonoBehaviour
 
         if(UIBreatheTicker > 1)
         {
-            breathDirection = true;
+            breathDirection = false;
         }
         if(UIBreatheTicker < 0)
         {
-            breathDirection = false;
+            breathDirection = true;
         }
     }
 

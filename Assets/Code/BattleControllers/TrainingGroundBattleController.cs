@@ -25,6 +25,9 @@ public class TrainingGroundBattleController : BattleController
                 activeCutscene.setFrame(0);
                 toggleCutscene(true);
 
+                clearObjectiveHighlights();
+                addObjectiveHighlight(characters[2]);
+
                 break;
 
 
@@ -143,6 +146,7 @@ public class TrainingGroundBattleController : BattleController
 
         initializeAdditionalElements();
 
+        addObjectiveHighlight(characters[1]);
 
         activeCutscene.preInitializeTextbox();
         activeCutscene.setFrame(0);

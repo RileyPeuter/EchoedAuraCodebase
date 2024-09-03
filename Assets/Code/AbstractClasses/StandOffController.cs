@@ -38,6 +38,8 @@ public abstract class StandOffController : MonoBehaviour
 
     protected int sideFinished = 0;
 
+    protected BattleEventLog BEL;
+
     protected bool left = false;
     protected bool right = false;
     protected void initialize()

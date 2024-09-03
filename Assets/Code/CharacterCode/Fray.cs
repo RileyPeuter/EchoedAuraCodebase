@@ -30,18 +30,17 @@ public class ShadowGrab : Ability
         description = "Non damaging anti-dodge spell";
     }
 
-    public ShadowGrab() : base("ShadowGrab", ModType.Mind, 4, 4, 6, 3,AbilityType.Targeted, 1)
+    public ShadowGrab() : base("ShadowGrab", ModType.Mind, 4, 4, 6, 2,AbilityType.Targeted, 1)
     {
         description = "Non damaging anti-dodge spell";
     }
 
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null){
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
+    {
         effectObjectName = "ShadowHoldEffect";
-
         ShadowHold SH = new ShadowHold(target.occupier.getCharacter());
         target.occupier.getCharacter().addBuff(SH);
         SOF.effectMessage("Shadow Hold", SH.getSprite());
-        StandOffController.print("Here");
     }
 }
 
@@ -51,7 +50,7 @@ public class ShadowHold : Buff
     public ShadowHold(Character trgt) : base(trgt)
     {
         name = "Shadow Hold";
-        magnitude = 6;
+        magnitude = 10;
         duration = 4;
         resourceName = "ShadowHold";
         description = "Reduces Dodge. \n Heavy shadows stick to the users";

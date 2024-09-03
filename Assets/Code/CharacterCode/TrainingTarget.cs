@@ -16,5 +16,7 @@ public class TrainingTarget : Character
 
         CharacterName = "Training Target";
         resourceString = "TrainingTarget";
+
+        reactionsAvailable.Clear();
     }
 }

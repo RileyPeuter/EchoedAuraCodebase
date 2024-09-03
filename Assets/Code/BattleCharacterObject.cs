@@ -24,6 +24,8 @@ public class BattleCharacterObject : MonoBehaviour
 
     //###MemberVariables###
 
+
+
     CellBuff currentCellBuff;
 
     CharacterAllegiance allegiance;
@@ -33,7 +35,7 @@ public class BattleCharacterObject : MonoBehaviour
     Dictionary<int, Ability> abilityList;
 
     Animator characterAnimator;
-     
+
     BattleCharacterAI CharacterAI;
     float idleTrigger;
     float timer = 0;
@@ -60,6 +62,11 @@ public class BattleCharacterObject : MonoBehaviour
     public CharacterAllegiance GetAllegiance()
     {
         return allegiance;
+    }
+
+    public int getAdjustedManaflow()
+    {
+        return 2 + Mathf.FloorToInt(getManaFlow() / 3);
     }
 
     public int getManaFlow()
@@ -116,6 +123,11 @@ public class BattleCharacterObject : MonoBehaviour
         return character.getDerivedStat(derivedStat.dodge);
     }
 
+
+    public List<reactionType> getAvailableReactions()
+    {
+        return character.reactionsAvailable;
+    }
 
     public int getParryToHit()
     {
@@ -280,13 +292,18 @@ public class BattleCharacterObject : MonoBehaviour
         return false;
     }
 
+    public static int adjustManaFlow(int mf)
+    {
+        return 2 + Mathf.FloorToInt(mf / 3);
+    }
+
     public void endTurn()
     {
         nextTurn += 20 - character.getDerivedStat(derivedStat.turnFrequency);
         print(nextTurn);
         character.cleanUpBuffs();
 
-        int manaRegenerated = character.getDerivedStat(derivedStat.manaFlow) - manaFlow;
+        int manaRegenerated = adjustManaFlow(character.getDerivedStat(derivedStat.manaFlow)) - manaFlow;
 
         if (character.getCurrentMana() < manaRegenerated)
         {
@@ -295,7 +312,7 @@ public class BattleCharacterObject : MonoBehaviour
         }
         else
         {
-            manaFlow = character.getDerivedStat(derivedStat.manaFlow);
+            manaFlow = adjustManaFlow(character.getDerivedStat(derivedStat.manaFlow));
             character.ManaPoints -= manaRegenerated;
         }
         availableMovement = character.getDerivedStat(derivedStat.movement);
@@ -345,7 +362,7 @@ public class BattleCharacterObject : MonoBehaviour
     //###UnityMessages###
  void Start()
     {
-        manaFlow = character.getDerivedStat(derivedStat.manaFlow);
+        manaFlow = adjustManaFlow(character.getDerivedStat(derivedStat.manaFlow));
         availableMovement = character.getDerivedStat(derivedStat.movement);
         abilityMove = new Move();
         idleTrigger = Random.Range(5f, 10f);

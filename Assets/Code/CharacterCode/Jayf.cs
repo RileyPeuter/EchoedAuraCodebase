@@ -22,6 +22,7 @@ public class Jayf : Character
         CharacterAbilities.Add(new ArsAmagus());
 
         DefaultCAI = new AIJayf();
+        reactionsAvailable.Remove(reactionType.Dodge);
     }
 }
 
@@ -38,7 +39,7 @@ public class ArsAmagus : Ability
     }
 
 
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
     {
         caster.getCharacter().addBuff(new ShieldStrengthen(caster.getCharacter()));
         if(SOF != null) { 
@@ -58,7 +59,7 @@ public class MagusPhantasma : Ability
     {
     }
 
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
     {
         BattleController.ActiveBattleController.spawnCharacter(GameObject.Instantiate(caster.gameObject), CharacterAllegiance.Enemey, ExWhy.activeExWhy.getClosestAvailableCell(target), new Jayf(), BattleController.ActiveBattleController.AIClusters[0]);
         BattleController.ActiveBattleController.spawnCharacter(GameObject.Instantiate(caster.gameObject), CharacterAllegiance.Enemey, ExWhy.activeExWhy.getClosestAvailableCell(target), new Jayf(), BattleController.ActiveBattleController.AIClusters[0]);

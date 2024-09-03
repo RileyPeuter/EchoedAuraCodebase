@@ -143,7 +143,7 @@ public class TownBattleController : BattleController
 
         toggleCutscene(true);
 
-
+        addObjectiveHighlight(characters[2]);
         Objective nBattleObjective = new Objective("dkAtk0", 1, BattleEventType.Attack).addDescription("Attack the drunk. Drive him away").addTarget("Drunk");
         objList.addObjective(nBattleObjective);
 

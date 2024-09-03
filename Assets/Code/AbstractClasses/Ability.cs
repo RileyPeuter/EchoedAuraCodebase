@@ -6,7 +6,8 @@ public enum AbilityType
 {
     Area,
     Targeted,
-    Self
+    Self,
+    Support
 }
 
 
@@ -114,10 +115,21 @@ public abstract class Ability
     public int ParryTH { get => parryTH; set => parryTH = value; }
     public int DodgeTH { get => dodgeTH; set => dodgeTH = value; }
 
-    public virtual void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
+    public virtual void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
     {
-        int damage = getDamage(caster.getCharacter());
-        target.occupier.takeDamage(damage);
+        int damage = getDamage(caster.getCharacter()) - reduction;
+
+        if (damage > 0)
+        {
+            target.occupier.takeDamage(damage);
+        }
+        else
+        {
+            if (SOF != null)
+            {
+                SOF.effectMessage("ting!");
+            }
+        }
     }
 
     public virtual void spendMana(BattleCharacterObject BCO)

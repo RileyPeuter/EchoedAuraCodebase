@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class IceShuriken : Ability
 {
-    public IceShuriken() : base("IceShuriken", ModType.Ranged, 10, 10, 5, 4, AbilityType.Targeted, 1, false, 3)
+    public IceShuriken() : base("IceShuriken", ModType.Ranged, 10, 3, 10, 3, AbilityType.Targeted, 1, false, 3)
     {
         description = "An improvised ranged spell. Hard to Block or Dodge";
         baseDamage = 3;
@@ -20,7 +20,7 @@ public class LiquidSword : Ability
 
     }
 
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
     {
 
     }
@@ -33,7 +33,7 @@ public class DemonMist : Ability
 
     }
 
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
     {
 
     }
@@ -46,7 +46,7 @@ public class IradensFrigidarium : Ability
 
     }
 
-    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null)
+    public override void cast(ExWhyCell target, BattleCharacterObject caster, StandOffSide SOF = null, int reduction = 0)
     {
 
     }

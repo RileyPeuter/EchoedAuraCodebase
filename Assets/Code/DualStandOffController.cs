@@ -16,6 +16,7 @@ public class DualStandOffController : StandOffController
 
     bool reactSelected = true;
 
+
     MiniStatsController targetController;
 
     
@@ -24,10 +25,11 @@ public class DualStandOffController : StandOffController
     {
 
         BUIC = nBUIC;
-
+        BEL = BC.BEL;
         resourceName = BC.getMapResourceString();
         ability = AA.getAbility();
         BUIC = BC.GetBattleUIController();
+        
         rollPanel = BUIC.openWindow("uI_StandOffRoll_Panel", true, "Canvas", false);
         spawnAbilitySnippet("uI_StandOffRoll_Panel(Clone)");
         
@@ -104,8 +106,11 @@ public class DualStandOffController : StandOffController
                 break;
 
             case StandOffStage.EndAttack:
-                Destroy(targetController.gameObject, 0.7f);
 
+                if (targetController != null)
+                {
+                    Destroy(targetController.gameObject, 0.7f);
+                }
                 end();
             break;
 
@@ -180,6 +185,12 @@ public class DualStandOffController : StandOffController
     }
     public void roll()
     {
+        if(attackAttempt.getReactionUsed() == reactionType.None)
+        {
+            SOS = StandOffStage.AttackSuccessful;
+            return;
+        }
+
         int rollAmount = attackAttempt.getRandom();
         //   rollText.text = rollAmount.ToString();
 
@@ -190,12 +201,13 @@ public class DualStandOffController : StandOffController
             switch (attackAttempt.getReactionUsed())
             {
                 case reactionType.Dodge:
-                    if ((rollAmount + toHitNumber + attackAttempt.getAttackee().getMovement() < 10))
+                    int dodgeOffset = (rollAmount + toHitNumber - attackAttempt.getAttackee().getMovement() - 10);
+                    if (dodgeOffset < 0)
                     {
-                        attackAttempt.getAttackee().spendMovement((10 + toHitNumber) - rollAmount);
+                        attackAttempt.getAttackee().spendMovement(Mathf.Abs(dodgeOffset));
 
                         SOS = StandOffStage.EndAttack;
-                        rightSide.effectMessage("Dodged " + (10 + toHitNumber - rollAmount).ToString());
+                        rightSide.effectMessage("Dodged (" + (10 + toHitNumber - rollAmount).ToString() + ")");
                         playSound(Resources.Load<AudioClip>("Audio/SoundEffects/dodge"));
                         attackAttempt.getAttackee().getCharacter().addBuff(new DodgeFatigue(attackAttempt.getAttackee().getCharacter()));
                     }
@@ -203,6 +215,7 @@ public class DualStandOffController : StandOffController
 
                 case reactionType.Block:
                     reductionAmount = 2;
+                    rightSide.effectMessage("Blocked: (" +  reductionAmount.ToString() + ")");
                     break;
             }
         }
@@ -213,6 +226,7 @@ public class DualStandOffController : StandOffController
             {
                 case 0:
                     rightSide.effectMessage("Dodged");
+                    rightSide.effectMessage("Dodge Fatigue", ResourceLoader.loadSprite("BuffIcons/DodgeFatigue"));
 
                     playSound(Resources.Load<AudioClip>("Audio/SoundEffects/dodge"));
                     attackAttempt.getAttackee().getCharacter().addBuff(new DodgeFatigue(attackAttempt.getAttackee().getCharacter()));
@@ -222,6 +236,8 @@ public class DualStandOffController : StandOffController
 
                 case 1:
                     rightSide.effectMessage("Blocked");
+                    rightSide.effectMessage("Block Fatigue", ResourceLoader.loadSprite("BuffIcons/BlockFatigue"));
+
                     playSound(Resources.Load<AudioClip>("Audio/SoundEffects/block"));
                     attackAttempt.getAttackee().getCharacter().addBuff(new BlockFatigue(attackAttempt.getAttackee().getCharacter()));
                     break;
@@ -229,6 +245,7 @@ public class DualStandOffController : StandOffController
 
                 case 2:
                     rightSide.effectMessage("Parried");
+                    rightSide.effectMessage("Parry Fatigue", ResourceLoader.loadSprite("BuffIcons/ParryFatigue"));
                     playSound(Resources.Load<AudioClip>("Audio/SoundEffects/parry"));
                     attackAttempt.getAttackee().getCharacter().addBuff(new ParryFatigue(attackAttempt.getAttackee().getCharacter()));
                     if (ability.getModType() == ModType.Melee)
@@ -241,6 +258,9 @@ public class DualStandOffController : StandOffController
             showDifference(toHitNumber - rollAmount, false);
             SOS = StandOffStage.EndAttack;
         }
+
+
+        BEL.addEvent(BattleEventType.React, attackAttempt.getAttackee().getName(), attackAttempt.getReactionUsed().ToString(), attackAttempt.getAttacker().getName(), (SOS == StandOffStage.AttackSuccessful).ToString());
     }
 
     void intialState()
@@ -273,6 +293,12 @@ public class DualStandOffController : StandOffController
 
     public void setUIValues()
     {
+
+        if(attackAttempt.getReactionUsed() == reactionType.None)
+        {
+            return;
+        }
+
         foreach (Text text in rollPanel.GetComponentsInChildren<Text>())
         {
             switch (text.name)
@@ -339,7 +365,7 @@ public class DualStandOffController : StandOffController
 
     protected override void cast()
     {
-        storedDamage = attackAttempt.cast(rightSide);
+        storedDamage = attackAttempt.cast(rightSide, reductionAmount);
         damageText.text = storedDamage.ToString();
         BattleController.ActiveBattleController.BEL.addEvent(BattleEventType.Hit,  attackAttempt.getAttacker().getName(), attackAttempt.getAbility().name, attackAttempt.getAttackee().getName(), storedDamage.ToString());
 
