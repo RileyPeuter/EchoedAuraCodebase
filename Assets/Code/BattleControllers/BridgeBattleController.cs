@@ -103,8 +103,8 @@ public class BridgeBattleController : BattleController
         activeCutscene.addSprite("Tutorial", "Tutorials3");
         activeCutscene.addFrame("Jayf", "An adequete dispaly. I think I've gotten a read on your ability", "Jayf");
         activeCutscene.addFrame("Jayf", "Now, to see how you stand in the face of violence", "Jayf");
-        activeCutscene.addFrame("Tutorial", "When attacked you will attempt to react. \n Either by dodging, blocking or parrying", "Tutorial");
-        activeCutscene.addFrame("Tutorial", "Blocking is safest, reducing some damage even if hit \n Dodge is also safe, adding you movement to make the difference should it fail. \n Parry will perform a counter should it succeed", "Tutorial");
+        activeCutscene.addFrame("Tutorial", "When attacked you will attempt to react. \nEither by dodging, blocking or parrying", "Tutorial");
+        activeCutscene.addFrame("Tutorial", "Generally, blocking is safest, reducing some damage even if hit \nDodge is also safe, adding your movement to make the difference should it fail. \nParry will perform a counter should it succeed against melee attacks", "Tutorial");
         activeCutscene.createDialogueObject();
         initializeAdditionalElements();
 
@@ -117,7 +117,7 @@ public class BridgeBattleController : BattleController
         AIClusters.Add(new AICluster(999, 0, 1));
         AIClusters[0].ClusterMembers.Add(characters[0].getAI());
 
-        Objective nBattleObjective = new Objective("clnKil0", 3, BattleEventType.Kill).addDescription("Defeat Jay's Phantasmas").addSubject("Jayf");
+        Objective nBattleObjective = new VagueObjective("clnKil0", 3, BattleEventType.Kill).addDescription("Defeat Jay's Phantasmas").addSubject("Jayf");
         objList.addObjective(nBattleObjective);
     }
 

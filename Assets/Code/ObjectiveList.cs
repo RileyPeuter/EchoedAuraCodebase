@@ -14,24 +14,24 @@ public enum ObjectiveModifier
 public class Objective
 {
     //###MemberVariables###
-    ObjectiveModifier modifier = ObjectiveModifier.None;
-    int modifierThreshold;
+    protected ObjectiveModifier modifier = ObjectiveModifier.None;
+    protected int modifierThreshold;
 
     public string objectiveID;
-    string description;
-    string stringData;
-    int maxCompletions;
-    int currentCompletions = 0;
+    protected string description;
+    protected string stringData;
+    protected int maxCompletions;
+    protected int currentCompletions = 0;
 
-    BattleEventType objectiveType;
-    
-    string subject = null;
-    string verb = null;
-    string target = null;
-    string result = null;
+    protected BattleEventType objectiveType;
+
+    protected string subject = null;
+    protected string verb = null;
+    protected string target = null;
+    protected string result = null;
 
     //Non Visible objectives are used for triggers
-    bool visible = true;
+    public bool visible = true;
 
     public bool completed = false;
 
@@ -113,6 +113,11 @@ public class Objective
         target = nTarget;
         return this;
     }
+    public Objective addReuslt(string nResult)
+    {
+        result = nResult;
+        return this;
+    }
 
     public Objective addParent(GameObject nParent)
     {
@@ -141,6 +146,7 @@ public class Objective
     //###Utilities###
     public void setInfo(float offset)
     {
+        if (!visible) { return;}
         parent.transform.Translate(0, offset, 0);
         foreach (Text text in parent.GetComponentsInChildren<Text>())
         {
@@ -212,13 +218,16 @@ public class ObjectiveList : MonoBehaviour, BattleEventListener
     //###Utilities###
     public void addObjective(Objective nObjectiveListElement)
     {
-        nObjectiveListElement.addParent(GameObject.Instantiate(objectiveGameObject, this.gameObject.transform)).addOffset(yOffset);
         objectives.Add(nObjectiveListElement);
-        nObjectiveListElement.setInfo(yOffset);
-        nObjectiveListElement.setText();
 
+        if (nObjectiveListElement.visible)
+        {
+            nObjectiveListElement.addParent(GameObject.Instantiate(objectiveGameObject, this.gameObject.transform)).addOffset(yOffset);
+            nObjectiveListElement.setInfo(yOffset);
+            nObjectiveListElement.setText();
 
-        yOffset = yOffset - 80;
+            yOffset = yOffset - 80;
+        }
     }
 
     public void updateList()
@@ -231,16 +240,12 @@ public class ObjectiveList : MonoBehaviour, BattleEventListener
 
     public void hearEvent(BattleEvent nBattleEvent)
     {
-        Debug.Log("kam");
         foreach (Objective objective in objectives.ToArray())
         {
-            Debug.Log("sam");
             if (objective.checkObjective(nBattleEvent.eventType, nBattleEvent.subject, nBattleEvent.verb, nBattleEvent.target, nBattleEvent.result))
             {
-                Debug.Log("fam");
                 if (objective.increment() && !objective.completed)
                 {
-                    Debug.Log("dam");
                     objective.completed = true;
                     BC.objectiveComplete(objective.objectiveID);
                 }

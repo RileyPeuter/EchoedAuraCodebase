@@ -18,7 +18,7 @@ public class DualStandOffController : StandOffController
 
 
     MiniStatsController targetController;
-
+    MiniStatsController parryController;
     
 
     public void initialize(AttackAttempt AA, BattleController BC, BattleUIController nBUIC)
@@ -68,6 +68,8 @@ public class DualStandOffController : StandOffController
         targetController.initialize(BattleUIController.HighestWindow, rightSide.characterSide);
         rightSide.getAnimator().SetTrigger("anticipate");
         leftSide.getAnimator().SetInteger("ability", attackAttempt.getAbilityAniID());
+
+        leftSide.getAnimator().SetTrigger("attack");
     }
 
     void Update()
@@ -111,6 +113,11 @@ public class DualStandOffController : StandOffController
                 {
                     Destroy(targetController.gameObject, 0.7f);
                 }
+                if(parryController != null)
+                {
+                    Destroy(parryController.gameObject, 0.7f);
+                }
+
                 end();
             break;
 
@@ -128,7 +135,7 @@ public class DualStandOffController : StandOffController
 
     void attackState()
     {
-        if ((timer > 0.5f && sideFinished >= 2)|| timer > 3 )
+        if (timer > 0.5f && leftSide.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
         {
             resetAnimationListeners();
             roll();
@@ -141,9 +148,11 @@ public class DualStandOffController : StandOffController
         if (timer > 0.2)
         {
             backPanel.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0.40f);
+            
         }
-        if((timer > 1 && right )|| timer > 3)
-        {
+
+        if(timer > 1 && (rightSide.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime  >= 1 && leftSide.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1))
+        { 
             timer = 0;
             SOS = StandOffStage.EndAttack;
         }
@@ -181,8 +190,16 @@ public class DualStandOffController : StandOffController
         timer = 0;
         playSound(Resources.Load<AudioClip>("Audio/SoundEffects/hit"));
         SOS = StandOffStage.WindDown;
-        targetController.setInfo();
+        targetController.setInfo(true);
+
+        if(attackAttempt.getAttackee().getState() == CharacterState.Dead)
+        {
+            rightSide.effectMessage("Kill Shot!");
+            rightSide.killEffect();
+        }
+
     }
+
     public void roll()
     {
         if(attackAttempt.getReactionUsed() == reactionType.None)
@@ -244,14 +261,22 @@ public class DualStandOffController : StandOffController
 
 
                 case 2:
+
                     rightSide.effectMessage("Parried");
                     rightSide.effectMessage("Parry Fatigue", ResourceLoader.loadSprite("BuffIcons/ParryFatigue"));
                     playSound(Resources.Load<AudioClip>("Audio/SoundEffects/parry"));
                     attackAttempt.getAttackee().getCharacter().addBuff(new ParryFatigue(attackAttempt.getAttackee().getCharacter()));
                     if (ability.getModType() == ModType.Melee)
                     {
+                        leftSide.getAnimator().SetTrigger("parried");
                         attackAttempt.getAttacker().takeDamage(attackAttempt.getAttackee().getMeleeBonus());
                         leftSide.effectMessage(attackAttempt.getAttackee().getMeleeBonus().ToString());
+                        parryController.spawnChunk();
+                        if (attackAttempt.getAttacker().getState() == CharacterState.Dead)
+                        {
+                            leftSide.effectMessage("Kill Shot!");
+                            leftSide.killEffect();
+                        }
                     }
                     break;
             }
@@ -260,11 +285,16 @@ public class DualStandOffController : StandOffController
         }
 
 
-        BEL.addEvent(BattleEventType.React, attackAttempt.getAttackee().getName(), attackAttempt.getReactionUsed().ToString(), attackAttempt.getAttacker().getName(), (SOS == StandOffStage.AttackSuccessful).ToString());
+        BEL.addEvent(BattleEventType.React, attackAttempt.getAttackee().getNameID(), attackAttempt.getReactionUsed().ToString(), attackAttempt.getAttacker().getNameID(), (SOS == StandOffStage.AttackSuccessful).ToString());
     }
 
     void intialState()
     {
+        if(leftSide.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime > 0.3 && !leftSide.getAnimator().GetCurrentAnimatorClipInfo(0)[0].clip.isLooping)
+        {
+            leftSide.getAnimator().speed = 0;
+        }
+
         if (timer > 1f)
         {
             if (attackAttempt.getAttackee().GetAllegiance() == CharacterAllegiance.Controlled)
@@ -278,14 +308,22 @@ public class DualStandOffController : StandOffController
 
             if (reactSelected)
             {
-                leftSide.getAnimator().SetTrigger("attack");
+                leftSide.getAnimator().speed = 1f;
+                rightSide.setReaction((int)attackAttempt.getReactionUsed());
+
+                if(attackAttempt.getReactionUsed() == reactionType.Parry)
+                {
+                    parryController = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_StandOffTargetStat_Panel"), GameObject.Find("Canvas").transform).GetComponent<MiniStatsController>();
+                    parryController.initialize(BattleUIController.HighestWindow, leftSide.characterSide);
+                    parryController.GetComponent<RectTransform>().Translate(new Vector2( (parryController.GetComponent<RectTransform>().position.x - GameObject.Find("Canvas").GetComponent<RectTransform>().rect.width) * 2 , 0));
+                    //GameObject.Find("Canvas").GetComponent<RectTransform>().rect.width 
+                }
 
                 resetAnimationListeners();
                 initiateAttack();
                 timer = 0;
                 setUIValues();
                 SOS = StandOffStage.Attack;
-                rightSide.setReaction((int)attackAttempt.getReactionUsed());
 
             }
         }
@@ -298,7 +336,7 @@ public class DualStandOffController : StandOffController
         {
             return;
         }
-
+         
         foreach (Text text in rollPanel.GetComponentsInChildren<Text>())
         {
             switch (text.name)
@@ -367,7 +405,7 @@ public class DualStandOffController : StandOffController
     {
         storedDamage = attackAttempt.cast(rightSide, reductionAmount);
         damageText.text = storedDamage.ToString();
-        BattleController.ActiveBattleController.BEL.addEvent(BattleEventType.Hit,  attackAttempt.getAttacker().getName(), attackAttempt.getAbility().name, attackAttempt.getAttackee().getName(), storedDamage.ToString());
+        BattleController.ActiveBattleController.BEL.addEvent(BattleEventType.Hit,  attackAttempt.getAttacker().getNameID(), attackAttempt.getAbility().name, attackAttempt.getAttackee().getNameID(), storedDamage.ToString());
 
         rightSide.effectMessage(damageText.text);
     }

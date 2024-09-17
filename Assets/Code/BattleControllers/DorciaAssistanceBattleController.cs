@@ -10,12 +10,19 @@ public class DorciaAssistanceBattleController : BattleController
     BattleCharacterObject gate;
     public override void endBattle()
     {
-        
+        GlobalGameController.GGC.completeMission();
+        GlobalGameController.GGC.openManagment();
     }
 
     public override void GBCTexecutions(int index)
     {
+        switch (index)
+        {
+            case 1:
+                openEndWindow();
+                break;
 
+        }
     }
 
     public override void loadCharacters()
@@ -95,9 +102,17 @@ public class DorciaAssistanceBattleController : BattleController
                 activeCutscene.addSprite("Dorcia", "Dorcia");
                 activeCutscene.addSprite("Iraden", "Iraden");
 
-                activeCutscene.addFrame("Fray", "Gate up ahead. ", "Fray");
-                activeCutscene.addFrame("Morthred", "It looks flimsy. We could just break it down", "Morthred");
-                activeCutscene.addFrame("Fray", "Not flimsy enough. If someone gets behind it, they could unbar it", "Fray");
+                activeCutscene.addFrame("Dorcia", "Thank you! I think we should be safe for now", "Dorcia");
+                activeCutscene.addFrame("Morthred", "I don't enjoy you being a liability. We should have left you our there", "Morthred");
+                activeCutscene.addFrame("Fray", "That's a bit harsh.", "Fray");
+                activeCutscene.addFrame("Fray", "Dorce, If you do this again I'm going to have to listen to her again.", "Fray");
+                activeCutscene.addFrame("Fray", "I will uncrew your legs in your sleep if you do it again", "Fray");
+                activeCutscene.addFrame("Iraden", "That's...not armour is it?", "Iraden");
+                activeCutscene.addFrame("Dorcia", "Haha", "Dorcia");
+                activeCutscene.addFrame("Dorcia", "No, I sort of lost my body when I was younger. \nAsa found some handy people to make me this", "Dorcia");
+                activeCutscene.addFrame("Morthred", "However, it ceases up when her mana is low. Hence our situation", "Morthred");
+                activeCutscene.addFrame("Fray", "Anyway, lets bring her back to the castle", "Fray", 1);
+
 
                 activeCutscene.createDialogueObject();
                 activeCutscene.preInitializeTextbox();
@@ -194,7 +209,9 @@ public class DorciaAssistanceBattleController : BattleController
 
         objList.addObjective(new MovementObjective("khFSpawn01", KahundSpawnField, 1).addDescription("Teststests"));
 
-        objList.addObjective(new Objective("pshDorcia01", 1, BattleEventType.Movement).addDescription("Push Dorcia out of Danger"));
+        
+        objList.addObjective(new Objective("pshDorcia01", 1, BattleEventType.Movement).addDescription("Push Dorcia out of Danger").addTarget(map.gridObject.gridCells[19, 6].ToString()).addSubject(dorciaObject.getNameID()));
+
     }
 
     // Update is called once per frame

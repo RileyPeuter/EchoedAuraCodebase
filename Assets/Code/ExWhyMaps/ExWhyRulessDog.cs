@@ -12,7 +12,7 @@ public class ExWhyRulessDog : ExWhy
             {'t','t','t','t','t','t','t','t','t','g','t','t','t' },
             {'t','t','t','d','g','g','g','g','g','g','t','t','t' },
             {'t','t','g','d','d','d','d','d','d','d','t','t','t' },
-            {'t','t','g','d','g','t','t','t','t','t','t','t','t' },
+            {'t','t','g','d','w','t','t','t','t','t','t','t','t' },
             {'t','t','g','d','d','t','t','t','t','t','t','t','t' },
             {'t','t','d','d','d','t','t','t','t','t','t','t','t' },
             {'t','g','d','g','d','t','t','d','d','t','t','t','t' },
@@ -21,7 +21,7 @@ public class ExWhyRulessDog : ExWhy
             {'t','t','d','d','d','t','t','t','t','t','t','t','t' },
             {'t','t','g','d','t','t','t','t','t','t','t','t','t' },
             {'t','t','g','d','t','t','t','t','t','t','t','t','t' },
-            {'t','t','t','d','t','t','t','t','t','t','t','t','t' },
+            {'t','t','t','w','t','t','t','t','t','t','t','t','t' },
             {'t','t','t','g','t','t','t','t','t','t','t','t','t' },
             {'t','t','t','d','g','d','d','d','d','d','t','t','t' },
             {'t','t','t','t','t','t','t','g','t','d','t','t','t' },
@@ -49,7 +49,7 @@ public class ExWhyRulessDog : ExWhy
                     cell.resourceName = "Grass";
                     cell.makeAltable();
                     cell.setAltRate(10);
-                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
+                    cell.setCellBuff(new GenericCellBuff(3, 0, -2));
                     break;
 
                 case 'd':
@@ -57,7 +57,7 @@ public class ExWhyRulessDog : ExWhy
                     cell.resourceName = "Dirt";
                     cell.makeAltable();
                     cell.setAltRate(20);
-                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
+                    cell.setCellBuff(new GenericCellBuff(0, 4, 0));
                     break;
 
                 case 't':
@@ -68,7 +68,15 @@ public class ExWhyRulessDog : ExWhy
                     cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                     cell.animatable = true;
                     cell.animatableRate = 5;
-                    break;
+                break;
+
+                case 'w':
+                    instantiateCell(cell, true, 5, 5);
+                    cell.resourceName = "WoodenBoards";
+                    cell.setCellBuff(new GenericCellBuff(-1, -2, 5));
+
+
+                break;
             }
         }
     }

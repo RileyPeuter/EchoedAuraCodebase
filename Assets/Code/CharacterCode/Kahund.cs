@@ -5,7 +5,7 @@ using UnityEngine;
 public class Kahund : Character
 {
     public Kahund () : base () {
-        initiateBasicStats(2, 2, 2, 2, 2, 2);
+        initiateBasicStats(2, 0, 2, 2, 2, 2);
         initiateDerivedStats();
         HealthPoints = getDerivedStat(derivedStat.maxHealthPoints);
         ManaPoints = getDerivedStat(derivedStat.maxManaPoints);
@@ -17,11 +17,12 @@ public class Kahund : Character
         GeneralAbilities.Add(new MeleeStrike());
         
         DefaultCAI = new AttackPointAI();
+        reactionsAvailable = new List<reactionType>() { reactionType.Dodge };
     }
 
     public Kahund(ExWhyCell target) : base()
     {
-        initiateBasicStats(2, 2, 2, 2, 2, 2);
+        initiateBasicStats(2,0, 2, 2, 2, 2);
         initiateDerivedStats();
         HealthPoints = getDerivedStat(derivedStat.maxHealthPoints);
         ManaPoints = getDerivedStat(derivedStat.maxManaPoints);
@@ -36,6 +37,8 @@ public class Kahund : Character
         APAI.setTargetCell(target);
 
         DefaultCAI = APAI;
+
+        reactionsAvailable = new List<reactionType>() { reactionType.Dodge };
     }
 
 

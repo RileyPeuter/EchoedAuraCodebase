@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using Unity.Collections;
 using UnityEngine;
 
@@ -21,15 +22,23 @@ public enum CharacterState
 
 public class BattleCharacterObject : MonoBehaviour
 {
+    static int nextID = 0;
+
+    public static int getNextID()
+    {
+        int output = nextID;
+        nextID++;
+        return output;
+    }
 
     //###MemberVariables###
 
-
+    int id;
 
     CellBuff currentCellBuff;
 
     CharacterAllegiance allegiance;
-    ExWhyCell occupying;
+    ExWhyCell occupying;    
     Character character;
 
     Dictionary<int, Ability> abilityList;
@@ -103,6 +112,11 @@ public class BattleCharacterObject : MonoBehaviour
     {
         return character.CharacterAbilities;
     }
+    
+    public int getID()
+    {
+        return id;
+    }
 
     public List<Ability> getAllAbilities()
     {
@@ -112,6 +126,10 @@ public class BattleCharacterObject : MonoBehaviour
         return output;
     }
 
+    public CharacterState getState()
+    {
+        return characterState;
+    }
     public int getDodgeToHit()
     {
         return character.getDerivedStat(derivedStat.dodgeTH);
@@ -160,6 +178,11 @@ public class BattleCharacterObject : MonoBehaviour
     public string getName()
     {
         return character.CharacterName;
+    }
+
+    public string getNameID()
+    {
+        return character.CharacterName + id;
     }
 
     public Character getCharacter()
@@ -282,6 +305,7 @@ public class BattleCharacterObject : MonoBehaviour
     {
         if (characterAnimator != null)
         {
+            clearAniBools();
             characterAnimator.SetTrigger("die");
         }
     }
@@ -326,8 +350,18 @@ public class BattleCharacterObject : MonoBehaviour
     }
 
     //###Initializer###
-    public void initialize(int nSpawnX, int nSpawnY, Character nCharacter, CharacterAllegiance nAllegiance, int nNextTurn = 0)
+    public void initialize(int nSpawnX, int nSpawnY, Character nCharacter, CharacterAllegiance nAllegiance, int nNextTurn = 0, int nID = -1)
     {
+        
+        if(nID == -1)
+        {
+            id = getNextID();
+        }
+        else
+        {
+            id = nID;
+        }
+       
         spawnX = nSpawnX;
         spawnY = nSpawnY;
         character = nCharacter;
@@ -344,8 +378,17 @@ public class BattleCharacterObject : MonoBehaviour
         characterAnimator = GetComponent<Animator>();
     }
 
-    public void initialize(Character ch, CharacterAllegiance chAl)
+    public void initialize(Character ch, CharacterAllegiance chAl, int nID = -1)
     {
+        if (nID == -1)
+        {
+            id = getNextID();
+        }
+        else
+        {
+            id = nID;
+        }
+
         character = ch;
         allegiance = chAl;
         if (character.getDefualtBCAI() is null)

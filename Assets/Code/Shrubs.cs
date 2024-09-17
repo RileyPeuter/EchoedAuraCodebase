@@ -13,6 +13,8 @@ public class Shrubs : Character
         HealthPoints = getDerivedStat(derivedStat.maxHealthPoints);
         ManaPoints = getDerivedStat(derivedStat.maxManaPoints);
 
+        reactionsAvailable.Clear();
+
         CharacterName = "Shrub";
         resourceString = "Shrub";
     }

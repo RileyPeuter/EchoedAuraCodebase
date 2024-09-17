@@ -36,7 +36,7 @@ public class TownBattleController : BattleController
         
         characters[0].initialize(4, 1, new Iraden(), CharacterAllegiance.Controlled);
         characters[1].initialize(7, 7, new Fray(), CharacterAllegiance.Controlled);
-        characters[2].initialize(6, 5, new Drunk(), CharacterAllegiance.Enemey);
+        characters[2].initialize(6, 5, new Drunk(), CharacterAllegiance.Enemey, 0, -2);
         characters[2].makeDormant();
         characters[3].initialize(4, 6, new Morthred(), CharacterAllegiance.Controlled);
 
@@ -54,7 +54,7 @@ public class TownBattleController : BattleController
         {
 
             case "dkAtk0":
-                Objective nBattleObjective = new Objective("dkHit0", 1, BattleEventType.Hit).addDescription("Deal damage to the drunk (use Fray's Shadow to reduce dodge)").addModifier(ObjectiveModifier.GreaterThan, 1).addTarget("Drunk");
+                Objective nBattleObjective = new Objective("dkHit0", 1, BattleEventType.Hit).addDescription("Deal damage to the drunk (use Fray's Shadow to reduce dodge)").addModifier(ObjectiveModifier.GreaterThan, 1).addTarget("Drunk-2");
                 objList.addObjective(nBattleObjective);
                 
                 activeCutscene = gameObject.AddComponent<GenericBattleCutscene>();
@@ -71,7 +71,7 @@ public class TownBattleController : BattleController
                 activeCutscene.addFrame("Fray", "Morthred. Move to overwhelm. Take his attention", "Fray");
                 activeCutscene.addFrame("Morthred", "Ready!", "Morthred");
                 activeCutscene.addFrame("Tutorial2", "The Drunk's dodge is too high. \n You can add debuffs to the enemy to lower them. \n", "Tutorial2");
-                activeCutscene.addFrame("Tutorial2", "Enemies will automatically become easier to hit when they successfully react to attacks \n Combine this with Fray's non damaging special ability to land damage \n", "Tutorial2");
+                activeCutscene.addFrame("Tutorial2", "Enemies will automatically become easier to hit when they successfully react to attacks \nHowever, it's much more efficient to use abilities that decrease or disable reactions\nsuch as Fray's Shadow Grab", "Tutorial2");
 
 
                 activeCutscene.createDialogueObject();
@@ -91,8 +91,8 @@ public class TownBattleController : BattleController
                 activeCutscene.addFrame("Drunk", "Ehgh!", "Drunk");
                 activeCutscene.addFrame("Drunk", ".fIne imm leafing for soemwehe else", "Drunk");
                 activeCutscene.addFrame("Drunk", "yah bloody KidS", "Drunk");
-                activeCutscene.addFrame("Morthred", "Well, surprisingly aduqette. \n Maintain this efficiency and you'll be an asset to the team", "Morthred");
-                activeCutscene.addFrame("Fray", "Our glorious civil service done, lets head back", "Fray", 1);
+                activeCutscene.addFrame("Morthred", "Well, surprisingly aduqette. \nMaintain this efficiency and you'll be an asset to the team", "Morthred");
+                activeCutscene.addFrame("Fray", "Civil service isn't my idea of a mission, but it's done.  \nlets head back", "Fray", 1);
                 
 
                 activeCutscene.createDialogueObject();
@@ -144,7 +144,7 @@ public class TownBattleController : BattleController
         toggleCutscene(true);
 
         addObjectiveHighlight(characters[2]);
-        Objective nBattleObjective = new Objective("dkAtk0", 1, BattleEventType.Attack).addDescription("Attack the drunk. Drive him away").addTarget("Drunk");
+        Objective nBattleObjective = new Objective("dkAtk0", 1, BattleEventType.React).addDescription("Attack the drunk. Drive him away").addSubject("Drunk-2");
         objList.addObjective(nBattleObjective);
 
         //  activeCutscene.preInitializeTextbox();

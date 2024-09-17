@@ -11,7 +11,7 @@ public class TrainingGroundBattleController : BattleController
         switch (id)
         {
             case "tgAtk0":
-                Objective nObjective1 = new Objective("tgAtk1", 1, BattleEventType.Hit).addDescription("Use a Ranged Strike at the target").addTarget(characters[2].getName()).addVerb("RangedStrike");
+                Objective nObjective1 = new Objective("tgAtk1", 1, BattleEventType.Hit).addDescription("Use a Ranged Strike at the target").addTarget(characters[2].getNameID()).addVerb("RangedStrike");
                 objList.addObjective(nObjective1);
                 addTacticalPoints();
 
@@ -32,7 +32,7 @@ public class TrainingGroundBattleController : BattleController
 
 
             case "tgAtk1":
-                Objective nObjective2 = new Objective("tgAtk2", 1, BattleEventType.Hit).addDescription("Use your Ice Shuriken at the target").addTarget(characters[2].getName()).addVerb("IceShuriken");
+                Objective nObjective2 = new Objective("tgAtk2", 1, BattleEventType.Hit).addDescription("Use your Ice Shuriken at the target").addTarget(characters[2].getNameID()).addVerb("IceShuriken");
                 objList.addObjective(nObjective2);
                 addTacticalPoints();
 
@@ -151,7 +151,7 @@ public class TrainingGroundBattleController : BattleController
         activeCutscene.preInitializeTextbox();
         activeCutscene.setFrame(0);
         toggleCutscene(true);
-        Objective nObjective = new Objective("tgAtk0", 1, BattleEventType.Hit).addDescription("Use a MeleeStrike on the cuirass").addTarget(characters[1].getName()).addVerb("MeleeStrike");
+        Objective nObjective = new Objective("tgAtk0", 1, BattleEventType.Hit).addDescription("Use a MeleeStrike on the cuirass").addTarget(characters[1].getNameID()).addVerb("MeleeStrike");
         objList.addObjective(nObjective);
         GlobalGameController.GGC.playMusic(Resources.Load<AudioClip>("Audio/Music/HonkHonk"));
 

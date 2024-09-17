@@ -86,7 +86,7 @@ public abstract class StandOffController : MonoBehaviour
         GO.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
         
         GO.GetComponent<AbilitySnippetController>().initialize(BattleUIController.HighestWindow, ability);
-        GO.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -200);
+        GO.GetComponent<RectTransform>().anchoredPosition = new Vector2(-400, 200);
     }
     
     public void setResourceName(string recName)

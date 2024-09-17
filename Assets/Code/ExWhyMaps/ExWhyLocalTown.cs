@@ -45,7 +45,7 @@ public class  ExWhyLocalTown : ExWhy
                     cell.resourceName = "Dirt";
                     cell.makeAltable();
                     cell.setAltRate(30);
-                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
+                    cell.setCellBuff(new GenericCellBuff(0, 4, 0));
                     break;
 
                 case 'g':
@@ -53,7 +53,7 @@ public class  ExWhyLocalTown : ExWhy
                     cell.resourceName = "Grass";
                     cell.makeAltable();
                     cell.setAltRate(30);
-                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
+                    cell.setCellBuff(new GenericCellBuff(3, 0, -2));
                     cell.animatable = true;
                     break;
 
@@ -66,7 +66,7 @@ public class  ExWhyLocalTown : ExWhy
                 case 'w':
                     instantiateCell(cell, true, 3, 3);
                     cell.resourceName = "WoodenBoard";
-                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
+                    cell.setCellBuff(new GenericCellBuff(-1, -2, 5));
                     break;
 
                 case 'h':

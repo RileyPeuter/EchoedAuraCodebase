@@ -1,4 +1,4 @@
-using System.Collections;
+    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +12,7 @@ public abstract class BattleController : MonoBehaviour
 
     public List<BattleCharacterObject> characters;
 
+    GameObject hoverAA;
     GameObject currentAA;
     AttackAttempt aa;
     GameObject selectedSatsPanel;
@@ -166,7 +167,7 @@ public abstract class BattleController : MonoBehaviour
     public void forceCast(BattleCharacterObject caster, ExWhyCell target, Ability ab) 
     {
         if (ab.abilityType == AbilityType.Targeted && !(ab is TacticalAbility )) 
-        {
+        { 
             createStandOff(new AttackAttempt(caster, target.occupier, ab));
         }
     }
@@ -175,9 +176,7 @@ public abstract class BattleController : MonoBehaviour
     {
         //I'm not sure we're removing this AR
         AbilityRange AbRa = gameObject.AddComponent<AbilityRange>();
-        print(abi.name);
-        print(activeCharacter.getName());
-
+        
         AbRa.initalize(abi.GetRange(), activeCharacter.getOccupying(), ExWhy.activeExWhy);
         AbRa.findCellsInRange(RangeMode.Simple);
         foreach (BattleCharacterObject BCO in AbRa.findCharactersInRange())
@@ -197,9 +196,7 @@ public abstract class BattleController : MonoBehaviour
     {
         //I'm not sure we're removing this AR
         AbilityRange AbRa = gameObject.AddComponent<AbilityRange>();
-        print(abi.name);
-        print(activeCharacter.getName());
-
+        
         AbRa.initalize(abi.GetRange(), activeCharacter.getOccupying(), ExWhy.activeExWhy);
         AbRa.findCellsInRange(RangeMode.Simple);
         foreach (BattleCharacterObject BCO in AbRa.findCharactersInRange())
@@ -235,7 +232,7 @@ public abstract class BattleController : MonoBehaviour
         }
         selectedAbility = null;
 
-        BEL.addEvent( BattleEventType.EndTurn, activeCharacter.getName(), activeCharacter.GetAllegiance().ToString());
+        BEL.addEvent( BattleEventType.EndTurn, activeCharacter.getNameID(), activeCharacter.GetAllegiance().ToString());
 
         activeCharacter.endTurn();
         activeCharacter.clearAniBools();
@@ -374,17 +371,23 @@ public abstract class BattleController : MonoBehaviour
 
         if (ability.name == "Move")
         {
+            activeCharacter.clearAniBools();
             activeCharacter.setAniRun(true);
         }
         else
         {
+            activeCharacter.clearAniBools();
             activeCharacter.setAniAnticipate(true);
         }
 
         createRange(ability);
 
         BUIC.lockFocus(GO.GetComponent<AbilitySnippetController>());
-        checkTarget();
+
+        if (cursorCell.occupier != activeCharacter)
+        {
+            checkTarget();
+        }
         if(ability.abilityType == AbilityType.Self) { tryCast(selectedAbility); }
     }
 
@@ -519,6 +522,31 @@ public abstract class BattleController : MonoBehaviour
         }
     }
 
+    public void checkHoverCellTarget(ExWhyCell cell)
+    {
+        if (hoverAA)
+        {
+            Destroy(hoverAA);
+        }
+
+        if (cell.occupier is null)
+        {
+            return;
+        }
+
+        if(selectedAbility is null)
+        {
+            return;
+        }
+
+        if (selectedAbility.abilityType == AbilityType.Targeted)
+        {
+            hoverAA = BUIC.openWindow("uI_MiniAttackAttampet_Panel", true, "Canvas", false);
+            hoverAA.GetComponent<AttackAttemptUIController>().initialize(BattleUIController.HighestWindow, new AttackAttempt(activeCharacter, cell.occupier, selectedAbility));
+            hoverAA.GetComponent<RectTransform>().localPosition += mainCamera.WorldToScreenPoint((Vector2)  cell.cellGO.transform.position);
+        }
+    }
+
     protected void controls()
     { 
         cursor.transform.position = cursorCell.cellGO.transform.position;
@@ -539,9 +567,10 @@ public abstract class BattleController : MonoBehaviour
 
         BUIC.checkBackButtons();
 
-        if(Input.mousePosition != lastMousePosition)
+        if (hoverCursor.transform.position != map.getMouseCell().cellGO.transform.position)
         {   
             hoverCursor.transform.position = map.getMouseCell().cellGO.transform.position;
+            checkHoverCellTarget(map.getMouseCell());
         }
 
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
@@ -667,7 +696,7 @@ public abstract class BattleController : MonoBehaviour
         {
             if(checkValidTarget(AR, cursorCell, false, true, AbilityType.Targeted))
             {
-                BEL.addEvent(BattleEventType.Movement, activeCharacter.getName(), "Move", cursorCell.ToString());
+                BEL.addEvent(BattleEventType.Movement, activeCharacter.getNameID(), "Move", cursorCell.ToString());
 
                 ability.cast(cursorCell, activeCharacter);
                 createStandOff(null, ability, activeCharacter, null);
@@ -684,7 +713,7 @@ public abstract class BattleController : MonoBehaviour
         switch (ability.abilityType)
         {
             case AbilityType.Self:
-                BEL.addEvent(BattleEventType.Attack, activeCharacter.getName(), ability.name);
+                BEL.addEvent(BattleEventType.Attack, activeCharacter.getNameID(), ability.name);
                 if (ability is TacticalAbility)
                 {
                     createStandOff(null, null, activeCharacter, (TacticalAbility)ability);
@@ -698,7 +727,7 @@ public abstract class BattleController : MonoBehaviour
             case AbilityType.Targeted:
                 if(checkValidTarget(AR, cursorCell, true, false, AbilityType.Targeted))
                 {   
-                    BEL.addEvent(BattleEventType.Attack, activeCharacter.getName(), ability.name, cursorCell.occupier.getName());
+                    BEL.addEvent(BattleEventType.Attack, activeCharacter.getNameID(), ability.name, cursorCell.occupier.getNameID());
                     if (ability is TacticalAbility)
                     {
                         createStandOff(null, null, activeCharacter, (TacticalAbility)ability);
@@ -714,7 +743,7 @@ public abstract class BattleController : MonoBehaviour
             case AbilityType.Support:
                 if(checkValidTarget(AR, cursorCell, true, false, AbilityType.Support))
                 {
-                    BEL.addEvent(BattleEventType.Attack, activeCharacter.getName(), ability.name, cursorCell.occupier.getName());
+                    BEL.addEvent(BattleEventType.Attack, activeCharacter.getNameID(), ability.name, cursorCell.occupier.getNameID());
                     if(ability is TacticalAbility)
                     {
                         createStandOff(null, null, null, (TacticalAbility)ability);
@@ -846,7 +875,7 @@ public abstract class BattleController : MonoBehaviour
 
     public void killCharacter(BattleCharacterObject character)
     {
-        BEL.addEvent(BattleEventType.Kill, character.getName());
+        BEL.addEvent(BattleEventType.Kill, character.getNameID());
         character.setAniDie();
         characters.Remove(character);
         Destroy(character.characterObject, 2f);
@@ -872,7 +901,7 @@ public abstract class BattleController : MonoBehaviour
     {
         foreach (BattleCharacterObject battleCharacterObject in characters) 
         {
-            if (battleCharacterObject.getName() == name)
+            if (battleCharacterObject.getNameID() == name)
             {
 
             return battleCharacterObject; 
@@ -882,6 +911,8 @@ public abstract class BattleController : MonoBehaviour
         Debug.Log("Fam, there's a wrong character name. maybe they died");
         return null;
     }
+
+       
 
     //Obscelete for now
     public void getMouseCell()

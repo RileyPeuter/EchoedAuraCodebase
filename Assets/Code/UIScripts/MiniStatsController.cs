@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MiniStatsController : Window
 {
+    GameObject fillArea;
     GameObject buffBar;
+    int previousHealth = 99999;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,9 +17,19 @@ public class MiniStatsController : Window
         setInfo();
     }
 
-    public void setInfo()
+    public void updateInfo()
     {
+    //    GetComponentInChildren<Slider>().
+    }
 
+
+
+    public void setInfo(bool chunk = false)
+    {
+        if (chunk)
+        {
+            spawnChunk();
+        }
 
         foreach (Text text in GetComponentsInChildren<Text>())
         {
@@ -27,11 +40,11 @@ public class MiniStatsController : Window
                     break;
 
                 case "uI_CurrentHealthNumeric_Text":
-                    text.text = character.getCharacter().getDerivedStat(derivedStat.maxHealthPoints).ToString() + " / " + character.getCharacter().getCurrentHealth();
+                    text.text = character.getCharacter().getCurrentHealth() + " / " + character.getCharacter().getDerivedStat(derivedStat.maxHealthPoints).ToString();
                     break;
 
                 case "uI_CurrentManaNumeric_Text":
-                    text.text = character.getCharacter().getDerivedStat(derivedStat.maxManaPoints).ToString() + " / " + character.getCharacter().getCurrentMana();
+                    text.text = character.getCharacter().getCurrentMana() + " / " +  character.getCharacter().getDerivedStat(derivedStat.maxManaPoints).ToString();
                     break;
 
                 case "uI_CurrentManaFlow_Text":
@@ -43,6 +56,8 @@ public class MiniStatsController : Window
 
             }
         }
+
+        fillArea = GetComponentsInChildren<Image>().ToList().Find(x => x.name == "uI_HealthFill_Image").gameObject;
 
         foreach (Slider slider in GetComponentsInChildren<Slider>())
         {
@@ -75,7 +90,10 @@ public class MiniStatsController : Window
         }
     }
 
-
+    public void spawnChunk()
+    {
+        GameObject.Instantiate(Resources.Load<GameObject>("healthChunk"), fillArea.transform);
+    }
 
     public void addBuff(Buff buff)
     {

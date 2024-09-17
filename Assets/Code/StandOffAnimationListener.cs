@@ -7,6 +7,8 @@ public class StandOffAnimationListener : MonoBehaviour
 {
     StandOffController SOC;
     public bool left = false;
+    
+    public KeyValuePair<StandOffStage, bool> currentStage;
     public void test()
     {
         

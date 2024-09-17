@@ -9,16 +9,34 @@ public class StandOffSide
     Sprite frontTileSprite;
     Sprite backTileSprite;
     Sprite backgroundSprite;
+    SpriteRenderer characterSprite;
     Animator characterAnimator;
     Animation abilityAnimation;
     public GameObject sideGO;
     Dictionary<string, Sprite> messageQueue;
     StandOffAnimationListener SOAL;
     float messageTimer = 0;
-    
+
+    bool killed = false;
+
+    public virtual bool animationsFinished(StandOffAnimationListener nSAOL)
+    {
+        //        switch (nSAOL.) { }
+        return true;
+    }    
+
+    public void killEffect()
+    {
+        killed = true;
+    }
 
     public void tickMessage()
     {
+        if (killed)
+        {
+            characterSprite.color -= new Color(0, 0, 0, Time.deltaTime); 
+        }
+
         messageTimer -= Time.deltaTime;
         if (messageQueue.Count != 0)
         {
@@ -165,5 +183,8 @@ public class StandOffSide
                     break;
             }
         }
+        characterSprite = characterAnimator.gameObject.GetComponent<SpriteRenderer>();
+
+
     }
 }

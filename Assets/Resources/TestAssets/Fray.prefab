@@ -74,12 +74,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -70
-  m_Sprite: {fileID: 21300000, guid: 109b2757f4ef35140927da401022a319, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c08668bad11bcf244928942731e637bf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 8, y: 4.6}
+  m_Size: {x: 12, y: 5.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fcf7a7ece276e4c92709bc9a44e5c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterObject: {fileID: 0}
 --- !u!95 &8595880640306258091
 Animator:
   serializedVersion: 3
@@ -129,11 +130,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1472800153837325359, guid: 260c426b791df464d847134355b85fc6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.2
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1472800153837325359, guid: 260c426b791df464d847134355b85fc6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.6
+      value: -2.26
       objectReference: {fileID: 0}
     - target: {fileID: 1472800153837325359, guid: 260c426b791df464d847134355b85fc6, type: 3}
       propertyPath: m_LocalPosition.z

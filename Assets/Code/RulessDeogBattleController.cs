@@ -12,12 +12,7 @@ public class RulessDeogBattleController : BattleController
     public override void endBattle()
     {
         
-        BattleCharacterObject BCO = getCharacterFromName("Ruless");
-
-        if (BCO != null)
-        {
-            GlobalGameController.GGC.getAgency().addCharacter(BCO.getCharacter());
-        }
+        GlobalGameController.GGC.getAgency().addCharacter(new Ruless());
         GlobalGameController.GGC.completeMission();
         GlobalGameController.GGC.openManagment();
     }
@@ -44,7 +39,7 @@ public class RulessDeogBattleController : BattleController
 
 
         spawnCells.Add(map.gridObject.gridCells[4, 4]);
-        spawnCells.Add(map.gridObject.gridCells[5, 4]);
+        spawnCells.Add(map.gridObject.gridCells[5, 4]); 
         spawnCells.Add(map.gridObject.gridCells[7, 4]);
         spawnCells.Add(map.gridObject.gridCells[6, 4]);
 
@@ -54,23 +49,19 @@ public class RulessDeogBattleController : BattleController
             GO.GetComponent<BattleCharacterObject>().setSpawnCords(spawnCells[spawnIndex].xPosition, spawnCells[spawnIndex].yPosition);
             characters.Add(GO.GetComponent<BattleCharacterObject>());
 
-            characters[spawnIndex].spawnCharacter(map.gridObject);
+            characters[spawnIndex].spawnCharacter(map.gridObject);  
             spawnIndex++;
         }
-        foreach (BattleCharacterObject bco in characters)
-        {
-            print(bco.getName());
-        }
-
+        
         //Please please please redo this some time, atleast take away the list refernces
         characters.Add(GameObject.Instantiate(Resources.Load<GameObject>("TestAssets/TradeCart")).GetComponent<BattleCharacterObject>());
-        characters[characters.Count - 1].initialize(8, 3, new TradeCart(), CharacterAllegiance.Allied);
+        characters[characters.Count - 1].initialize(8, 3, new TradeCart(), CharacterAllegiance.Allied, 0, -6);
         characters[characters.Count - 1].spawnCharacter(map.gridObject);
         cart = characters[characters.Count -1];
         cart.makeDormant();
-
+            
         characters.Add(GameObject.Instantiate(Resources.Load<GameObject>("TestAssets/Ruless")).GetComponent<BattleCharacterObject>());
-        characters[characters.Count - 1].initialize(7, 3, new Ruless(), CharacterAllegiance.Controlled);
+        characters[characters.Count - 1].initialize(7, 3, new Ruless(), CharacterAllegiance.Controlled, 0, -7);
         characters[characters.Count - 1].spawnCharacter(map.gridObject);
 
         characters.Add(GameObject.Instantiate(Resources.Load<GameObject>("TestAssets/Shrub")).GetComponent<BattleCharacterObject>());
@@ -87,7 +78,7 @@ public class RulessDeogBattleController : BattleController
             case "etKahund0":
 
                 spawnKahund();
-                objList.addObjective(new Objective("etKahund0", 1, BattleEventType.EndTurn).addVerb(CharacterAllegiance.Controlled.ToString()));
+                objList.addObjective(new Objective("etKahund0", 1, BattleEventType.EndTurn).addSubject("Ruless-7").makeInvisible());
                 break;
 
             case "etFinish":
@@ -102,7 +93,7 @@ public class RulessDeogBattleController : BattleController
                 activeCutscene.addFrame("Fray", "We're getting nowhere.", "Fray");
                 activeCutscene.addFrame("Ruless", "I can keep this up. We musn't abbandon our duty.", "Ruless");
                 activeCutscene.addFrame("Fray", "Normally i'd agree, but your duty was to escort people who ran away hours ago", "Fray");
-                activeCutscene.addFrame("Fray", "I don't want to have to explain to our seniors how you died a some pests", "Fray");
+                activeCutscene.addFrame("Fray", "I don't want to have to explain to our seniors how you died to some pests", "Fray");
                 activeCutscene.addFrame("Iraden", "Maybe we can break through the trees. They'll leave us alone for the cart", "Iraden");
                 activeCutscene.addFrame("Ruless", "...Fine. For your sakes", "Ruless", 1);
 
@@ -154,7 +145,7 @@ public class RulessDeogBattleController : BattleController
         baseTacticalAbilities.Add(new Supposititious(this));
         objList.addObjective(new Objective("etKahund0", 1, BattleEventType.EndTurn).addSubject("Ruless").makeInvisible());
         objList.addObjective(new Objective("etFinish", 1, BattleEventType.Time).addDescription("Hold out (till T:50)").addModifier(ObjectiveModifier.GreaterThan, 50));
-        objList.addObjective(new Objective("defCart0", 1, BattleEventType.Time).addDescription("Hold out (till T:50)").addModifier(ObjectiveModifier.GreaterThan, 50));
+        objList.addObjective(new Objective("defCart0", 1, BattleEventType.Hit).addDescription("Ensure the food cart isn't spoilt").addTarget(cart.name));
 
         lookForBattleEventListeners();
         spawnKahund(true);
