@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cutScene>
+	<sprite>
+		<name>Iraden</name>
+		<path>Iraden</path>
+	</sprite>
+	<frame>
+		<speaker>Iraden</speaker>
+		<dialogue>I heard there was a...a vacancy of those who are...uhh \n Inclined towards that of military academia...ahh \n via magical tal..."</dialogue>
+		<sprite>Iraden</sprite>
+	</frame>
+</cutScene>
