@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public abstract class ExWhy
@@ -146,14 +147,15 @@ public abstract class ExWhy
             {
                 //GameObject.Find("globalGameController").GetComponent<globalGameController>().notPrint("OverworldTiles/sprites/" + resourceName + "/" + tp.name + (x + 1));
                 //OverworldTiles / sprites / arena / floorSprites1.png
-                spriteSheet[y, x] = Resources.Load<Sprite>("MapTiles/Sprites/" + resourceName + "/" + tp.name + (x + 1));//+ (x + 1));                                                                                                             //OverworldTiles/sprites/arena/floorSpritesfloorSprites.png
+                spriteSheet[y, x] = Resources.Load<Sprite>("TileSprites/" + tp.name + (x + 1));//+ (x + 1));        
+                //OverworldTiles/sprites/arena/floorSpritesfloorSprites.png
             }
 
             for (int x = 16; x < 32; x++)
             {
                 //GameObject.Find("globalGameController").GetComponent<globalGameController>().notPrint("OverworldTiles/sprites/" + resourceName + "/" + tp.name + (x + 1));
                 //OverworldTiles / sprites / arena / floorSprites1.png
-                altSpriteSheet[y, x - 16] = Resources.Load<Sprite>("MapTiles/Sprites/" + resourceName + "/" + tp.name + (x + 1));//+ (x + 1));                                                                                                             //OverworldTiles/sprites/arena/floorSpritesfloorSprites.png
+                altSpriteSheet[y, x - 16] = Resources.Load<Sprite>("TileSprites/" + tp.name + (x + 1));//+ (x + 1));                                                                                                             //OverworldTiles/sprites/arena/floorSpritesfloorSprites.png
             }
             y = y + 1;
         }
@@ -257,8 +259,9 @@ public abstract class ExWhy
         {
             cell.cellGO.GetComponent<SpriteRenderer>().sprite = altSpriteSheet[cell.spriteID, cell.colID];
             return;
-        }
-        cell.cellGO.GetComponent<SpriteRenderer>().sprite = spriteSheet[cell.spriteID, cell.colID];
+        }  
+        Debug.Log(cell.xPosition.ToString() + "  " +  cell.yPosition.ToString()); 
+        cell.cellGO.GetComponent<SpriteRenderer>().sprite = spriteSheet[cell.spriteID, cell.colID]; 
     }
 
     //This function is used to trigger an event. 

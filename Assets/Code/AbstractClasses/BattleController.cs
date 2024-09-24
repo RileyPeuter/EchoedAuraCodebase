@@ -448,6 +448,7 @@ public abstract class BattleController : MonoBehaviour
         turnTimer++;
         turnTimerUI.updateTime(turnTimer);
         timerTick();
+        //fam
     }
 
     public void setActiveCharacter(BattleCharacterObject character)

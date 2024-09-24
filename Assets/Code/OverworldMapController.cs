@@ -12,6 +12,7 @@ public class OverworldMapController : MonoBehaviour
     GameObject characterSelect;
     MapCharacterListController characterListController;
 
+
     public void initialize(Agency ag)
     {
         agency = ag;
@@ -97,6 +98,14 @@ public class OverworldMapController : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void tickCharacters()
+    {
+        foreach (StoredCharacterObject SCO in agency.getCharacters())
+        {
+            SCO.tick();
+        }
     }
 
     void spawnMissions()

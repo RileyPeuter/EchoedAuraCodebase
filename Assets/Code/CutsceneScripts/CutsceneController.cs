@@ -25,6 +25,10 @@ public class CutsceneController : MonoBehaviour
             case 3:
                 this.gameObject.AddComponent<DorciaMeetCutscene>();
                 break;
+
+            case 4:
+                this.gameObject.AddComponent<PostPrologueCutscene>();
+                break;
         }
     }
 

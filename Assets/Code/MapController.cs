@@ -97,6 +97,9 @@ BattleController battleController;
             case 5:
                 battleController = this.gameObject.AddComponent<DorciaAssistanceBattleController>();
             break;
+            case 6:
+                battleController = this.gameObject.AddComponent<Siege1BattleController>();
+             break;
 
         }
         if(GGC.getMissionCharacters() != null)

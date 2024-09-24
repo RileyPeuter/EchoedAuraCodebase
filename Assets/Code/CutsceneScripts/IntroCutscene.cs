@@ -13,14 +13,17 @@ public class IntroCutscene : Cutscene
     // Start is called before the first frame update
     void Start()
     {
+        frames = new List<CutsceneFrame>();
+        speakerSprites = new Dictionary<string, Sprite>();
 
+        resourceString = "Intro";
+        CutsceneLoader.loadCutscene(this);
         GlobalGameController.GGC.playMusic(Resources.Load<AudioClip>("Audio/Music/NomadOprhan"));
 
-        speakerSprites = new Dictionary<string, Sprite>();
+        /*
         speakerSprites.Add("Iraden", Resources.Load<Sprite>("CutsceneSpeakerSprites/Iraden"));
         speakerSprites.Add("Jayf", Resources.Load<Sprite>("CutsceneSpeakerSprites/Jayf"));
-        frames = new List<CutsceneFrame>();
-
+        
         frames.Add(new CutsceneFrame("", "In a delapitated castle, in the quite country side, hosts \n a small band of specialized mercenaries"));
 
 
@@ -43,13 +46,14 @@ public class IntroCutscene : Cutscene
         frames.Add(new CutsceneFrame("Jayf", "hmm. Learning that by books alone would be an achievement. \n A mouse scurrying through the cracks, sticking people \n with ice could be useful to us.", getSprite("Jayf")));
         frames.Add(new CutsceneFrame("Jayf", "If what you say is true...", getSprite("Jayf")));
         frames.Add(new CutsceneFrame("Jayf", "Walk with me to the training ground and show me what you can do.", getSprite("Jayf")));
+        */
 
         bigTextBox = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_Dialogue_GameObject"));
 
         spawnVisuals();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         if(phaseTime > 0)

@@ -24,6 +24,8 @@ public abstract class Cutscene : MonoBehaviour
 {
     //###MemberVeriables###
 
+    public string resourceString;
+
     //Amount of time it the textbox is inactive
     protected float phaseTime;
 

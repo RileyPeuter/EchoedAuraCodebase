@@ -18,6 +18,17 @@ public class StoredCharacterObject
     Character character;
     int mana;
 
+    public void tick()
+    {
+        switch (storedState)
+        {
+            case StoredCharacterState.Idle:
+            case StoredCharacterState.Resting:
+                
+            break;
+        }
+    }
+
     public StoredCharacterObject(Character n_Character)
     {
         character = n_Character;

@@ -32,6 +32,7 @@ public abstract class Character {
     public int getCurrentHealth()
     {
         return healthPoints;
+        //kappa
     }
 
     public int getCurrentMana()
