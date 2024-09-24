@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cutScene>
+	<sprite>
+		<name>Iraden</name>
+		<path>Iraden</path>
+	</sprite>
+
+	<sprite>
+		<name>Jayf</name>
+		<path>Jayf</path>
+	</sprite>
+
+	<frame>
+		<dialogue>In a delapitated castle, in the quite country side, hosts \n a small band of specialized mercenaries"</dialogue>
+	</frame>
+	
+	
+	<frame>
+		<speaker>Iraden</speaker>
+		<dialogue trigger="1">I heard there was a...a vacancy of those who are...uhh
+		Inclined towards that of military academia...ahh
+		via magical tal..."</dialogue>
+	</frame>
+
+	<frame>
+		<speaker>Jayf</speaker>
+		<dialogue>That's an impressive amount of big words, but perhaps try speaking plainly. 
+		Who are you?</dialogue>
+	</frame>
+
+	<frame>
+		<speaker>Iraden</speaker>
+		<dialogue>I want to enrol</dialogue>
+	</frame>
+
+	<frame>
+		<speaker>Jayf</speaker>
+		<dialogue>That's obvious, hence my question. Who are you? \n We aren't exactly advertising for new people.</dialogue>
+	</frame>
+
+	<frame>
+		<speaker>Iraden</speaker>
+		<dialogue>We're hiring people of more peculiar, specialised and specific skills. 
+		Things that can't be gotten from anywhere else.</dialogue>
+	</frame>
+	
+	<frame>
+		<speaker>Iraden</speaker>
+		<dialogue>I'm quiet and fast. 
+		And I studied mana weaving.</dialogue>
+	</frame>
+	
+	<frame>
+		<speaker>Jayf</speaker>
+		<dialogue>Well, do tell me, at what academy</dialogue>
+	</frame>
+	
+	<frame>
+		<speaker>Iraden</speaker>
+		<dialogue>I didn't need one. I bought books with what my father left me.</dialogue>
+	</frame>
+	<frame>
+		<speaker>Jayf</speaker>
+		<dialogue>As I thought.
+		'Self Taught' mages tend to be danger to themselves and those around</dialogue>
+	</frame>
+	
+	<frame>
+		<speaker>Iraden</speaker>
+		<dialogue>I learnt the Cerilin ice saw lighter, so that it can be thrown.\n And I can do it really quickly</dialogue>
+	</frame>
+
+	<frame>
+		<speaker>Jayf</speaker>
+		<dialogue>
+			Hmm. Learning that by books alone would be an achievement. \n A mouse scurrying through the cracks, sticking people \n with ice could be useful to us.
+		</dialogue>
+	</frame>
+
+	<frame>
+		<speaker>Jayf</speaker>
+		<dialogue>
+			If what you say is true...
+		</dialogue>
+	</frame>
+
+	<frame>
+		<speaker>Jayf</speaker>
+		<dialogue>
+			Walk with me to the training ground and show me what you can do.
+		</dialogue>
+	</frame>
+
+
+</cutScene>
