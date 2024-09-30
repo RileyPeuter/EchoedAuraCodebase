@@ -6,7 +6,7 @@ public class MapCharacterListController : Window
 {
     // Start is called before the first frame update
     List<StoredCharacterObject> characters = new List<StoredCharacterObject>();
-    BattleUIController BUIC;
+    UIController UIC;
     OverworldMapController OWMC;
 
     List<GameObject> characterButtons = new List<GameObject>();
@@ -31,6 +31,7 @@ public class MapCharacterListController : Window
             }
         }
     }
+
 
     public void disableSelection()
     {
@@ -57,12 +58,24 @@ public class MapCharacterListController : Window
         {
             GameObject GO = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_Character_Button"), this.transform);
 
-            GO.GetComponent<CharacterSnippetController>().initialize(this, character);
+            GO.GetComponent<CharacterSnippetController>().initialize(UIController.HighestWindow , character, true);
             GO.GetComponent<CharacterSnippetController>().setListener(this);
             GO.GetComponent<RectTransform>().localPosition += new Vector3(0, yOffset);
             yOffset = yOffset - 50;
 
             characterButtons.Add(GO);
         }
+    }
+
+    public void initialize(Window nParent, OverworldMapController nOWMC, UIController nUIC)
+    {
+        initialize(nParent);
+        OWMC = nOWMC;
+        UIC = nUIC;
+    }
+
+    public UIController getUIC()
+    {
+        return UIC;
     }
 }

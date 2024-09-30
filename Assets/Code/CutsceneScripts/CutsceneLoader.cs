@@ -14,7 +14,6 @@ public class CutsceneLoader
         XmlDocument xmlDocument = new XmlDocument();
         xmlDocument.LoadXml(textAsset.text);
 
-        Debug.Log(xmlDocument.SelectNodes("/cutScene/sprite").Count);
         XmlReader reader = XmlReader.Create("Intro.xml", settings);
 
         string spriteName = "";

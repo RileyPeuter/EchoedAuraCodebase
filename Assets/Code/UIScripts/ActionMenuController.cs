@@ -8,10 +8,10 @@ public class ActionMenuController : Window
 {
     GameObject quickSelectBar;
     public GameObject BasicMenu;
-    BattleUIController BUIC;
+    UIController BUIC;
     BattleController BC;
     List<QuickSelectButtonScript> quickSelectButtons;
-
+    BattleCharacterObject character;
     public void OpenMenu(int menuType)
     {
         BUIC.closeAllTransient();
@@ -38,7 +38,7 @@ public class ActionMenuController : Window
         }
     }
 
-    public void setBUIC(BattleUIController NBUIC)
+    public void setBUIC(UIController NBUIC)
     {
         BUIC = NBUIC;
     }
@@ -93,6 +93,11 @@ public class ActionMenuController : Window
             xOffset += 78;
             hotkeyNumber++;
         }
+    }
+
+    public void initialize(Window nParent, BattleCharacterObject nBCO)
+    {
+        character = nBCO;
     }
 
     void hotKeyCheck()

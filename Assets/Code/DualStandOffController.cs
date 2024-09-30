@@ -21,7 +21,7 @@ public class DualStandOffController : StandOffController
     MiniStatsController parryController;
     
 
-    public void initialize(AttackAttempt AA, BattleController BC, BattleUIController nBUIC)
+    public void initialize(AttackAttempt AA, BattleController BC, UIController nBUIC)
     {
 
         BUIC = nBUIC;
@@ -53,7 +53,7 @@ public class DualStandOffController : StandOffController
         if (attackAttempt.getAttackee().GetAllegiance() == CharacterAllegiance.Controlled)
         {
             GameObject GO = BUIC.openWindow("uI_AttackAttampetReact_Panel", true, "Canvas", false);
-            GO.GetComponent<AttackAttemptReactionScript>().initialize(BattleUIController.HighestWindow, attackAttempt);
+            GO.GetComponent<AttackAttemptReactionScript>().initialize(UIController.HighestWindow, attackAttempt);
         }
         else
         {
@@ -64,8 +64,8 @@ public class DualStandOffController : StandOffController
     void Start()
     {
         initialize();
-        targetController = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_StandOffTargetStat_Panel"), GameObject.Find("Canvas").transform).GetComponent<MiniStatsController>();
-        targetController.initialize(BattleUIController.HighestWindow, rightSide.characterSide);
+        targetController = BUIC.openWindow("uI_StandOffTargetStat_Panel", hasBackButton: false).GetComponent<MiniStatsController>();
+        targetController.initialize(UIController.HighestWindow, rightSide.characterSide);
         rightSide.getAnimator().SetTrigger("anticipate");
         leftSide.getAnimator().SetInteger("ability", attackAttempt.getAbilityAniID());
 
@@ -313,10 +313,10 @@ public class DualStandOffController : StandOffController
 
                 if(attackAttempt.getReactionUsed() == reactionType.Parry)
                 {
-                    parryController = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_StandOffTargetStat_Panel"), GameObject.Find("Canvas").transform).GetComponent<MiniStatsController>();
-                    parryController.initialize(BattleUIController.HighestWindow, leftSide.characterSide);
+                    parryController = BUIC.openWindow("uI_StandOffTargetStat_Panel", true, "Canvas", false).GetComponent<MiniStatsController>();
+                    parryController.initialize(UIController.HighestWindow, leftSide.characterSide);
                     parryController.GetComponent<RectTransform>().Translate(new Vector2( (parryController.GetComponent<RectTransform>().position.x - GameObject.Find("Canvas").GetComponent<RectTransform>().rect.width) * 2 , 0));
-                    //GameObject.Find("Canvas").GetComponent<RectTransform>().rect.width 
+
                 }
 
                 resetAnimationListeners();

@@ -17,7 +17,7 @@ public class QuickSelectButtonScript : MonoBehaviour, IPointerEnterHandler, IPoi
     public void OnPointerEnter(PointerEventData eventData)
     {
         abilitySnippet = Instantiate(abilitySnippetPrefab, this.transform);
-        abilitySnippet.GetComponent<AbilitySnippetController>().initialize(BattleUIController.HighestWindow, ability);
+        abilitySnippet.GetComponent<AbilitySnippetController>().initialize(UIController.HighestWindow, ability);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -76,7 +76,7 @@ public class QuickSelectButtonScript : MonoBehaviour, IPointerEnterHandler, IPoi
         if(abilitySnippet is null)
         {
             abilitySnippet = Instantiate(abilitySnippetPrefab);
-            abilitySnippet.GetComponent<AbilitySnippetController>().initialize(BattleUIController.HighestWindow, ability);
+            abilitySnippet.GetComponent<AbilitySnippetController>().initialize(UIController.HighestWindow, ability);
         }
         abilitySnippet.GetComponent<AbilitySnippetController>().selectAbility();
         Destroy(abilitySnippet);

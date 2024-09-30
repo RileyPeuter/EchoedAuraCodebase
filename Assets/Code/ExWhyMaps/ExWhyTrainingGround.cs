@@ -19,7 +19,7 @@ public class ExWhyTrainingGround : ExWhy
             {'g','f','f','f','f','f','f','f','f','g' },
             {'g','g','g','g','g','g','g','g','g','g' },
         };
-
+        
         eventMask = new int[10, 10]
         {
             {0,0,0,0,0,0,0,0,0,0},

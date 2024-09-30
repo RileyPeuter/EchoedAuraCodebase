@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5975474474152252744}
   - component: {fileID: 2727928826132383511}
   - component: {fileID: -5682311155894631966}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ruless
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -796734179
+  m_SortingLayer: 2
   m_SortingOrder: -70
   m_Sprite: {fileID: 21300000, guid: 85f1deebbf86e964d9f7c8d4d8d60ece, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -127,7 +127,7 @@ GameObject:
   m_Component:
   - component: {fileID: 80446047717651762}
   - component: {fileID: 7153764254127845933}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class AbilitySnippetController : Window
 {
-
+    Ability ability;
     // Start is called before the first frame update
     void Start()
     {
@@ -55,11 +55,17 @@ public class AbilitySnippetController : Window
         }
     }
 
+    public void initialize(Window nParent , Ability nAbility)
+    {
+        ability = nAbility;
+        initialize(nParent);
+    }
+
     public void selectAbility()
     {
         GameObject.Find("MapController").GetComponent<BattleController>().selectAbility(ability);
-        GameObject.Find("MapController").GetComponent<BattleUIController>().closeWindow(this.gameObject);
-        GameObject.Find("MapController").GetComponent<BattleUIController>().closeWindow(GameObject.Find("uI_AbilityMenu_Panel(Clone)"));
+        GameObject.Find("MapController").GetComponent<UIController>().closeWindow(this.gameObject);
+        GameObject.Find("MapController").GetComponent<UIController>().closeWindow(GameObject.Find("uI_AbilityMenu_Panel(Clone)"));
     }
 
     public override void  closeWindow()

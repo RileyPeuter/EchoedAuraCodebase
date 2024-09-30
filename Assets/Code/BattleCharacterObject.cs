@@ -276,7 +276,7 @@ public class BattleCharacterObject : MonoBehaviour
         setGraphicalPosition();
         currentCellBuff = newCell.getCellBuff().Clone(character);
         character.addBuff(currentCellBuff);
-
+        GetComponent<SpriteRenderer>().sortingOrder = -occupying.yPosition;
     }
 
     public void clearAniBools()

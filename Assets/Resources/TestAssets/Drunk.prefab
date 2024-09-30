@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4948461407180688096}
   - component: {fileID: 5562674530480240241}
   - component: {fileID: -7538858684857670194}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Drunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,9 +71,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: -70
+  m_SortingLayerID: -796734179
+  m_SortingLayer: 2
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 03598367a38b8584c9e1d2f80ec378a3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fcf7a7ece276e4c92709bc9a44e5c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterObject: {fileID: 0}
 --- !u!95 &-7538858684857670194
 Animator:
   serializedVersion: 3
@@ -170,6 +171,10 @@ PrefabInstance:
     - target: {fileID: 7101295633218660872, guid: 260c426b791df464d847134355b85fc6, type: 3}
       propertyPath: m_Name
       value: Shadow
+      objectReference: {fileID: 0}
+    - target: {fileID: 7101295633218660872, guid: 260c426b791df464d847134355b85fc6, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 260c426b791df464d847134355b85fc6, type: 3}

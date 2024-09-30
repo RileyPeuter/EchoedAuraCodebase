@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,30 @@ public class CharacterSnippetController : Window
 
     MapCharacterListController MCLCController;
     CharacterSelectController CSCController;
+
+    StoredCharacterObject storedCharacter;
+
+    
+
     // Start is called before the first frame update
+    public void initialize(Window nParent, StoredCharacterObject nCharacter, bool hasCharacterSheetButton)
+    {
+        initialize(nParent);
+
+        if (!hasCharacterSheetButton)
+        {
+            Destroy(GetComponentsInChildren<Button>().ToList().Find(x => x.name == "uI_ShowCharacterSheet_Button"));
+        }
+        storedCharacter = nCharacter;
+    }
+
+    public void showCharacterSheet()
+    {
+        CharacterSheetScript CSS = MCLCController.getUIC().openWindow("uI_CharacterSheet_Panel").GetComponent<CharacterSheetScript>();
+        CSS.initialize(UIController.HighestWindow);
+        CSS.setCharacterObject(storedCharacter.GetCharacter());
+    }
+
     void Start()
     {
         setText();

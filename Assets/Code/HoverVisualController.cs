@@ -15,7 +15,7 @@ public class HoverVisualController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        colourVal = Mathf.Abs(Mathf.Sin(1 - BattleUIController.UIBreatheTicker));
+        colourVal = Mathf.Abs(Mathf.Sin(1 - UIController.UIBreatheTicker));
         spriteRenderer.color = new Color(colourVal, colourVal, colourVal);
     }
 }

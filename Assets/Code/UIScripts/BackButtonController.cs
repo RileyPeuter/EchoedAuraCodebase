@@ -5,7 +5,7 @@ using UnityEngine;
 public class BackButtonController : MonoBehaviour
 {
     //###MemberVariables###
-    BattleUIController BUIC;
+    UIController BUIC;
     Window assosiatedWinow;
     BattleController deselectAbilityListener;
 
@@ -41,7 +41,7 @@ public class BackButtonController : MonoBehaviour
 
     public void Back()
     {
-        BattleUIController.checkForDeleted();
+        UIController.checkForDeleted();
         BUIC.releaseFocus();
         assosiatedWinow.closeWindow();
 
@@ -52,7 +52,7 @@ public class BackButtonController : MonoBehaviour
     }
 
     //###Initialize###
-    public void initialize(BattleUIController BU)
+    public void initialize(UIController BU)
     {
         BUIC = BU;
         assosiatedWinow = gameObject.GetComponentInParent<Window>();

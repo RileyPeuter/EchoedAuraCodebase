@@ -11,7 +11,9 @@ public class OverworldMapController : MonoBehaviour
     Mission selectedMission;
     GameObject characterSelect;
     MapCharacterListController characterListController;
+    ExtraManagemeentMenuController extraManagemeentMenuController;
 
+    UIController UIC;
 
     public void initialize(Agency ag)
     {
@@ -27,7 +29,7 @@ public class OverworldMapController : MonoBehaviour
 
         selectedMission = mission;
         characterSelect = Instantiate(Resources.Load<GameObject>("UIElements/uI_SelectCharacters_Panel"), this.transform);
-        characterSelect.GetComponent<CharacterSelectController>().initialize(BattleUIController.HighestWindow);
+        characterSelect.GetComponent<CharacterSelectController>().initialize(UIController.HighestWindow);
         characterSelect.GetComponent<CharacterSelectController>().initialize(null, false);
 
         characterSelect.GetComponent<CharacterSelectController>().setOWMC(this);
@@ -41,18 +43,25 @@ public class OverworldMapController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        UIC = this.gameObject.AddComponent<UIController>();
+        UIC.initialize(this);
+
         missionPrefab = Resources.Load<GameObject>("UIElements/uI_Mission_Button");
         gameController = GlobalGameController.GGC;
         initialize(gameController.getAgency());
         spawnMissions();
         createCharacterList();
+        //Please please please change this, we need to make our UI manager extend to this
+        extraManagemeentMenuController = Instantiate(Resources.Load<GameObject>("UIElements/uI_TopTab_Panel"), GameObject.Find("Canvas").transform).GetComponent<ExtraManagemeentMenuController>();
+        extraManagemeentMenuController.initialize(agency);
+
     }
 
     public void createCharacterList()
     {
         characterListController = Instantiate(Resources.Load<GameObject>("UIElements/uI_CharacterList_Panel"), this.transform).GetComponent<MapCharacterListController>();
-        characterListController.initialize(BattleUIController.HighestWindow);
-        characterListController.setOWMC(this);
+        characterListController.initialize(UIController.HighestWindow, this, UIC);
         characterListController.addCharacters(agency.getCharacters()); 
     }
 

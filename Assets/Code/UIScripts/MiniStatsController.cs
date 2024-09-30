@@ -9,6 +9,9 @@ public class MiniStatsController : Window
     GameObject fillArea;
     GameObject buffBar;
     int previousHealth = 99999;
+
+    BattleCharacterObject character;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -99,9 +102,10 @@ public class MiniStatsController : Window
     {
         buffBar.GetComponent<BuffBarScript>().tryAddBuff(buff);
     }
-    // Update is called once per frame
-    void Update()
+
+    public void initialize(Window nParent, BattleCharacterObject nBCO)
     {
-        
+        initialize(nParent);
+        character = nBCO;
     }
 }

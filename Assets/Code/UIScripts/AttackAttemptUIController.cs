@@ -6,12 +6,12 @@ using UnityEngine.UI;
 
 public class AttackAttemptUIController : Window
 {
-
+    //Maybe make this pubplic
+    protected AttackAttempt attackAttempt;
 
     // Start is called before the first frame update
     void Start()
     {
-
         setValues();
     }
 
@@ -123,9 +123,9 @@ public class AttackAttemptUIController : Window
     }
     
 
-    // Update is called once per frame
-    void Update()
+    public void initialize(Window nParent, AttackAttempt nAttackAttempt)
     {
-        
-    }
+        initialize(nParent);
+        attackAttempt = nAttackAttempt;
+    } 
 }

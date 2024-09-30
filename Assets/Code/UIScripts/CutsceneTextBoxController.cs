@@ -59,6 +59,12 @@ public class CutsceneTextBoxController : Window
     void Start()
     {
         initialize();
+        foreach(TextMesh textMesh in GetComponentsInChildren<TextMesh>())
+        {
+            textMesh.GetComponent<Renderer>().sortingLayerName = "WorldUI";
+
+        }
+
     }
         
 

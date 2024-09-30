@@ -68,4 +68,21 @@ public class DerivedStat
         multiplictiveBuffs = new Dictionary<int, int>();
     }
     
+    public DerivedStat(derivedStat nStatType, int nBaseAmount)
+    {
+        derivedStatType = nStatType;
+        baseFromMain = nBaseAmount;
+        additionBuffs = new Dictionary<int, int>();
+        multiplictiveBuffs = new Dictionary<int, int>();
+    }
+
+    public void reCalculateBaseFromMain(int mainstat0, int mainstat1 = 0, int baseline = 0)
+    {
+        baseFromMain = mainstat0 + mainstat1 + baseline;    
+    }
+
+    public void setBase(int nBase)
+    {
+        baseFromMain = nBase;
+    }
 }

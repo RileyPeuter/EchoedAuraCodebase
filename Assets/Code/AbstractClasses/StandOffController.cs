@@ -29,7 +29,7 @@ public abstract class StandOffController : MonoBehaviour
     protected string resourceName;
     protected bool isCutscene = false;
     Sprite mapBackground;
-    protected BattleUIController BUIC;
+    protected UIController BUIC;
     Text rollText;
     protected Text damageText;
     protected GameObject rollPanel;
@@ -85,7 +85,7 @@ public abstract class StandOffController : MonoBehaviour
         GO.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
         GO.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
         
-        GO.GetComponent<AbilitySnippetController>().initialize(BattleUIController.HighestWindow, ability);
+        GO.GetComponent<AbilitySnippetController>().initialize(UIController.HighestWindow, ability);
         GO.GetComponent<RectTransform>().anchoredPosition = new Vector2(-400, 200);
     }
     

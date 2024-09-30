@@ -8,7 +8,7 @@ public class MiscMenuController : MonoBehaviour
 {
 
     BattleController BC;
-    BattleUIController BUIC;
+    UIController BUIC;
 
     GameObject objectiveListGameobject;
     GameObject combatLogGameobject;
@@ -22,7 +22,7 @@ public class MiscMenuController : MonoBehaviour
 
 
 
-    public void initialize(BattleUIController BU, BattleController BaCo, GameObject OLG, GameObject CLG, GameObject CSG)
+    public void initialize(UIController BU, BattleController BaCo, GameObject OLG, GameObject CLG, GameObject CSG)
     {
         BUIC = BU;
         BC = BaCo;

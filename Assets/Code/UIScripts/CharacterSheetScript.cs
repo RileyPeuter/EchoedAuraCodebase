@@ -7,12 +7,6 @@ public class CharacterSheetScript : Window
 {
 
     public Character characterObj;
-    // Start is called before the first frame update
-    void Start()
-    {
-        //characterObj = character.getCharacter();
-      //  inputInformation(); 
-    }
 
     public void setCharacterObject(Character chr)
     {
@@ -20,36 +14,98 @@ public class CharacterSheetScript : Window
         inputInformation(); 
     }
 
-
     void inputInformation()
     {
-        GameObject.Find("uI_Name_Text").GetComponent<Text>().text = characterObj.CharacterName;
-        GameObject.Find("uI_StrengthAmount_Text").GetComponent<Text>().text = characterObj.getBasicStat(stat.strength).ToString();
-        GameObject.Find("uI_VitalityAmount_Text").GetComponent<Text>().text = characterObj.getBasicStat(stat.vitality).ToString();
-        GameObject.Find("uI_SpeedAmount_Text").GetComponent<Text>().text = characterObj.getBasicStat(stat.speed).ToString();
-        GameObject.Find("uI_PrecisionAmount_Text").GetComponent<Text>().text = characterObj.getBasicStat(stat.precision).ToString();
-        GameObject.Find("uI_FocusAmount_Text").GetComponent<Text>().text = characterObj.getBasicStat(stat.focus).ToString();
-        GameObject.Find("uI_IngenuityAmount_Text").GetComponent<Text>().text = characterObj.getBasicStat(stat.ingenuity).ToString();
+        foreach(Text text in GetComponentsInChildren<Text>(true))
+        {
+            switch (text.name)
+            {
+                case "uI_Name_Text":
+                    text.text = characterObj.CharacterName;
+                break;
 
 
-        GameObject.Find("uI_Health_Text").GetComponent<Text>().text = characterObj.getDerivedStat(derivedStat.maxHealthPoints).ToString() + "/" + characterObj.HealthPoints;
-        GameObject.Find("uI_Mana_Text").GetComponent<Text>().text = characterObj.getDerivedStat(derivedStat.maxManaPoints).ToString() + "/" + characterObj.ManaPoints;
+                case "uI_StrengthAmount_Text":
+                    text.text = characterObj.getBasicStat(stat.strength).ToString();
+                    break;
 
-        GameObject.Find("uI_ToHitDodge_Text").GetComponent<Text>().text = characterObj.getDerivedStat(derivedStat.dodgeTH).ToString();
-        GameObject.Find("uI_ToHitBlock_Text").GetComponent<Text>().text = characterObj.getDerivedStat(derivedStat.blockTH).ToString();
-        GameObject.Find("uI_ToHitParry_Text").GetComponent<Text>().text = characterObj.getDerivedStat(derivedStat.parryTH).ToString();
+                case "uI_VitalityAmount_Text":
+                    text.text = characterObj.getBasicStat(stat.vitality).ToString();
+                    break;
 
-        GameObject.Find("uI_ToReactDodge_Text").GetComponent<Text>().text = characterObj.getDerivedStat(derivedStat.dodge).ToString();
-        GameObject.Find("uI_ToReactBlock_Text").GetComponent<Text>().text = characterObj.getDerivedStat(derivedStat.block).ToString();
-        GameObject.Find("uI_ToReactParry_Text").GetComponent<Text>().text = characterObj.getDerivedStat(derivedStat.parry).ToString();
+                case "uI_SpeedAmount_Text":
+                    text.text = characterObj.getBasicStat(stat.speed).ToString();
+                    break;
 
-        GameObject.Find("uI_MeleeBonus_Text").GetComponent<Text>().text = characterObj.getDerivedStat(derivedStat.meleeBonus).ToString();
-        GameObject.Find("uI_RangedBonus_Text").GetComponent<Text>().text = characterObj.getDerivedStat(derivedStat.rangedBonus).ToString();
-        GameObject.Find("uI_MagicBonus_Text").GetComponent<Text>().text = characterObj.getDerivedStat(derivedStat.magicBonus).ToString();
+                case "uI_PrecisionAmount_Text":
+                    text.text = characterObj.getBasicStat(stat.precision).ToString();
+                    break;
 
-        GameObject.Find("uI_TurnFrequency_Text").GetComponent<Text>().text = characterObj.getDerivedStat(derivedStat.turnFrequency).ToString();
-        GameObject.Find("uI_Movement_Text").GetComponent<Text>().text = characterObj.getDerivedStat(derivedStat.movement).ToString();
+                case "uI_FocusAmount_Text":
+                    text.text = characterObj.getBasicStat(stat.focus).ToString();
+                    break;
 
+                case "uI_IngenuityAmount_Text":
+                    text.text = characterObj.getBasicStat(stat.ingenuity).ToString();
+                    break;
+
+                case "uI_Health_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.maxHealthPoints).ToString() + "/" + characterObj.HealthPoints;
+                    break;
+
+                case "uI_Mana_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.maxManaPoints).ToString() + "/" + characterObj.ManaPoints;
+                    break;
+
+                case "uI_ToHitDodge_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.dodgeTH).ToString();
+                    break;
+
+                case "uI_ToHitBlock_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.blockTH).ToString();
+                    break;
+
+                case "uI_ToHitParry_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.parryTH).ToString();
+                    break;
+
+                case "uI_ToReactDodge_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.dodge).ToString();
+                    break;
+
+                case "uI_ToReactBlock_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.block).ToString();
+                    break;
+
+                case "uI_ToReactParry_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.parry).ToString();
+                    break;
+
+                case "uI_MeleeBonus_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.meleeBonus).ToString();
+                    break;
+
+                case "uI_RangedBonus_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.rangedBonus).ToString();
+                    break;
+
+                case "uI_MagicBonus_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.magicBonus).ToString();
+                    break;
+
+                case "uI_TurnFrequency_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.turnFrequency).ToString();
+                    break;
+
+                case "uI_Movement_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.movement).ToString();
+                    break;
+
+                case "uI_ManaFlow_Text":
+                    text.text = characterObj.getDerivedStat(derivedStat.manaFlow).ToString();
+                    break;
+            }
+        }    
     }
 
 }

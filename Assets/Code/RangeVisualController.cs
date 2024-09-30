@@ -37,7 +37,7 @@ public class RangeVisualController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        colourVal = Mathf.Abs(Mathf.Sin(BattleUIController.UIBreatheTicker +  offset)) * 0.5f;
+        colourVal = Mathf.Abs(Mathf.Sin(UIController.UIBreatheTicker +  offset)) * 0.5f;
         spriteRednerer.color = new Color(baseR, baseG, baseB, colourVal + 0.2f);
     }
 }

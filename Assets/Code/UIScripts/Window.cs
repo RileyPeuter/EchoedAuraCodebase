@@ -9,10 +9,7 @@ public abstract class Window : MonoBehaviour
 {
     //###MemberVeriables###
     protected bool affectdByFocus = true;
-    protected BattleCharacterObject character = null;
-    protected AttackAttempt attackAttempt;
-    protected Ability ability;
-    protected StoredCharacterObject storedCharacter;
+
 
     List<Window> childrenWindows;
     Window parentWindow;
@@ -51,45 +48,13 @@ public abstract class Window : MonoBehaviour
                 }
             }
         }
-        BattleUIController.checkForDeleted();
+        UIController.checkForDeleted();
     }
 
     //###Initializers###
-    public void initialize(Window parent, StoredCharacterObject sc)
-    {
-        parentWindow = parent;
-        childrenWindows = new List<Window>();
-
-        storedCharacter = sc;
-    }
-
     public void initialize(Window parent)
     {
         parentWindow = parent;
-        childrenWindows = new List<Window>();
-    }
-
-    public void initialize(Window parent, BattleCharacterObject chara)
-    {
-        parentWindow = parent;
-        character = chara;
-
-        childrenWindows = new List<Window>();
-    }
-
-    public void initialize(Window parent, AttackAttempt aa)
-    {
-        attackAttempt = aa;
-        parentWindow = parent;
-
-        childrenWindows = new List<Window>();
-    }
-
-    public void initialize(Window parent, Ability abilty)
-    {
-        ability = abilty;
-        parentWindow = parent;
-
         childrenWindows = new List<Window>();
     }
 }

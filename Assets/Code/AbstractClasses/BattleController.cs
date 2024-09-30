@@ -51,7 +51,7 @@ public abstract class BattleController : MonoBehaviour
     protected Window currentTarget;
     bool ticking = true;
     BattleCharacterObject activeCharacter;
-    protected BattleUIController BUIC;
+    protected UIController BUIC;
 
     protected TimerUIScript turnTimerUI;
 
@@ -82,7 +82,7 @@ public abstract class BattleController : MonoBehaviour
     {
         return map.GetResourceName();
     }
-    public BattleUIController GetBattleUIController()
+    public UIController GetBattleUIController()
     {
         return BUIC;
     }
@@ -282,6 +282,12 @@ public abstract class BattleController : MonoBehaviour
         objectiveHighlights.Add(Instantiate(objectiveHighlightPrefab, nBCO.gameObject.transform));
     }
 
+    protected void addObjectiveHighlight(int xPosition, int yPosition)
+    {
+        objectiveHighlights.Add(Instantiate(objectiveHighlightPrefab, map.gridObject.gridCells[xPosition, yPosition].getTransform()));
+    }
+
+
     public void initializeBattleController()
     {
         objectiveHighlightPrefab = Resources.Load<GameObject>("ObjectiveHighlight");
@@ -291,7 +297,7 @@ public abstract class BattleController : MonoBehaviour
         mainCamera = Camera.main;
         ActiveBattleController = this;
         characters = new List<BattleCharacterObject>();
-        BUIC = GameObject.Find("MapController").GetComponent<BattleUIController>();
+        BUIC = GameObject.Find("MapController").GetComponent<UIController>();
         BUIC.initialize(this);
         map = this.gameObject.GetComponent<MapController>();
         cursor = GameObject.Instantiate(Resources.Load<GameObject>("MapTiles/Prefabs/General/TileCursor"));
@@ -307,7 +313,7 @@ public abstract class BattleController : MonoBehaviour
 
         GameObject charSheet = BUIC.openWindow("uI_CharacterSheet_Panel", false, "Canvas", false);
         CSS = charSheet.GetComponent<CharacterSheetScript>();
-        CSS.initialize(BattleUIController.HighestWindow, new BattleCharacterObject());
+        CSS.initialize(UIController.HighestWindow);
         GameObject combatLog = BUIC.openWindow("uI_CombatLog_Panel", false, "Canvas", false);
 
         miscMenu = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_MiscMenus_Panel"), GameObject.Find("Canvas").transform);
@@ -338,7 +344,7 @@ public abstract class BattleController : MonoBehaviour
         aa = new AttackAttempt(attacker, attackee, ab);
 
         currentAA = BUIC.openWindow("uI_AttackAttampet_Panel", true, "Canvas", false);
-        currentAA.GetComponent<AttackAttemptUIController>().initialize(BattleUIController.HighestWindow, aa);
+        currentAA.GetComponent<AttackAttemptUIController>().initialize(UIController.HighestWindow, aa);
     }
 
     public void deSelectAbility()
@@ -359,7 +365,7 @@ public abstract class BattleController : MonoBehaviour
     public void selectAbility(Ability ability)
     {
         GameObject GO = BUIC.openWindow("uI_SelectedAbility_Panel", true);
-        GO.GetComponent<AbilitySnippetController>().initialize(BattleUIController.HighestWindow, ability);
+        GO.GetComponent<AbilitySnippetController>().initialize(UIController.HighestWindow, ability);
         GO.GetComponentInChildren<Button>().interactable = false;
         GO.GetComponentInChildren<BackButtonController>().setDeselectListener(this);
         selectedAbility = ability;
@@ -470,9 +476,9 @@ public abstract class BattleController : MonoBehaviour
     void openTurnUI(BattleCharacterObject character)
     {
         GameObject GO = BUIC.openWindow("uI_CurrentActiveStat_Panel", false, "Canvas", false);
-        GO.GetComponent<Window>().initialize(BattleUIController.HighestWindow, character);
+        GO.GetComponent<MiniStatsController>().initialize(UIController.HighestWindow, character);
         AMC = BUIC.openWindow("uI_Actions_Panel", false, "Canvas", false).GetComponent<ActionMenuController>();
-        AMC.initialize(BattleUIController.HighestWindow, activeCharacter);
+        AMC.initialize(UIController.HighestWindow, activeCharacter);
         AMC.GetComponent<ActionMenuController>().setBUIC(BUIC);
     }
 
@@ -484,6 +490,7 @@ public abstract class BattleController : MonoBehaviour
         }
     }
 
+    // test
     public void finishMove(int amount = -1)
     {
 
@@ -543,7 +550,7 @@ public abstract class BattleController : MonoBehaviour
         if (selectedAbility.abilityType == AbilityType.Targeted)
         {
             hoverAA = BUIC.openWindow("uI_MiniAttackAttampet_Panel", true, "Canvas", false);
-            hoverAA.GetComponent<AttackAttemptUIController>().initialize(BattleUIController.HighestWindow, new AttackAttempt(activeCharacter, cell.occupier, selectedAbility));
+            hoverAA.GetComponent<AttackAttemptUIController>().initialize(UIController.HighestWindow, new AttackAttempt(activeCharacter, cell.occupier, selectedAbility));
             hoverAA.GetComponent<RectTransform>().localPosition += mainCamera.WorldToScreenPoint((Vector2)  cell.cellGO.transform.position);
         }
     }
@@ -830,7 +837,7 @@ public abstract class BattleController : MonoBehaviour
         {
             //Maybe change this to disabled instead of realoading
             selectedSatsPanel = BUIC.openWindow("uI_CurrentTargetStat_Panel", true, "Canvas", false);
-            selectedSatsPanel.GetComponent<Window>().initialize(BattleUIController.HighestWindow, cursorCell.occupier);
+            selectedSatsPanel.GetComponent<MiniStatsController>().initialize(UIController.HighestWindow, cursorCell.occupier);
             miscMenu.GetComponent<MiscMenuController>().setSheetCharacter(cursorCell.occupier.getCharacter());
 
             if (!(selectedAbility is null ) && selectedAbility.abilityType == AbilityType.Targeted)
@@ -913,7 +920,10 @@ public abstract class BattleController : MonoBehaviour
         return null;
     }
 
-       
+    public void spawnDecorations(Vector2 location, string decorationName)
+    {
+        Instantiate(Resources.Load<GameObject>("Decorations/" + decorationName)).transform.position = location;
+    }
 
     //Obscelete for now
     public void getMouseCell()

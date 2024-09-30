@@ -30,7 +30,7 @@ public class TacticalStandOffController : StandOffController {
         tAbility.cast(target, caster);
     }
 
-    public void initialize(TacticalAbility nAbility, BattleCharacterObject nCaster, string recName, BattleUIController nBUIC, ExWhyCell nTarget = null)
+    public void initialize(TacticalAbility nAbility, BattleCharacterObject nCaster, string recName, UIController nBUIC, ExWhyCell nTarget = null)
     {
         tAbility = nAbility;
 

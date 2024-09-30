@@ -63,6 +63,19 @@ public abstract class Character {
         return 0;
     }
 
+    public Stat getBasicStatObject(stat statType)
+    {
+
+        foreach (Stat s in basicStats)
+        {
+            if (s.statType == statType)
+            {
+                return s;
+            }
+        }
+        return null;
+    }
+
     public int getDerivedStat(derivedStat statType)
     {
         foreach (DerivedStat stat in derivedStats)
@@ -85,6 +98,21 @@ public abstract class Character {
             }
         }
         return null;
+    }
+
+    //This should only be used outside of combat
+    public void incrementBaseStat(stat statTarget)
+    {
+        getBasicStatObject(statTarget).incrementAddition();
+        reCalculateDerivedStats();
+    }
+
+    public void reCalculateDerivedStats()
+    {
+        foreach(DerivedStat stat in derivedStats)
+        {
+            stat.setBase(statAlgorithm(stat.derivedStatType));
+        }
     }
 
     //###Setter###
@@ -150,21 +178,87 @@ public abstract class Character {
     public void initiateDerivedStats()
     {
         derivedStats = new DerivedStat[]{
-            new DerivedStat(derivedStat.movement, getBasicStat(stat.strength), getBasicStat(stat.speed)),
-            new DerivedStat(derivedStat.maxHealthPoints, getBasicStat(stat.vitality), 0, 5),
-            new DerivedStat(derivedStat.maxManaPoints, getBasicStat(stat.vitality),getBasicStat(stat.focus), 20),
-            new DerivedStat(derivedStat.manaFlow, getBasicStat(stat.speed),getBasicStat(stat.focus)),
-            new DerivedStat(derivedStat.meleeBonus, getBasicStat(stat.strength),getBasicStat(stat.speed)),
-            new DerivedStat(derivedStat.rangedBonus, getBasicStat(stat.precision)),
-            new DerivedStat(derivedStat.magicBonus, getBasicStat(stat.ingenuity),getBasicStat(stat.focus)),
-            new DerivedStat(derivedStat.block, getBasicStat(stat.strength),getBasicStat(stat.vitality), -5),
-            new DerivedStat(derivedStat.dodge, getBasicStat(stat.speed),getBasicStat(stat.ingenuity), -5),
-            new DerivedStat(derivedStat.parry, getBasicStat(stat.precision),getBasicStat(stat.focus), -5),
-            new DerivedStat(derivedStat.blockTH, getBasicStat(stat.strength)),
-            new DerivedStat(derivedStat.dodgeTH, getBasicStat(stat.speed)),
-            new DerivedStat(derivedStat.parryTH, getBasicStat(stat.focus)),
-            new DerivedStat(derivedStat.turnFrequency, getBasicStat(stat.speed), getBasicStat(stat.ingenuity))
+            new DerivedStat(derivedStat.movement, statAlgorithm(derivedStat.movement)),
+            new DerivedStat(derivedStat.maxHealthPoints, statAlgorithm(derivedStat.maxHealthPoints)),
+            new DerivedStat(derivedStat.maxManaPoints, statAlgorithm(derivedStat.maxManaPoints)),
+            new DerivedStat(derivedStat.manaFlow, statAlgorithm(derivedStat.manaFlow)),
+            new DerivedStat(derivedStat.meleeBonus, statAlgorithm(derivedStat.meleeBonus)), 
+            new DerivedStat(derivedStat.rangedBonus, statAlgorithm(derivedStat.rangedBonus)),
+            new DerivedStat(derivedStat.magicBonus, statAlgorithm(derivedStat.magicBonus)),
+            new DerivedStat(derivedStat.block, statAlgorithm(derivedStat.block)),
+            new DerivedStat(derivedStat.dodge, statAlgorithm(derivedStat.dodge)),
+            new DerivedStat(derivedStat.parry, statAlgorithm(derivedStat.parry)),
+            new DerivedStat(derivedStat.blockTH, statAlgorithm(derivedStat.blockTH)),
+            new DerivedStat(derivedStat.dodgeTH, statAlgorithm(derivedStat.dodgeTH)),
+            new DerivedStat(derivedStat.parryTH, statAlgorithm(derivedStat.parryTH)),
+            new DerivedStat(derivedStat.turnFrequency, statAlgorithm(derivedStat.turnFrequency))
         };
+    }
+
+    public int statAlgorithm(derivedStat derivedStat)
+    {
+        int output = 0;
+
+        switch (derivedStat) 
+        {
+            case derivedStat.movement:
+                output = getBasicStat(stat.strength) + getBasicStat(stat.speed);
+            break;
+
+            case derivedStat.maxHealthPoints:
+                output = getBasicStat(stat.vitality) + 5;
+            break;
+
+            case derivedStat.maxManaPoints:
+                output = getBasicStat(stat.vitality) + getBasicStat(stat.speed) + 20;
+            break;
+
+            case derivedStat.manaFlow:
+                output = getBasicStat(stat.speed) + getBasicStat(stat.focus);
+            break;
+
+            case derivedStat.meleeBonus:
+                output = getBasicStat(stat.strength) + getBasicStat(stat.speed);
+            break;
+
+            case derivedStat.rangedBonus:
+                output = getBasicStat(stat.precision);
+            break;
+
+            case derivedStat.magicBonus:
+                output = getBasicStat(stat.ingenuity) + getBasicStat(stat.focus);
+            break;
+
+            case derivedStat.block:
+                output = getBasicStat(stat.strength) + getBasicStat(stat.vitality) - 5;
+            break;
+
+            case derivedStat.dodge:
+                output = getBasicStat(stat.speed) + getBasicStat(stat.ingenuity) - 5;
+            break;
+
+            case derivedStat.parry:
+                output = getBasicStat(stat.precision) + getBasicStat(stat.focus);
+            break;
+
+            case derivedStat.blockTH:
+                output = getBasicStat(stat.strength);
+             break;
+
+            case derivedStat.dodgeTH:
+                output = getBasicStat(stat.focus);
+            break;
+
+            case derivedStat.parryTH:
+                output = getBasicStat(stat.focus);
+            break;
+
+            case derivedStat.turnFrequency:
+                output = getBasicStat(stat.speed) + getBasicStat(stat.ingenuity);
+            break;
+        }
+
+        return output;
     }
 
     public void tickBuffs()

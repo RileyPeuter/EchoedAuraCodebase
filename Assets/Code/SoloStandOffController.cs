@@ -42,7 +42,7 @@ public class SoloStandOffController : StandOffController
         }
     }
 
-    public void initialize(Ability ab, BattleCharacterObject BCO, string recName, BattleUIController nBUIC)
+    public void initialize(Ability ab, BattleCharacterObject BCO, string recName, UIController nBUIC)
     {
         ability = ab;
 

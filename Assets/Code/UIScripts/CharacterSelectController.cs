@@ -81,7 +81,7 @@ public class CharacterSelectController : Window
             if (characters[i] != null)
             {
                 GameObject GO = Instantiate(characterInfoPrefab, this.transform);
-                GO.GetComponent<CharacterSnippetController>().initialize(this, characters[i]);
+                GO.GetComponent<CharacterSnippetController>().initialize(this, characters[i], false);
                 GO.GetComponent<CharacterSnippetController>().setListener(this);
                 GO.GetComponent<RectTransform>().localPosition = new Vector3(0, 80 + yOffset);
                 characterButtons.Add(GO);

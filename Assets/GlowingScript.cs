@@ -15,7 +15,7 @@ public class GlowingScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float updater = (BattleUIController.UIBreatheTicker);
+        float updater = (UIController.UIBreatheTicker);
         spriteRenderer.color = new Color(255, 255, 255 , updater);
         transform.localScale = new Vector3(1 + (updater * 0.3f), 1 + (updater * 0.3f));
 

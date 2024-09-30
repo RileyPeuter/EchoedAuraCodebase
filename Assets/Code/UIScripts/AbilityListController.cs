@@ -7,7 +7,7 @@ public class AbilityListController : Window
 {
     public  List<Ability> abilities;
     GameObject test;
-    public  BattleUIController BUIC;
+    public  UIController BUIC;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,8 +33,8 @@ public class AbilityListController : Window
         foreach(Ability ability in abilities)
         {
             //This line creates a new panel, then tells it it's ability
-            GameObject GO = GameObject.Find("MapController").GetComponent<BattleUIController>().openWindow("uI_Ability_Panel", true, this.gameObject.name, false);
-            GO.GetComponent<AbilitySnippetController>().initialize(BattleUIController.HighestWindow, ability);
+            GameObject GO = GameObject.Find("MapController").GetComponent<UIController>().openWindow("uI_Ability_Panel", true, this.gameObject.name, false);
+            GO.GetComponent<AbilitySnippetController>().initialize(UIController.HighestWindow, ability);
             GO.GetComponent<RectTransform>().anchoredPosition = new Vector3(GO.GetComponent<RectTransform>().anchoredPosition.x + xOffset, GO.GetComponent<RectTransform>().anchoredPosition.y + yOffset, 0f);
 
             if (!ability.isCastable(BattleController.ActiveBattleController.getActiveCharacter()))

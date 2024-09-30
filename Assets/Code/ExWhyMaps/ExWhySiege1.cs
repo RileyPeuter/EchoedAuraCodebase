@@ -6,21 +6,27 @@ public class ExWhySiege1 : ExWhy
 {
     //He wrote this script on a pepsi max soda shop
     //Wishing on a rope, or to see that glizzy go pop
-    public ExWhySiege1() : base(10, 10, "Siege")
+    public ExWhySiege1() : base(15, 12, "Siege")
     {
         //t=Trees, g = grass, d = dirt, b = battlement, w = wall
-        worldData = new char[10, 10]
+        worldData = new char[15, 12]
         {
-            {'t', 't', 't' , 'g', 'g', 'g', 'd', 'd', 'd','d'},
-            {'t', 't', 't' , 'g', 'g', 'g', 'd', 'b', 'b','b'},
-            {'t', 't', 't' , 'g', 'g', 'g', 'd', 'w', 'w','w'},
-            {'t', 't', 't' , 'g', 'g', 'g', 'd', 'w', 'w','w'},
-            {'t', 't', 't' , 'g', 'g', 'g', 'd', 'w', 'w','w'},
-            {'t', 't', 't' , 'g', 'g', 'g', 'd', 'd', 'b','b'},
-            {'t', 't', 't' , 'g', 'g', 'g', 'd', 'd', 'w','w'},
-            {'t', 't', 't' , 'g', 'g', 'g', 'd', 'd', 'w','w'},
-            {'t', 't', 't' , 'g', 'g', 'g', 'd', 'd', 'w','w'},
-            {'t', 't', 't' , 'g', 'g', 'g', 'd', 'd', 'd','d'}
+
+            {'t','t','t', 't', 'g' , 'g', 'g', 'd', 'd', 't', 't','t'},
+            {'t','t','t', 'g', 'g' , 'g', 'g', 'd', 'd', 't', 't','t'},
+            {'t','t','t', 'g', 't' , 't', 't', 't', 'd', 'g', 't','t'},
+            {'g','g','g', 'g', 't' , 't', 't', 'g', 'd', 'g', 'g','t'},
+            {'d','d','g', 't', 't' , 't', 't', 'g', 'd', 't', 't','t'},
+            {'d','t','t', 'g', 't' , 't', 'd', 'g', 'd', 't', 't','t'},
+            {'g','d','d', 'g', 't' , 't', 't', 't', 'd', 't', 't','t'},
+            {'t','t','t', 'g', 'g' , 't', 'g', 'd', 'd', 'g', 't','t'},
+            {'g','g','g', 'g', 'g' , 'g', 'g', 'g', 'd', 'd', 'd','d'},
+            {'g','g','g', 'g', 'g' , 'g', 'g', 'g', 'd', 'd', 'd','d'},
+            {'g','g','d', 'g', 'd' , 'g', 'd', 'g', 'd', 'd', 'g','g'},
+            {'g','g','g', 'g', 'd' , 'g', 'd', 'w', 'w', 'w', 'b','d'},
+            {'g','g','d', 'w', 'w' , 'w', 'b', 'w', 'w', 'w', 'b','d'},
+            {'g','t','d', 'w', 'w' , 'w', 'b', 'w', 'w', 'w', 'b','d'},
+            {'g','g','d', 'w', 'w' , 'w', 'b', 'w', 'w', 'w', 'b','d'}
 
         };
         initiateCells();
@@ -41,38 +47,38 @@ public class ExWhySiege1 : ExWhy
 
                 
                 case 't':
-                    instantiateCell(cell, false, 2, 2);
+                    instantiateCell(cell, false, 3, 3);
                     cell.resourceName = "Forest";
-                    cell.makeAltable();
-                    cell.setAltRate(50);
+                   // cell.makeAltable();
+                   // cell.setAltRate(50);
                     cell.setCellBuff(new GenericCellBuff(0, 0, 0));
                 break;
 
                 case 'd':
-                    instantiateCell(cell, true, 0, 0);
+                    instantiateCell(cell, true, 2, 2);
                     cell.resourceName = "Dirt";
-                    cell.makeAltable();
-                    cell.setAltRate(30);
+                    //cell.makeAltable();
+                    //cell.setAltRate(30);
                     cell.setCellBuff(new GenericCellBuff(0, 4, 0));
                     break;
 
                 case 'g':
-                    instantiateCell(cell, true, 1, 1);
+                    instantiateCell(cell, true, 4, 4);
                     cell.resourceName = "Grass";
-                    cell.makeAltable();
-                    cell.setAltRate(30);
+                   // cell.makeAltable();
+                   // cell.setAltRate(30);
                     cell.setCellBuff(new GenericCellBuff(3, 0, -2));
-                    cell.animatable = true;
+                    //cell.animatable = true;
                     break;
 
                 case 'w':
-                    instantiateCell(cell, true, 2, 2);
+                    instantiateCell(cell, true, 1, 1);
                     cell.resourceName = "Wall";
                     cell.setCellBuff(new GenericCellBuff(1, 2, 5));
                     break;
 
                 case 'b':
-                    instantiateCell(cell, false, 3, 3);
+                    instantiateCell(cell, false, 0, 0);
                     cell.setCellBuff(new GenericCellBuff(0, 8, 0));
                     cell.resourceName = "Battlement";
                     break;

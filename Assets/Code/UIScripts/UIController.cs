@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BattleUIController : MonoBehaviour
+public class UIController : MonoBehaviour
 {
     public static List<Window> openWindows;
     //Transient Windows are windows that will close should a significant event happen
@@ -20,7 +20,11 @@ public class BattleUIController : MonoBehaviour
     
     //Prefab of the back button
     GameObject backButton;
+
     BattleController BC;
+    OverworldMapController OWMC;
+
+
     Window focusedWindow;
 
     //###Utlitlies###
@@ -88,10 +92,10 @@ public class BattleUIController : MonoBehaviour
 
     public GameObject openWindow(string windowName, bool transient = true, string parentName = "Canvas", bool hasBackButton = true)
     {
-        GameObject go = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/" + windowName), GameObject.Find(parentName).transform);
+        GameObject go = GameObject.Instantiate(ResourceLoader.loadGameObject("UIElements/" + windowName), GameObject.Find(parentName).transform);
         if (transient)
         {
-            BattleUIController.transientWindows.Add(go.GetComponent<Window>());
+            UIController.transientWindows.Add(go.GetComponent<Window>());
         }
 
         openWindows.Add(go.GetComponent<Window>());
@@ -176,17 +180,40 @@ public class BattleUIController : MonoBehaviour
     {
         BC = BaCo;
 
-        BattleUIController.openWindows = new List<Window>();
-        BattleUIController.transientWindows = new List<Window>();
-        BattleUIController.backButtonControllers = new List<BackButtonController>();
+        UIController.openWindows = new List<Window>();
+        UIController.transientWindows = new List<Window>();
+        UIController.backButtonControllers = new List<BackButtonController>();
 
         backButton = Resources.Load<GameObject>("UIElements/uI_BackButton_Panel");
     }
+
+    public void initialize(OverworldMapController nOWMC)
+    {
+        OWMC = nOWMC;
+
+        UIController.openWindows = new List<Window>();
+        UIController.transientWindows = new List<Window>();
+        UIController.backButtonControllers = new List<BackButtonController>();
+
+        backButton = Resources.Load<GameObject>("UIElements/uI_BackButton_Panel");
+    }
+
+
+
 
     //###UnityMessages###
     private void Update()
     {
         incrimentBreathe();
     }
-}
 
+    private void Start()
+    {
+        UIController.openWindows = new List<Window>();
+
+        UIController.transientWindows = new List<Window>();
+
+        UIController.backButtonControllers = new List<BackButtonController>();
+
+    }
+}

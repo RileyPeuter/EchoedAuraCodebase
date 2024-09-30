@@ -26,6 +26,11 @@ public class Stat
         statBase = sttBse;
     }
 
+    public void incrementAddition()
+    {
+        additions++;
+    }
+
     public Stat()
     {
 
