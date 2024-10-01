@@ -10,12 +10,17 @@ public class ExWhyCell
     public int xPosition;
     public int yPosition;
     public GameObject cellGO;
+    public GameObject fogOfWarObject;
     public char cellType;
     public int eventIndex;
     public int colID;
     public int spriteID;
     public string resourceName;
     public BattleCharacterObject occupier;
+
+    public static GameObject FOWPrefab;
+
+    public GameObject fieldVisual;
 
     public bool altable = false;
     public int altRate = 50;
@@ -27,8 +32,12 @@ public class ExWhyCell
 
     CellBuff cellBuff;
 
+    public bool fogOfWar;
 
-
+    public void toggleFOW(bool toggle)
+    {
+        fogOfWarObject.GetComponent<SpriteRenderer>().enabled = toggle;
+    }
 
     //###Getters###
     public override string ToString()
@@ -68,6 +77,8 @@ public class ExWhyCell
     {
         occupier = chara;
     }
+
+
 
     //###Constructor###
     public ExWhyCell(int nXPosition, int nYPosition, char nCellType, int nEventIndex = 0)

@@ -22,6 +22,8 @@ public enum CharacterState
 
 public class BattleCharacterObject : MonoBehaviour
 {
+    ExWhyCellField fieldOfVision;
+
     static int nextID = 0;
 
     public static int getNextID()
@@ -59,15 +61,29 @@ public class BattleCharacterObject : MonoBehaviour
     int spawnX = 3;
     int spawnY = 3;
 
+    int visionRange = 5;
+
     int nextTurn;
     CharacterState characterState = CharacterState.Normal;
 
 
     //###Getters###
+    public ExWhyCellField getFieldOfVision()
+    {
+        return fieldOfVision;
+    }
+
     public BattleCharacterAI getAI()
     {
         return CharacterAI;
     }
+
+    public ExWhyCellField calculateFieldOfView(ExWhy map)
+    {
+        fieldOfVision = ExWhyCellField.simpleRange(map, occupying, visionRange);
+        return fieldOfVision;
+    }
+
     public CharacterAllegiance GetAllegiance()
     {
         return allegiance;

@@ -12,6 +12,10 @@ public abstract class BattleController : MonoBehaviour
 
     public List<BattleCharacterObject> characters;
 
+    ExWhyCellField playersVision;
+    ExWhyCellField fogOfWar;
+
+
     GameObject hoverAA;
     GameObject currentAA;
     AttackAttempt aa;
@@ -259,6 +263,26 @@ public abstract class BattleController : MonoBehaviour
         }
     }
 
+    public void updateVision()
+    {
+        playersVision = new ExWhyCellField();
+        
+         foreach (BattleCharacterObject BCO in getAllAllegiance(CharacterAllegiance.Controlled))
+        {
+            ExWhyCellField test = BCO.calculateFieldOfView(map.gridObject);
+            playersVision.Add(test);
+        }
+        if (fogOfWar != null)
+        {
+            fogOfWar.despawnVisuals();
+        }
+        fogOfWar = new ExWhyCellField(map.gridObject.getMapAsField());
+        fogOfWar.Remove(playersVision);
+        fogOfWar.setPrefab("FogOfWar");
+        fogOfWar.spawnVisuals();
+        
+    }
+
     //###InitalizationMethods
     protected void initializeGameState()
     {
@@ -471,6 +495,7 @@ public abstract class BattleController : MonoBehaviour
         }
         activeCellInformation.initialize(activeCharacter.getOccupying(), true);
         cursorCell = activeCharacter.getOccupying();
+        updateVision();
     }
 
     void openTurnUI(BattleCharacterObject character)
@@ -583,16 +608,14 @@ public abstract class BattleController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
-            cursorCell = map.getMouseCell();
-            checkTarget();
+            moveCursor(map.getMouseCell());
         }
 
         if (Input.GetKeyDown("w"))
         {   
             if (cursorCell.yPosition != map.gridObject.yMax - 1)
             {
-                cursorCell = map.gridObject.gridCells[cursorCell.xPosition, cursorCell.yPosition + 1];
-                checkTarget();
+                moveCursor(map.gridObject.gridCells[cursorCell.xPosition, cursorCell.yPosition + 1]);
             }
         }
 
@@ -600,8 +623,7 @@ public abstract class BattleController : MonoBehaviour
         {
             if (cursorCell.yPosition != 0)
             {
-                cursorCell = map.gridObject.gridCells[cursorCell.xPosition, cursorCell.yPosition - 1];
-                checkTarget();
+                moveCursor(map.gridObject.gridCells[cursorCell.xPosition, cursorCell.yPosition - 1]);
             }
         }
             
@@ -609,8 +631,7 @@ public abstract class BattleController : MonoBehaviour
         {
             if (cursorCell.xPosition != 0)
             {
-                cursorCell = map.gridObject.gridCells[cursorCell.xPosition - 1, cursorCell.yPosition];
-                checkTarget();
+                moveCursor(map.gridObject.gridCells[cursorCell.xPosition - 1, cursorCell.yPosition]);
             }
         }
 
@@ -618,8 +639,7 @@ public abstract class BattleController : MonoBehaviour
         {
             if (cursorCell.xPosition != map.gridObject.xMax - 1)
             {
-                cursorCell = map.gridObject.gridCells[cursorCell.xPosition + 1, cursorCell.yPosition];
-                checkTarget();
+                moveCursor(map.gridObject.gridCells[cursorCell.xPosition + 1, cursorCell.yPosition]);
             }
         }
 
@@ -642,6 +662,21 @@ public abstract class BattleController : MonoBehaviour
             hoverCellInformationController = GO.GetComponent<CellInformationController>();
             hoverCellInformationController.initialize(map.getMouseCell());
         }
+    }
+
+    public void moveCursor(ExWhyCell nCursorCell, bool needsVisual = false)
+    {
+        if (targetCellInformation != null)
+        {
+            targetCellInformation.closeWindow();
+        }
+
+        cursorCell = nCursorCell;
+        if (playersVision.contains(nCursorCell) || !needsVisual)
+        {
+            checkTarget();
+        }
+
     }
 
     //I think this method is gonna be wacky

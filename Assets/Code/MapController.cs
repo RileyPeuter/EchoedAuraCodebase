@@ -12,6 +12,7 @@ public class MapController : MonoBehaviour
     GlobalGameController GGC;
 
 BattleController battleController;
+
      public string GetResourceName()
     {
         return gridObject.resourceName;

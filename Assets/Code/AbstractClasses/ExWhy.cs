@@ -86,7 +86,7 @@ public abstract class ExWhy
             return false;
         }
 
-        if (x > xMax || y > yMax)
+        if (x >= xMax || y >= yMax)
         {
             return false;
         }
@@ -175,6 +175,16 @@ public abstract class ExWhy
                 gridCells[x, y] = new ExWhyCell(x, y, worldData[x, y], 0);//eventMask[y, x]);
             }
         }
+    }
+
+    public ExWhyCellField getMapAsField()
+    {
+        ExWhyCellField output = new ExWhyCellField();
+        foreach(ExWhyCell cell in gridCells)
+        {
+            output.Add(cell);
+        }
+        return output;
     }
 
     protected void instantiateCell(ExWhyCell cell, bool walkable, int prefabIndex, int spriteID)
