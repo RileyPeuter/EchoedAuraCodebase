@@ -7,6 +7,17 @@ using UnityEngine.Assertions;
 public class Distraction : TacticalAbility, BattleEventListener
 {
 
+    public override List<ExWhyCell> getCustomRange()
+    {
+        List<ExWhyCell> output = new List<ExWhyCell>();
+        if (lastMiss != null)
+        {
+            output.Add(lastMiss.getOccupying());
+        }
+        return output;
+    }
+
+
     BattleController BC;
     BattleCharacterObject lastMiss;
     string reactionUsed;
@@ -84,13 +95,4 @@ public class Distraction : TacticalAbility, BattleEventListener
 
     }
 
-    public override List<ExWhyCell> getCustomRange()
-    {
-        List<ExWhyCell> output = new List<ExWhyCell>();
-        if (lastMiss != null)
-        {
-            output.Add(lastMiss.getOccupying());
-        }
-        return output;
-    }
 }

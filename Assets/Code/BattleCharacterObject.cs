@@ -61,7 +61,7 @@ public class BattleCharacterObject : MonoBehaviour
     int spawnX = 3;
     int spawnY = 3;
 
-    int visionRange = 5;
+    int visionRange = 8;
 
     int nextTurn;
     CharacterState characterState = CharacterState.Normal;
@@ -233,6 +233,12 @@ public class BattleCharacterObject : MonoBehaviour
     {
         nextTurn = -1;
     }
+
+    public void alert(int  nNextTrun)
+    {
+        nextTurn = nNextTrun;
+    }
+
     public void spawnCharacter(ExWhy grid)
     {
         characterObject = this.gameObject;
@@ -340,7 +346,6 @@ public class BattleCharacterObject : MonoBehaviour
     public void endTurn()
     {
         nextTurn += 20 - character.getDerivedStat(derivedStat.turnFrequency);
-        print(nextTurn);
         character.cleanUpBuffs();
 
         int manaRegenerated = adjustManaFlow(character.getDerivedStat(derivedStat.manaFlow)) - manaFlow;
@@ -392,6 +397,8 @@ public class BattleCharacterObject : MonoBehaviour
             CharacterAI = character.getDefualtBCAI();
         }
         characterAnimator = GetComponent<Animator>();
+        visionRange = character.defaultVision;
+        getAI().initialize(this);
     }
 
     public void initialize(Character ch, CharacterAllegiance chAl, int nID = -1)
@@ -425,7 +432,6 @@ public class BattleCharacterObject : MonoBehaviour
         availableMovement = character.getDerivedStat(derivedStat.movement);
         abilityMove = new Move();
         idleTrigger = Random.Range(5f, 10f);
-        getAI().initialize(this);
     }
 
     void Update()

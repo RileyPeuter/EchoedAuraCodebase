@@ -37,6 +37,7 @@ public class CharacterSnippetController : Window
     void Start()
     {
         setText();
+        GetComponentsInChildren<Image>().ToList().Find(x => x.gameObject.name == "uI_Emblem_Image").sprite = ResourceLoader.loadSprite("CharacterEmblems/" + storedCharacter.GetCharacter().resourceString);
         
     }
 

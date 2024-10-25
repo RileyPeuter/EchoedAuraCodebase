@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CutsceneFrame{
@@ -24,6 +25,8 @@ public abstract class Cutscene : MonoBehaviour
 {
     //###MemberVeriables###
 
+    protected List<Vector2> actorSpawnLocations;
+
     public string resourceString;
 
     //Amount of time it the textbox is inactive
@@ -40,6 +43,8 @@ public abstract class Cutscene : MonoBehaviour
     protected GameObject bigTextBox;
 
     protected Dictionary<string, Sprite> speakerSprites;
+
+    protected List<CutsceneActorController> actorControllers;
 
     //###Utilities###
     public void phaseCutscene(float time)
@@ -58,10 +63,54 @@ public abstract class Cutscene : MonoBehaviour
         }
     }
 
+    public bool containsSprite(string nSpriteName)
+    {
+        if (speakerSprites.Keys.Contains(nSpriteName)) { return true;}
+            return false;
+    }
+
+    public void loadSpritesFromStoredCharacters(List<StoredCharacterObject> nSCOs = null)
+    {
+        //List<Sprite> output = new List<Sprite>();
+
+        List<StoredCharacterObject> SCOs = nSCOs;
+        if(SCOs == null)
+        {
+            SCOs = GlobalGameController.GGC.getMissionCharacters();
+        }
+
+        foreach(StoredCharacterObject SCO in SCOs)
+        {
+            //output.Add(ResourceLoader.loadSprite("CutsceneSpeakerSprites/" + SCO.getResourceString()));
+            addSprite(SCO.getCharacterName(),ResourceLoader.loadSprite("CutsceneSpeakerSprites/" + SCO.getResourceString()));
+        }
+
+//        return output;
+    }
+
+    public List<GameObject> loadActorsFromStoreCharacters(List<StoredCharacterObject> nSCOs = null)
+    {
+        List<GameObject> output = new List<GameObject>();
+
+        List<StoredCharacterObject> SCOs = nSCOs;
+        if (SCOs == null)
+        {
+            SCOs = GlobalGameController.GGC.getMissionCharacters();
+        }
+
+        foreach(StoredCharacterObject SCO in SCOs)
+        {
+            output.Add(ResourceLoader.loadGameObject("CutsceneActors/" +  SCO.getResourceString()));
+        }
+        return output;
+    }
+
     public void addSprite(string spriteName, string location)
     {
         speakerSprites.Add(spriteName, Resources.Load<Sprite>("CutsceneSpeakerSprites/" + location));
     }
+
+
 
     public void addSprite(string speakerName, Sprite sprite)
     {
@@ -128,12 +177,26 @@ public abstract class Cutscene : MonoBehaviour
     //###Initializer###
     public virtual void initialize()
     {
+        actorSpawnLocations = new List<Vector2>();
         speakerSprites = new Dictionary<string, Sprite>();
         frames = new List<CutsceneFrame>();
+        actorControllers = new List<CutsceneActorController>();
     }
 
     public void recreateTextBox()
     {
+    }
+
+    public virtual void spawnActors(List<GameObject> actors)
+    {
+        int spawnIndex = 0;
+        foreach(GameObject actor in actors)
+        {
+            GameObject GO =  Instantiate(actor); 
+            GO.transform.position = actorSpawnLocations[spawnIndex];
+            actorControllers.Add(GO.GetComponent<CutsceneActorController>());
+            spawnIndex++;
+        }
     }
 
     public abstract void endCutscene();

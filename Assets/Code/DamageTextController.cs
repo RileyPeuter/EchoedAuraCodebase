@@ -9,6 +9,7 @@ public class DamageTextController : MonoBehaviour
     {
         this.GetComponentInChildren<TextMesh>().text = text;
         this.GetComponentInChildren<SpriteRenderer>().sprite = image;
+
     }
 
     void Update()
@@ -18,7 +19,8 @@ public class DamageTextController : MonoBehaviour
 
     void Start()
     {
-        GameObject.Destroy(gameObject, 2f);
+      this.GetComponent<Renderer>().sortingLayerName = "WorldUI";
+      GameObject.Destroy(gameObject, 2f);
 
     }
 }

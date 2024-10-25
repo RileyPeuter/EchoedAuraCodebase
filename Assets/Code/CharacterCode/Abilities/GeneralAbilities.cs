@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MeleeStrike : Ability
 {
-    public MeleeStrike() : base("MeleeStrike", ModType.Melee, 1, 1, 1, 2, AbilityType.Targeted, 11)
+    public MeleeStrike() : base("MeleeStrike", ModType.Melee, 3, 2, 1, 2, AbilityType.Targeted, 11)
     {
         description = "A simple Melee Strike";
 
@@ -16,11 +16,19 @@ public class MeleeStrike : Ability
 public class RangedStrike: Ability
 {
 
-    public RangedStrike() : base("RangedStrike", ModType.Ranged, 1, 1, 1, 1, AbilityType.Targeted, 12, false, 3)
+    public RangedStrike() : base("RangedStrike", ModType.Ranged, 1, 2, 3, 1, AbilityType.Targeted, 12, false, 3)
     {
         baseDamage = 1;
         description = "A simple Ranged Strike";
     }
+
+
+    public RangedStrike(int cRange) : base("RangedStrike", ModType.Ranged, 1, 2, 3, 1, AbilityType.Targeted, 12, false, cRange)
+    {
+        baseDamage = 1;
+        description = "A simple Ranged Strike";
+    }
+
 }
 
 public class ShadowClone: Ability

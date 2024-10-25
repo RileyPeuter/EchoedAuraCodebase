@@ -90,7 +90,7 @@ public class StandOffSide
         int output;
         if (int.TryParse(text, out output))
         {
-            if (output == 0) { return; }
+      //      if (output == 0) { return; }
         }
 
         messageQueue.Add(text, image);

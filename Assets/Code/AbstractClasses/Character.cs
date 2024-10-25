@@ -8,7 +8,7 @@ public abstract class Character {
 
     public List<reactionType> reactionsAvailable = new List<reactionType>() {reactionType.Block, reactionType.Dodge, reactionType.Parry};
 
-
+    public int defaultVision = 8;
     public string resourceString;
     int healthPoints;
     int manaPoints;
@@ -21,6 +21,7 @@ public abstract class Character {
     BattleCharacterObject BCO;
 
     protected BattleCharacterAI DefaultCAI = null;
+
 
     public int HealthPoints { get => healthPoints; set => healthPoints = value; }
     public int ManaPoints { get => manaPoints; set => manaPoints = value; }

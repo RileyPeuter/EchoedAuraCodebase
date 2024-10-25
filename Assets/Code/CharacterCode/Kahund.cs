@@ -15,7 +15,9 @@ public class Kahund : Character
         CharacterAbilities = new List<Ability>();
 
         GeneralAbilities.Add(new MeleeStrike());
-        
+
+        defaultVision = 2;
+
         DefaultCAI = new AttackPointAI();
         reactionsAvailable = new List<reactionType>() { reactionType.Dodge };
     }

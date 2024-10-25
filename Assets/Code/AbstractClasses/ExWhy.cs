@@ -179,7 +179,7 @@ public abstract class ExWhy
 
     public ExWhyCellField getMapAsField()
     {
-        ExWhyCellField output = new ExWhyCellField();
+        ExWhyCellField output = new ExWhyCellField(this);
         foreach(ExWhyCell cell in gridCells)
         {
             output.Add(cell);
@@ -270,7 +270,6 @@ public abstract class ExWhy
             cell.cellGO.GetComponent<SpriteRenderer>().sprite = altSpriteSheet[cell.spriteID, cell.colID];
             return;
         }  
-        Debug.Log(cell.xPosition.ToString() + "  " +  cell.yPosition.ToString()); 
         cell.cellGO.GetComponent<SpriteRenderer>().sprite = spriteSheet[cell.spriteID, cell.colID]; 
     }
 

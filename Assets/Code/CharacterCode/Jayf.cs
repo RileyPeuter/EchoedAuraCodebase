@@ -9,6 +9,7 @@ public class Jayf : Character
     {
         initiateBasicStats(2, 2, 2, 2, 2, 2);
         initiateDerivedStats();
+
         HealthPoints = getDerivedStat(derivedStat.maxHealthPoints);
         ManaPoints = getDerivedStat(derivedStat.maxManaPoints);
         CharacterName = "Jayf";

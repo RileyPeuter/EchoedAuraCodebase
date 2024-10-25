@@ -6,14 +6,20 @@ using UnityEngine;
 public class LineDefenceAI : BattleCharacterAI
 {
     bool mobile = false;
-    bool moved = false;
 
+    
     public override Ability getAbility()
     {
+        if (alerted)
+        {
+            mobile = true;
+        }
+
         foreach(Ability ability in getAvailableAbilities())
         {
             if(BattleController.ActiveBattleController.getCastable(ability, CharacterAllegiance.Controlled))
             {
+                
                 return ability;
             }
         }

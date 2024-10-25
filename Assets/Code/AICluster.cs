@@ -18,6 +18,37 @@ public class AICluster
 
     public List<BattleCharacterAI> ClusterMembers;
 
+    ExWhyCellVisionField vision;
+
+    bool alerted = true;
+
+    public bool getAlerted() {  return alerted; }
+
+    public void generateVision(ExWhy nMap, BattleEventLog nBEL)
+    {
+        if(vision != null)
+        {
+            vision.despawnVisuals();
+
+            nBEL.removeListener(vision);
+        }
+
+
+        vision = new ExWhyCellVisionField(nMap, this);
+
+        
+        nBEL.addListener(vision);
+        foreach (BattleCharacterAI BCAI in ClusterMembers)
+        {
+            vision.Add(BCAI.getCharacter().calculateFieldOfView(nMap));
+        }
+
+        vision.setPrefab();
+        vision.spawnVisuals(Color.red * 0.5f);
+
+
+    }
+
     int mobility = -1;
     int murderousIntent = 1;
     int gaps = 0;
@@ -41,7 +72,6 @@ public class AICluster
             setAllModes(AIMode.RecklessAttack);
             if (gaps < (ClusterMembers.Count - getTankedCount()))
             {
-                StandOffController.print("bro");
                 makeTanked((ClusterMembers.Count) - gaps - getTankedCount());
             }
         }
@@ -91,11 +121,29 @@ public class AICluster
         ClusterMembers = new List<BattleCharacterAI>();
     }
 
-    public AICluster(int mob, int murd, int gps)
+    public AICluster(int mob, int murd, int gps, bool nAlerted = true)
     {
         ClusterMembers = new List<BattleCharacterAI>();
         mobility = mob;
         murderousIntent = murd;
         gaps = gps;
+        alerted = nAlerted;
+    }
+
+    public void groupAlert(int nNextTurn)
+    {
+        foreach(BattleCharacterAI BCAI in ClusterMembers)
+        {
+            BCAI.alert(nNextTurn);
+            alerted = true;
+        }
+    }
+
+    public void makeDormant()
+    {
+        foreach (BattleCharacterAI BCAI in ClusterMembers)
+        {
+            BCAI.getCharacter().makeDormant();
+        }
     }
 }

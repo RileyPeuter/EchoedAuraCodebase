@@ -17,9 +17,11 @@ public class Archer : Character
         GeneralAbilities = new List<Ability>();
         CharacterAbilities = new List<Ability>();
 
-        GeneralAbilities.Add(new RangedStrike());
+        GeneralAbilities.Add(new RangedStrike(5));
 
         DefaultCAI = new LineDefenceAI();
-        reactionsAvailable = new List<reactionType> { reactionType.Block };
+        reactionsAvailable = new List<reactionType> { reactionType.Dodge };
+
+        defaultVision = 4;
 }
 }

@@ -33,6 +33,7 @@ public class OverworldMapController : MonoBehaviour
         characterSelect.GetComponent<CharacterSelectController>().initialize(null, false);
 
         characterSelect.GetComponent<CharacterSelectController>().setOWMC(this);
+        characterListController.highLight();
     }
 
     public void resetSelection()

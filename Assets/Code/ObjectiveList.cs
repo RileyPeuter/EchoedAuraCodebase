@@ -59,6 +59,7 @@ public class Objective
         return false;
     }
 
+
     //Added this to make it cleaner elsewhere
     public bool checkObjective(BattleEvent nBattleEvent)
     {
@@ -203,6 +204,11 @@ public class Objective
         setInfo(offset);
         setText();
     }
+
+    public GameObject getParent()
+    {
+        return parent;
+    }
 }
 
 public class ObjectiveList : MonoBehaviour, BattleEventListener
@@ -216,6 +222,17 @@ public class ObjectiveList : MonoBehaviour, BattleEventListener
     float yOffset = 0;
 
     //###Utilities###
+
+    public void removeObjective(string id)
+    {
+        Objective toRemove = objectives.Find(x => x.objectiveID == id);
+        Destroy(toRemove.getParent());
+
+        objectives.Remove(toRemove);
+
+
+    }
+
     public void addObjective(Objective nObjectiveListElement)
     {
         objectives.Add(nObjectiveListElement);

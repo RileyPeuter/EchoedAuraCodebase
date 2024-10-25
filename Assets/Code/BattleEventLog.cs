@@ -24,6 +24,11 @@ public class BattleEventLog : MonoBehaviour
         appendText(BE);
     }
 
+    public void removeListener(BattleEventListener nBEL)
+    {
+        listeners.Remove(nBEL);
+    }
+
     public void appendText(BattleEvent BE)
     {
         listText.text += "\n \n" + BE.ToString();

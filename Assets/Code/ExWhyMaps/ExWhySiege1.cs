@@ -45,9 +45,16 @@ public class ExWhySiege1 : ExWhy
             switch (cell.cellType)
             {
 
-                
+                case 'w':
+                    instantiateCell(cell, false, 1, 1);
+                    cell.resourceName = "BattlementWalls";
+                    // cell.makeAltable();
+                    // cell.setAltRate(50);
+                    cell.setCellBuff(new GenericCellBuff(0, 0, 0));
+                    break;
+
                 case 't':
-                    instantiateCell(cell, false, 3, 3);
+                    instantiateCell(cell, false, 5, 5);
                     cell.resourceName = "Forest";
                    // cell.makeAltable();
                    // cell.setAltRate(50);
@@ -55,7 +62,7 @@ public class ExWhySiege1 : ExWhy
                 break;
 
                 case 'd':
-                    instantiateCell(cell, true, 2, 2);
+                    instantiateCell(cell, true, 4, 4);
                     cell.resourceName = "Dirt";
                     //cell.makeAltable();
                     //cell.setAltRate(30);
@@ -63,18 +70,12 @@ public class ExWhySiege1 : ExWhy
                     break;
 
                 case 'g':
-                    instantiateCell(cell, true, 4, 4);
+                    instantiateCell(cell, true, 6, 6);
                     cell.resourceName = "Grass";
                    // cell.makeAltable();
                    // cell.setAltRate(30);
                     cell.setCellBuff(new GenericCellBuff(3, 0, -2));
                     //cell.animatable = true;
-                    break;
-
-                case 'w':
-                    instantiateCell(cell, true, 1, 1);
-                    cell.resourceName = "Wall";
-                    cell.setCellBuff(new GenericCellBuff(1, 2, 5));
                     break;
 
                 case 'b':

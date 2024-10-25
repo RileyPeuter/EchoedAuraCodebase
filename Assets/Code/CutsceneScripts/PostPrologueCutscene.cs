@@ -13,11 +13,36 @@ public class PostPrologueCutscene : Cutscene
     {
         switch (triggerIndex)
         {
+            //Iraden Run
             case 1:
+                GameObject.Find("Iraden").GetComponent<CutsceneActorController>().SetMove(Vector2.right, 10, 1);
+                phaseCutscene(3);
+                break;
 
-            break;
+            //Asa explode
+            case 2:
 
+                break;
+
+
+            //Camera Pan
+            case 3:
+
+                break;
+
+
+            //Iraden Run off
+            case 4:
+
+                break;
+
+
+            //Change scene
+            case 5:
+
+                break;
         }
+
     }
 
     void Start()

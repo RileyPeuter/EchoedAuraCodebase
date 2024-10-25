@@ -29,6 +29,10 @@ public class CutsceneController : MonoBehaviour
             case 4:
                 this.gameObject.AddComponent<PostPrologueCutscene>();
                 break;
+
+            case 5:
+                this.gameObject.AddComponent<Siege1BattleController>();
+            break;
         }
     }
 

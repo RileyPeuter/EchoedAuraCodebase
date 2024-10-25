@@ -59,7 +59,7 @@ public class DualStandOffController : StandOffController
         {
             attackAttempt.react(attackAttempt.askReaction());
         }
-
+        
     }
     void Start()
     {
@@ -331,8 +331,10 @@ public class DualStandOffController : StandOffController
 
     public void setUIValues()
     {
+        int dmg = attackAttempt.getDamage();
 
-        if(attackAttempt.getReactionUsed() == reactionType.None)
+
+        if (attackAttempt.getReactionUsed() == reactionType.None)
         {
             return;
         }
@@ -350,7 +352,7 @@ public class DualStandOffController : StandOffController
                     break;
 
                 case "uI_Damage_Text":
-                    text.text = attackAttempt.getDamage().ToString();
+                    text.text = dmg.ToString();
                     break;
 
                 case "uI_ToHitNumber_Text":

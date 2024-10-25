@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 
 public abstract class BattleController : MonoBehaviour
 {
@@ -81,6 +82,8 @@ public abstract class BattleController : MonoBehaviour
 
     protected int casualties = 0;
 
+    public bool stealth = false;
+
     //###Getters###
     public string getMapResourceString()
     {
@@ -89,6 +92,11 @@ public abstract class BattleController : MonoBehaviour
     public UIController GetBattleUIController()
     {
         return BUIC;
+    }
+
+    public int getTurnTime()
+    {
+        return turnTimer;
     }
 
     public BattleCharacterObject getActiveCharacter()
@@ -137,6 +145,50 @@ public abstract class BattleController : MonoBehaviour
         return output;
     }
 
+    public ExWhyCell moveTowardsAlliegence(ExWhyCell perspective, CharacterAllegiance ally)
+    {
+        ExWhyCell currentClosest = null;
+        int currentClosestDisatance = 99999;
+        foreach(BattleCharacterObject BCO in getAllAllegiance(ally)){
+            int possible = ExWhy.getDistanceBetweenCells(BCO.getOccupying(), perspective);
+            if(possible < currentClosestDisatance)
+            {
+                currentClosestDisatance = possible;
+                currentClosest = BCO.getOccupying();
+            }
+        }
+
+        if(currentClosest == null)
+        {
+            Debug.Log("Hey, you're moving towards null. There might not be a valid target for this");
+        }
+        return currentClosest;
+    }
+
+
+    public ExWhyCell moveTowardsAlliegences(ExWhyCell perspective, List<CharacterAllegiance> allies)
+    {
+        ExWhyCell currentClosest = null;
+        int currentClosestDisatance = 99999;
+
+        foreach (CharacterAllegiance ally in allies)
+        {
+            foreach (BattleCharacterObject BCO in getAllAllegiance(ally))
+            {
+                int possible = ExWhy.getDistanceBetweenCells(BCO.getOccupying(), perspective);
+                if (possible < currentClosestDisatance)
+                {
+                    currentClosestDisatance = possible;
+                    currentClosest = BCO.getOccupying();
+                }
+            }
+        }
+        if (currentClosest == null)
+        {
+            Debug.Log("Hey, you're moving towards null. There might not be a valid target for this");
+        }
+        return currentClosest;
+    }
 
 
     public List<BattleCharacterObject> getAllAllegiance(CharacterAllegiance allegiance)
@@ -179,40 +231,36 @@ public abstract class BattleController : MonoBehaviour
     public bool getCastable(Ability abi, CharacterAllegiance targetAllegiance)
     {
         //I'm not sure we're removing this AR
-        AbilityRange AbRa = gameObject.AddComponent<AbilityRange>();
+        AbilityRange AbRa = new AbilityRange(abi.GetRange(), activeCharacter.getOccupying(), map.gridObject, abi.GetRangeMode());
         
-        AbRa.initalize(abi.GetRange(), activeCharacter.getOccupying(), ExWhy.activeExWhy);
         AbRa.findCellsInRange(RangeMode.Simple);
         foreach (BattleCharacterObject BCO in AbRa.findCharactersInRange())
         {
             if (BCO.GetAllegiance() == targetAllegiance)
             {
-                Destroy(AbRa);
                 return true;
             }
         }
 
-        Destroy(AbRa);  
         return false;
     }
 
     public bool getCastable(Ability abi)
     {
         //I'm not sure we're removing this AR
-        AbilityRange AbRa = gameObject.AddComponent<AbilityRange>();
+
+        AbilityRange AbRa = new AbilityRange(abi.GetRange(), activeCharacter.getOccupying(), map.gridObject, abi.GetRangeMode());
         
-        AbRa.initalize(abi.GetRange(), activeCharacter.getOccupying(), ExWhy.activeExWhy);
+        //AbRa.initalize(abi.GetRange(), activeCharacter.getOccupying(), ExWhy.activeExWhy);
         AbRa.findCellsInRange(RangeMode.Simple);
         foreach (BattleCharacterObject BCO in AbRa.findCharactersInRange())
         {
             if (BCO.GetAllegiance() == CharacterAllegiance.Allied || BCO.GetAllegiance() == CharacterAllegiance.Controlled)
             {
-                Destroy(AbRa);
                 return true;
             }
         }
 
-        Destroy(AbRa);
         return false;
     }
 
@@ -220,7 +268,7 @@ public abstract class BattleController : MonoBehaviour
     {
         if (AR != null)
         {
-            AR.destroyVisual();
+            AR.despawnVisuals();
         }
     }
 
@@ -229,9 +277,9 @@ public abstract class BattleController : MonoBehaviour
 
     public void endTurn()
     {
-        if (AR)
+        if (AR != null)
         {
-            AR.destroyVisual();
+            AR.despawnVisuals();
             AR = null;
         }
         selectedAbility = null;
@@ -242,12 +290,22 @@ public abstract class BattleController : MonoBehaviour
         activeCharacter.clearAniBools();
         destroyTurnUI();
         timerTick();
+        
 
-        foreach(AICluster AIC in AIClusters)
+        ticking = true;
+    }
+
+    public void spawnEnemyVision()
+    {
+
+        foreach (AICluster AIC in AIClusters)
         {
             AIC.setMemeberModes();
+            if (!AIC.getAlerted())
+            {
+                AIC.generateVision(map.gridObject, BEL);
+            }
         }
-        ticking = true;
     }
 
     public void spawnCharacter(GameObject GO, CharacterAllegiance CA, ExWhyCell EWC, Character CH, AICluster AIC = null)
@@ -265,7 +323,12 @@ public abstract class BattleController : MonoBehaviour
 
     public void updateVision()
     {
-        playersVision = new ExWhyCellField();
+        if (playersVision != null)
+        {
+            playersVision.despawnVisuals();
+        }
+
+        playersVision = new ExWhyCellField(map.gridObject);
         
          foreach (BattleCharacterObject BCO in getAllAllegiance(CharacterAllegiance.Controlled))
         {
@@ -276,11 +339,18 @@ public abstract class BattleController : MonoBehaviour
         {
             fogOfWar.despawnVisuals();
         }
-        fogOfWar = new ExWhyCellField(map.gridObject.getMapAsField());
+
+        playersVision.setPrefab();
+        playersVision.spawnVisuals(Color.blue * new Color(0.2f, 0.2f, 0.2f, 0.2f));
+
+        fogOfWar = new ExWhyCellField(map.gridObject.getMapAsField(), map.gridObject);
         fogOfWar.Remove(playersVision);
         fogOfWar.setPrefab("FogOfWar");
         fogOfWar.spawnVisuals();
-        
+
+        spawnEnemyVision();
+
+
     }
 
     //###InitalizationMethods
@@ -326,9 +396,19 @@ public abstract class BattleController : MonoBehaviour
         map = this.gameObject.GetComponent<MapController>();
         cursor = GameObject.Instantiate(Resources.Load<GameObject>("MapTiles/Prefabs/General/TileCursor"));
         hoverCursor = GameObject.Instantiate(Resources.Load<GameObject>("MapTiles/Prefabs/General/HoverCursor"));
-        loadCharacters();
+
+
         AIClusters = new List<AICluster>();
+
+        loadCharacters();
+
+        GameObject combatLog = BUIC.openWindow("uI_CombatLog_Panel", false, "Canvas", false);
+        BEL = combatLog.GetComponent<BattleEventLog>();
+        BEL.initialze();
+
     }
+
+
 
     protected void initializeAdditionalElements()
     {
@@ -338,12 +418,9 @@ public abstract class BattleController : MonoBehaviour
         GameObject charSheet = BUIC.openWindow("uI_CharacterSheet_Panel", false, "Canvas", false);
         CSS = charSheet.GetComponent<CharacterSheetScript>();
         CSS.initialize(UIController.HighestWindow);
-        GameObject combatLog = BUIC.openWindow("uI_CombatLog_Panel", false, "Canvas", false);
 
         miscMenu = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_MiscMenus_Panel"), GameObject.Find("Canvas").transform);
-        miscMenu.GetComponent<MiscMenuController>().initialize(BUIC, this, objList.gameObject, combatLog, charSheet);
-        BEL = combatLog.GetComponent<BattleEventLog>();
-        BEL.initialze();
+        miscMenu.GetComponent<MiscMenuController>().initialize(BUIC, this, objList.gameObject, BEL.gameObject, charSheet);
         BEL.addListener(objList);
 
 
@@ -374,9 +451,9 @@ public abstract class BattleController : MonoBehaviour
     public void deSelectAbility()
     {
         selectedAbility = null;
-        if (AR)
+        if (AR != null)
         {
-            AR.destroyVisual(); 
+            AR.despawnVisuals(); 
         }
         aa = null;
         if (activeCharacter != null)
@@ -394,9 +471,9 @@ public abstract class BattleController : MonoBehaviour
         GO.GetComponentInChildren<BackButtonController>().setDeselectListener(this);
         selectedAbility = ability;
         
-        if (AR)
+        if (AR != null)
         {
-            AR.destroyVisual();
+            AR.despawnVisuals();
         }
 
         if (ability.name == "Move")
@@ -423,8 +500,8 @@ public abstract class BattleController : MonoBehaviour
 
     AbilityRange createRange(Ability ability)
     {
-        AR = this.gameObject.AddComponent<AbilityRange>();
-        AR.initalize(ability.GetRange(), activeCharacter.getOccupying(), map.gridObject);
+        AR = new AbilityRange(ability.GetRange(), activeCharacter.getOccupying(), map.gridObject, ability.GetRangeMode()); //this.gameObject.AddComponent<AbilityRange>();
+       // AR.initalize(ability.GetRange(), activeCharacter.getOccupying(), map.gridObject);
 
         RangeMode rangeMode = ability.GetRangeMode();
 
@@ -437,6 +514,7 @@ public abstract class BattleController : MonoBehaviour
             AR.findCellsInRange(rangeMode);
         }
 
+        AR.setPrefab();
         AR.spawnVisuals();
 
         return AR;
@@ -926,6 +1004,14 @@ public abstract class BattleController : MonoBehaviour
         if(character == activeCharacter) {  activeCharacter = null; }   
     }
 
+    public void exileCharacter(BattleCharacterObject character)
+    {
+        characters.Remove(character);
+        character.getOccupying().occupier = null;
+        Destroy(character.characterObject);
+        if (character == activeCharacter) { activeCharacter = null; }
+    }
+
     protected void ticker()
     {
         if (ticking)
@@ -989,13 +1075,17 @@ public abstract class BattleController : MonoBehaviour
 
     public virtual void interact(int index)
     {
-
+        BEL.addEvent(BattleEventType.Interact, activeCharacter.getNameID(), index.ToString());
     }
 
     public virtual void openEndWindow()
     {
         GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_MissionComplete_Panel"), GameObject.Find("Canvas").transform).GetComponent<EndMissionController>().initialize(this, goldRewards, casualties, turnTimer);
     }
+
+    public virtual void battleTriggers(string id){}
+
+    public virtual void fieldTrigger(string id) {}
 
     public abstract void loadCharacters();
 

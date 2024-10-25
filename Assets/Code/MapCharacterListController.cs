@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MapCharacterListController : Window
 {
@@ -11,9 +13,25 @@ public class MapCharacterListController : Window
 
     List<GameObject> characterButtons = new List<GameObject>();
 
+    bool highlighted = false;
+
+    public void highLight(bool toggle = true)
+    {
+        GetComponent<Image>().color = new Color(1f,1f,1f);
+        highlighted = true;
+    }
+
     void Start()
     {
         populateList();
+    }
+
+    private void Update()
+    {
+        if (highlighted)
+        {
+            GetComponent<Image>().color = new Color(1f * UIController.UIBreatheTicker + 0.5f, 1f * UIController.UIBreatheTicker + 0.5f, 1f * UIController.UIBreatheTicker + 0.5f);
+        }
     }
 
     public void addCharacters(List<StoredCharacterObject> n_characters)

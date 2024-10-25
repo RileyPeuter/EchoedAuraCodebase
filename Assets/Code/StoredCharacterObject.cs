@@ -62,7 +62,12 @@ public class StoredCharacterObject
         return character.CharacterName;
     }
 
-    
+
+    public string getResourceString()
+    {
+        return character.resourceString;
+    }
+
     public string getStateString()
     {
         string output = "";

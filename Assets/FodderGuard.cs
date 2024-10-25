@@ -22,5 +22,7 @@ public class FodderGuard : Character
 
         DefaultCAI = new LineDefenceAI();
         reactionsAvailable = new List<reactionType> { reactionType.Block };
+
+        defaultVision = 3;
     }
 }

@@ -15,6 +15,8 @@ public enum AIMode{
 
 public abstract class BattleCharacterAI
 {
+    public bool alerted;
+
     //###MemberVariables###
 
     protected bool moved = false;
@@ -27,6 +29,8 @@ public abstract class BattleCharacterAI
 
     protected Ability overrideAbility;
 
+    protected List<ExWhy> candidateTargets;
+
     //###Getters###
     public Ability getOverrideAbility()
     {
@@ -35,6 +39,11 @@ public abstract class BattleCharacterAI
     public bool getTankedUp()
     {
         return tankedUp;
+    }
+
+    public BattleCharacterObject getCharacter()
+    {
+        return BCO;
     }
 
     public virtual reactionType getReaction()
@@ -122,7 +131,7 @@ public abstract class BattleCharacterAI
         List<CharacterAllegiance> alliegances = new List<CharacterAllegiance>();
         alliegances.Add(CharacterAllegiance.Allied);
         alliegances.Add(CharacterAllegiance.Controlled);
-        return AbilityRange.getClosestCell(BattleController.ActiveBattleController.getAllAlliegiances(alliegances)[0].getOccupying(), BattleController.ActiveBattleController.AR.findCellsInRange(RangeMode.Move), requiresAbailable);
+        return AbilityRange.getClosestCell(BattleController.ActiveBattleController.moveTowardsAlliegences(BCO.getOccupying(), alliegances), BattleController.ActiveBattleController.AR.findCellsInRange(RangeMode.Move), requiresAbailable);
     }
 
     public virtual ExWhyCell getTarget(List<ExWhyCell> range)
@@ -156,6 +165,8 @@ public abstract class BattleCharacterAI
     {
         return AbilityRange.getClosestCell(BattleController.ActiveBattleController.getAllAllegiance(CharacterAllegiance.Controlled)[0].getOccupying(), BattleController.ActiveBattleController.AR.findCellsInRange(RangeMode.Move), requiresAbailable);
     }
+
+
     public ExWhyCell moveTowardsEnemy(BattleCharacterObject target, bool requiresAbailable = false)
     {
         return AbilityRange.getClosestCell(BattleController.ActiveBattleController.getAllAllegiance(CharacterAllegiance.Controlled)[0].getOccupying(), BattleController.ActiveBattleController.AR.findCellsInRange(RangeMode.Move), requiresAbailable);
@@ -194,4 +205,12 @@ public abstract class BattleCharacterAI
     {
         BCO = nBCO;
     }
+
+    public void alert(int nNextTurn)
+    {
+        alerted = true;
+        BCO.alert(nNextTurn);     
+
+    }
+
 }
