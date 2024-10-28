@@ -1065,7 +1065,19 @@ public abstract class BattleController : MonoBehaviour
         cursorCell = map.gridObject.gridCells[x, y];
     }
 
+    public virtual bool checkExtraction(bool exit = true)
+    {
+        if(getAllAllegiance(CharacterAllegiance.Controlled).Count == 1)
+        {
+            if (exit)
+            {
+                openEndWindow();
+            }
+            return true;
+        }
+        return false;
 
+    }
 
     //###Abstracts###
     public virtual List<TacticalAbility> getTacticalAbilities()

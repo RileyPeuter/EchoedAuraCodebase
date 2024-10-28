@@ -26,7 +26,7 @@ public class Siege1BattleController : BattleController
             case 1:
                 exileCharacter(getActiveCharacter());    
 
-            break;
+            break;  
         }
     }
 

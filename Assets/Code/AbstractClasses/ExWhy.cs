@@ -274,6 +274,7 @@ public abstract class ExWhy
     }
 
     //This function is used to trigger an event. 
+    //Bro we really need to remove the ExWhy events :(
     protected abstract void eventTest(int eventIndex);
     protected abstract void instantiateCells();
     protected abstract void instantiateEvents();

@@ -101,6 +101,10 @@ BattleController battleController;
             case 6:
                 battleController = this.gameObject.AddComponent<Siege1BattleController>();
              break;
+            case 7:
+                battleController = this.gameObject.AddComponent<Siege2BattleController>();
+            break;
+
 
         }
         if(GGC.getMissionCharacters() != null)

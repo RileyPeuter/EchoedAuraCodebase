@@ -79,10 +79,18 @@ public class OverworldMapController : MonoBehaviour
     
     public void startMission(List<StoredCharacterObject> characters)
     {
-
+        List<StoredCharacterObject> SCOs = new List<StoredCharacterObject>();
         gameController.mapToBeLoaded = selectedMission.map;
         gameController.BCToBeLoaded = selectedMission.BCID;
-        gameController.setCharactersToBeLoaded(characters);
+
+        foreach (StoredCharacterObject character in characters)
+        {
+            if(character != null)
+            {
+                SCOs.Add(character);
+            }
+        }
+        gameController.setCharactersToBeLoaded(SCOs);
 
         print(characterSelect.GetComponent<CharacterSelectController>().getCharacterCount());
 

@@ -2,17 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PassiveAbility : MonoBehaviour
+public abstract class PassiveAbility 
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    Character user;
+    public abstract void activate(BattleCharacterObject target, StandOffSide SOF);
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

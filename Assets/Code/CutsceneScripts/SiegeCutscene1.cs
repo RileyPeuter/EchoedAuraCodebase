@@ -6,6 +6,7 @@ public class SiegeCutscene1 : Cutscene
 {
     public override void endCutscene()
     {
+        GlobalGameController.GGC.startBattle();
     }
 
     public override void executeTrigger(int triggerIndex)
@@ -15,7 +16,8 @@ public class SiegeCutscene1 : Cutscene
             case 1:
                 foreach(CutsceneActorController CAC in actorControllers)
                 {
-                    CAC.SetMove(Vector2.right, 1f, 0.5f);
+                    CAC.SetMove(Vector2.right, 4f, 1.6f);
+                    phaseCutscene(3f);
                 }
             break;
         }
@@ -24,16 +26,18 @@ public class SiegeCutscene1 : Cutscene
     // Start is called before the first frame update
     void Start()
     {
-        
-        actorSpawnLocations.Add(new Vector2(0, 2));
-        actorSpawnLocations.Add(new Vector2(0, 4));
-        actorSpawnLocations.Add(new Vector2(0, 6));
-        actorSpawnLocations.Add(new Vector2(0, 8));
+        initialize();
+
+        actorSpawnLocations.Add(new Vector2(-9, -0.7f));
+        actorSpawnLocations.Add(new Vector2(-10, -1.4f));
+        actorSpawnLocations.Add(new Vector2(-11, -0.8f));
+        actorSpawnLocations.Add(new Vector2(-12, -1.4f));
 
         spawnActors(loadActorsFromStoreCharacters());
+        loadSpritesFromStoredCharacters();
 
-        
-        
+
+
          addSprite("Leigh", "Leigh");
 
 
@@ -108,12 +112,24 @@ public class SiegeCutscene1 : Cutscene
         addFrame("Leigh", "Don't sneak around, make yourself known, but don't put yourself into too much danger.", "Leigh");
         addFrame("Leigh", "I expect the north side to hold, but my expectations aren't worth much, so be quick.", "Leigh");
 
+        bigTextBox = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_Dialogue_GameObject"));
+        //bigTextBox.GetComponent<CutsceneTextBoxController>().alterSize(-0.5f);
+        bigTextBox.transform.position = Camera.main.transform.position + new Vector3(0, -2, 1);
+        spawnVisuals();
+
+       // Camera.main.orthographicSize += 5;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (phaseTime > 0)
+        {
+            testPhase();
+            return;
+        }
+
+        buttonCheck();
     }
 
     public override void spawnVisuals()

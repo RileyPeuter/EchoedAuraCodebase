@@ -2,35 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExWhySiege2 : ExWhy
+public class ExWhySiege3 : ExWhy
 {
-    public ExWhySiege2() : base(13 , 17, "Siege")
+    public ExWhySiege3() : base(13, 17, "Siege")
     {        //t=Trees, , v = dark, b = battlement, s = scafholding
-        worldData = new char[13 ,17]
+        worldData = new char[13, 17]
         {
-            {'v','v','v', 'v', 'v' , 't', 't', 't', 't', 'v','v','v', 'v', 'v', 'v', 'v','v'},
-            {'v','v','t', 't', 't' , 't', 't', 't', 't', 'v','v','v', 'v', 'v', 'v', 'v','v'},
-            {'v','v','t', 'v', 'v' , 'v', 'v', 'v', 'v', 'v','v','v', 'v', 'v', 'v', 'v','v'},
-            {'v','v','v', 'v', 'v' , 'v', 'v', 'v', 'v', 'v','v','v', 'v', 'v', 'v', 'v','v'},
-            {'v','b','b', 'b', 'v' , 'v', 's', 'v', 'v', 's','v','v', 'b', 'b', 'b', 'b','v'},
-            {'v','b','b', 'b', 'b'  ,'b', 'b', 'b'  ,'b','b','b','b', 'b', 'b', 'b', 'b','v'},
-            {'v','b','b', 'b', 's' , 's', 's', 'v', 'v', 's','s','s', 'b', 'b', 'b', 'b','v'},
-            {'v','b','b', 'b', 'v' , 'v', 'v', 'v', 'v', 'v','v','v', 'b', 'b', 'b', 'b','v'},
-            {'v','b','b', 'b', 'v' , 'v', 'v', 'v', 'v', 'v','v','v', 'b', 'b', 'b', 'b','v'},
-            {'v','b','b', 'b', 'v' , 'v', 'v', 'v', 'v', 'v','v','v', 'b', 'b', 'b', 'b','v'},
-            {'v','b','b', 'b', 'v' , 'v', 'v', 'v', 'v', 'v','v','v', 'b', 'b', 'b', 'b','v'},
-            {'v','b','b', 'b', 'v' , 'v', 'v', 'v', 'v', 'v','v','v', 'b', 'b', 'b', 'b','v'},
-            {'v','b','b', 'b', 'v' , 'v', 'v', 'v', 'v', 'v','v','v', 'b', 'b', 'b', 'b','v'}
+            {'v','b','b', 'b', 'v' , 'v', 's', 'v', 't', 'g','g','g', 'g', 'w', 'w', 'w','b'},
+            {'v','v','t', 't', 't' , 't', 't', 't', 't', 'g','g','g', 'g', 'w', 'w', 'w','b'},
+            {'v','v','t', 'v', 'v' , 'v', 'v', 'v', 't', 'g','g','g', 'g', 'w', 'w', 'w','b'},
+            {'v','v','v', 'v', 'v' , 'v', 'v', 'v', 't', 'g','g','g', 'g', 'w', 'w', 'w','b'},
+            {'v','b','b', 'b', 's' , 's', 's', 'v', 'g', 'g','g','g', 'g', 'w', 'w', 'w','b'},
+            {'v','b','b', 'b', 'b'  ,'b', 'b', 'b', 't','g','g','g', 'g', 'w', 'w', 'w','b'},
+            {'v','b','b', 'b', 'v' , 'v', 'v', 'v', 'g', 'g','g','g', 'g', 'w', 'w', 'w','b'},
+            {'v','b','b', 'b', 'v' , 'v', 'v', 'v', 'g', 'g','g','g', 'g', 'w', 'w', 'w','b'},
+            {'v','b','b', 'b', 'v' , 'v', 'v', 'v', 'g', 'g','g','g', 'g', 'w', 'w', 'w','b'},
+            {'v','v','v', 'v', 'v' , 't', 't', 't', 't', 'g','g','g', 'g', 'w', 'w', 'w','b'},
+            {'v','b','b', 'b', 'v' , 'v', 'v', 'v', 't', 't','g','g', 'g', 'w', 'w', 'w','b'},
+            {'v','b','b', 'b', 'v' , 'v', 'v', 'v', 't', 't','g','g', 'g', 'w', 'w', 'w','b'},
+            {'v','b','b', 'b', 'v' , 'v', 'v', 'v', 't', 't','g','g', 'g', 'w', 'w', 'w','b'}
         };
         initiateCells();
 
     }
 
+
     protected override void eventTest(int eventIndex)
     {
 
     }
-
     protected override void instantiateCells()
     {
         foreach (ExWhyCell cell in gridCells)
@@ -75,18 +75,5 @@ public class ExWhySiege2 : ExWhy
     protected override void instantiateEvents()
     {
 
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
