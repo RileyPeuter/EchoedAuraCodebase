@@ -118,11 +118,6 @@ public class CharacterSelectController : Window
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void initialize(List<StoredCharacterObject> forcedCharacters = null, bool ableToAdd = true)
     {
         ATA = ableToAdd;

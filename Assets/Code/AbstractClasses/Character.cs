@@ -269,7 +269,7 @@ public abstract class Character {
         {
             buff.tick();
             buff.duration--;
-            if (buff.duration <= 0)
+            if (buff.duration == 0)
             {
                 buff.cleanup();
                 buffsToRemove.Add(buff);

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Runtime.InteropServices;
-using JetBrains.Annotations;
+using System.ComponentModel.Design;
 
 public abstract class BattleController : MonoBehaviour
 {
     //###MemberVariables###
     public static BattleController ActiveBattleController;
+
+    protected bool controllerActive = true;
 
     public List<BattleCharacterObject> characters;
 
@@ -49,6 +50,8 @@ public abstract class BattleController : MonoBehaviour
     protected int turnTimer = 0;
     public bool hasControl = true;
 
+    protected bool scriptedDeath;
+
     protected GameObject objectiveHighlightPrefab;
     protected GameObject hoverCursor;
     protected GameObject cursor;
@@ -66,7 +69,7 @@ public abstract class BattleController : MonoBehaviour
 
     Camera mainCamera;
 
-    List<StoredCharacterObject> charactersToSpawn;
+    protected List<StoredCharacterObject> charactersToSpawn;
 
     protected List<GameObject> objectiveHighlights;
 
@@ -220,8 +223,18 @@ public abstract class BattleController : MonoBehaviour
     }
 
     //M, use this function reponsibliy 0_0... I'm keeping my eyes on you.
-    public void forceCast(BattleCharacterObject caster, ExWhyCell target, Ability ab) 
+    public void forceCast(BattleCharacterObject caster, ExWhyCell target, Ability ab)
     {
+        if (ab.name == "Move")
+        {
+            ab.cast(target, caster);
+            createStandOff(null, ab, caster, null);
+
+        }
+        if (ab.abilityType == AbilityType.Area && !(ab is TacticalAbility))
+        {
+        }
+
         if (ab.abilityType == AbilityType.Targeted && !(ab is TacticalAbility )) 
         { 
             createStandOff(new AttackAttempt(caster, target.occupier, ab));
@@ -426,6 +439,7 @@ public abstract class BattleController : MonoBehaviour
 
         turnTimerUI = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_Timer_Panel"), GameObject.Find("Canvas").transform).GetComponent<TimerUIScript>();
         turnTimerUI.initialize(this);
+        Instantiate(ResourceLoader.loadGameObject("UIElements/uI_EscapeMenu_Button"), GameObject.Find("Canvas").transform);
     }
 
     public void lookForBattleEventListeners()
@@ -547,14 +561,11 @@ public abstract class BattleController : MonoBehaviour
                 return;
             }
 
-            if (getAllAllegiance(CharacterAllegiance.Controlled).Count == 0)
-            {
-                Instantiate(Resources.Load<GameObject>("Gameover"), GameObject.Find("Canvas").transform);
-                Destroy(this.gameObject); return;
-            }
+
         }
         turnTimer++;
         turnTimerUI.updateTime(turnTimer);
+        
         timerTick();
         //fam
     }
@@ -612,9 +623,9 @@ public abstract class BattleController : MonoBehaviour
             return;
         }
 
-        if (activeCharacter.getManaFlow() <= 0 && activeCharacter.getMovement() <= 0)
+        if (activeCharacter.getManaFlow() <= 0 && (activeCharacter.getMovement() <= 0 && tacticalPoints <= 0))
         {
-            timerTick();
+            endTurn();
         }
         else
         {
@@ -659,17 +670,17 @@ public abstract class BattleController : MonoBehaviour
     }
 
     protected void controls()
-    { 
+    {
         cursor.transform.position = cursorCell.cellGO.transform.position;
 
         //This should be moved to a function which moves the cursor cells. 
-        if(Vector3.Distance(cursor.transform.position, mainCamera.transform.position) > 25)
+        if (Vector3.Distance(cursor.transform.position, mainCamera.transform.position) > 25)
         {
             //mainCamera.transform.position =  cursor.transform.position + new Vector3(0,0,-10);
-            mainCamera.transform.position = ((mainCamera.transform.position  + cursor.transform.position) / 2) + new Vector3(0, 0, -10);
+            mainCamera.transform.position = ((mainCamera.transform.position + cursor.transform.position) / 2) + new Vector3(0, 0, -10);
         }
 
-        if (!hasControl) 
+        if (!hasControl)
         {
             return;
         }
@@ -679,7 +690,7 @@ public abstract class BattleController : MonoBehaviour
         BUIC.checkBackButtons();
 
         if (hoverCursor.transform.position != map.getMouseCell().cellGO.transform.position)
-        {   
+        {
             hoverCursor.transform.position = map.getMouseCell().cellGO.transform.position;
             checkHoverCellTarget(map.getMouseCell());
         }
@@ -690,7 +701,7 @@ public abstract class BattleController : MonoBehaviour
         }
 
         if (Input.GetKeyDown("w"))
-        {   
+        {
             if (cursorCell.yPosition != map.gridObject.yMax - 1)
             {
                 moveCursor(map.gridObject.gridCells[cursorCell.xPosition, cursorCell.yPosition + 1]);
@@ -704,7 +715,7 @@ public abstract class BattleController : MonoBehaviour
                 moveCursor(map.gridObject.gridCells[cursorCell.xPosition, cursorCell.yPosition - 1]);
             }
         }
-            
+
         if (Input.GetKeyDown("a"))
         {
             if (cursorCell.xPosition != 0)
@@ -725,21 +736,27 @@ public abstract class BattleController : MonoBehaviour
         {
             cursorCell = map.getMouseCell();
             checkTarget();
-            tryCast(selectedAbility); 
+            tryCast(selectedAbility);
         }
-        
-        if(!Input.GetKey("left alt"))
+
+        if (!Input.GetKey("left alt"))
         {
             hoverCellInformationController = null;
         }
 
-        if(Input.GetKeyDown("left alt"))
+        if (Input.GetKeyDown("left alt"))
         {
             GameObject GO = BUIC.openWindow("uI_HoverCell_Panel");
             GO.GetComponent<RectTransform>().position = mainCamera.WorldToScreenPoint(hoverCursor.transform.position) + new Vector3(-130, 0, 0);
             hoverCellInformationController = GO.GetComponent<CellInformationController>();
             hoverCellInformationController.initialize(map.getMouseCell());
         }
+
+        if ((Input.GetKey("left shift") && Input.GetKeyDown("e")) || Input.GetKeyDown("left shift") && Input.GetKey("e"))
+        {
+            endTurn();
+        }
+
     }
 
     public void moveCursor(ExWhyCell nCursorCell, bool needsVisual = false)
@@ -892,13 +909,13 @@ public abstract class BattleController : MonoBehaviour
 
         if (nTacticalAbility != null)
         {
-            AAC.AddComponent<TacticalStandOffController>().initialize(nTacticalAbility, activeCharacter, map.GetResourceName(), BUIC, cursorCell);
+            AAC.AddComponent<TacticalStandOffController>().initialize(nTacticalAbility, nBCO, map.GetResourceName(), BUIC, cursorCell);
             return;
         }
 
         if (nAbility != null)
         {
-            AAC.AddComponent<SoloStandOffController>().initialize(nAbility, activeCharacter, map.GetResourceName(), BUIC);
+            AAC.AddComponent<SoloStandOffController>().initialize(nAbility, nBCO, map.GetResourceName(), BUIC);
             return;
         }
 
@@ -1001,7 +1018,13 @@ public abstract class BattleController : MonoBehaviour
         characters.Remove(character);
         Destroy(character.characterObject, 2f);
         character.getOccupying().occupier = null;
-        if(character == activeCharacter) {  activeCharacter = null; }   
+        if(character == activeCharacter) {  activeCharacter = null; }
+
+        if (getAllAllegiance(CharacterAllegiance.Controlled).Count == 0)
+        {
+            Instantiate(Resources.Load<GameObject>("Gameover"), GameObject.Find("Canvas").transform);
+            Destroy(this.gameObject); return;
+        }
     }
 
     public void exileCharacter(BattleCharacterObject character)
@@ -1025,8 +1048,7 @@ public abstract class BattleController : MonoBehaviour
         }
     }
 
-    //Bro, this won't work for duplicates, don't over rely on this.
-    public BattleCharacterObject getCharacterFromName(string name)
+    public BattleCharacterObject getCharacterFromNameID(string name)
     {
         foreach (BattleCharacterObject battleCharacterObject in characters) 
         {
@@ -1036,7 +1058,21 @@ public abstract class BattleController : MonoBehaviour
             return battleCharacterObject; 
             }
         }
+        Debug.Log("Fam, there's a wrong character name. maybe they died");
+        return null;
+    }
 
+    //Bro, this won't work for duplicates, don't over rely on this.
+    public BattleCharacterObject getCharacterFromName(string name)
+    {
+        foreach (BattleCharacterObject battleCharacterObject in characters)
+        {
+            if (battleCharacterObject.getName() == name)
+            {
+
+                return battleCharacterObject;
+            }
+        }
         Debug.Log("Fam, there's a wrong character name. maybe they died");
         return null;
     }
@@ -1082,7 +1118,14 @@ public abstract class BattleController : MonoBehaviour
     //###Abstracts###
     public virtual List<TacticalAbility> getTacticalAbilities()
     {
-        return baseTacticalAbilities;
+        List<TacticalAbility> output = new List<TacticalAbility>();
+
+        foreach(TacticalAbility tAbility in baseTacticalAbilities)
+        {
+            output.Add(tAbility);
+        }
+
+        return output;
     }
 
     public virtual void interact(int index)

@@ -13,6 +13,7 @@ public class IntroCutscene : Cutscene
     // Start is called before the first frame update
     void Start()
     {
+
         frames = new List<CutsceneFrame>();
         speakerSprites = new Dictionary<string, Sprite>();
 
@@ -51,6 +52,8 @@ public class IntroCutscene : Cutscene
         bigTextBox = GameObject.Instantiate(Resources.Load<GameObject>("UIElements/uI_Dialogue_GameObject"));
 
         spawnVisuals();
+
+        GameObject.Find("iraden").GetComponent<SpriteRenderer>().flipX = true;
     }
 
 

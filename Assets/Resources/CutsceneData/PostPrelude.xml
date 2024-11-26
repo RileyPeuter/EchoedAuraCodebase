@@ -7,7 +7,7 @@
 
 	<sprite>
 		<name>Asa</name>
-		<path>Asa1</path>
+		<path>Asa</path>
 	</sprite>
 
 	<sprite>
@@ -23,86 +23,66 @@
 
 	<frame>
 		<speaker>Iraden</speaker>
-		<dialogue trigger="1">
-Hey, hello. Fray told me I could find a room here...
+		<dialogue trigger="1">Hey, hello. Fray told me I could find a room here...
 		</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Iraden</speaker>
-		<dialogue trigger="1">
+		<dialogue trigger="2">
 ...
 		</dialogue>
 	</frame>
 	
 	<frame>
 		<speaker>Iraden</speaker>
-		<dialogue>
-Hey, help. That guy just...exploded
-		</dialogue>
+		<dialogue trigger="3">Hey, help. That guy just...exploded</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-Ummm.  Hello there. 
-		</dialogue>
+		<dialogue>Ummm.  Hello there.</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-That was a double of mine
-		</dialogue>
+		<dialogue>That was a double of mine</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Iraden</speaker>
-		<dialogue>
-Ohh...
-		</dialogue>
+		<dialogue>Ohh...</dialogue>
 	</frame>
 	
 	<frame>
 		<speaker>Iraden</speaker>
-		<dialogue>
-Are you the real you?
-		</dialogue>
+		<dialogue>Are you the real you?</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-			That's quite the question.
-		</dialogue>
+		<dialogue>That's quite the question.</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-	Am I the real me?
-		</dialogue>
+		<dialogue>Am I the real me?</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-I think I'm Asa. Asa from Hai. Strateigic Intelligence Operative
-		</dialogue>
+		<dialogue>I think I'm Asa. Asa from Hai. Strateigic Intelligence Operative</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-Heh, maybe I decided to imbue a phantom with concsiencousness. I wonder if all of them think this as they're about to explode
-		</dialogue>
+		<dialogue>Hah. maybe I decided to imbue a phantom with consciousness.
+I wonder if all of them think this as they're about to explode.</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-Am I mere seconds away from expiring?
-		</dialogue>
+		<dialogue>Am I mere seconds away from expiring?</dialogue>
 	</frame>
 
 	<frame>
@@ -114,112 +94,97 @@ Am I mere seconds away from expiring?
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-And you are?
-		</dialogue>
+		<dialogue>And you are?</dialogue>
 	</frame>
 
 
 	<frame>
 		<speaker>Iraden</speaker>
-		<dialogue>
-I'm a new recruit I suppose
-		</dialogue>
+		<dialogue>I'm a new recruit I suppose</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Iraden</speaker>
-		<dialogue>
-My name's Iraden. Just look for a room I can take
-		</dialogue>
+		<dialogue>My name's Iraden. Just looking for a room I can take</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-Oh well. This place is quite empty. Take any room you'd like, provided it's unoccupied.
-		</dialogue>
+		<dialogue>Oh well. This place is quite empty. Take any room you'd like, provided it's 
+unoccupied.</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-You'll most likely have to find your own comforts, but the space will be yours
-		</dialogue>
+		<dialogue>You'll most likely have to find your own comforts, but the space will be yours</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-We've got a sizable mission Tomorrow. Dorcia usually makes dinner when she can.
-		</dialogue>
+		<dialogue>We've got a sizable mission Tomorrow. Dorcia usually makes dinner when she can.</dialogue>
 	</frame>
 
 
 	<frame>
 		<speaker>Asa</speaker>
-			<dialogue>
-Get some food and some rest. Be up and ready for the morning. 
-			</dialogue>
+			<dialogue>Get some food and some rest. Be up and ready for the morning breifing. </dialogue>
+	</frame>
+
+
+	<frame>
+		<speaker>Asa</speaker>
+		<dialogue>And try to not mind my copies. I've been practicing keeping them up for exnteded periods.</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Iraden</speaker>
-			<dialogue>
-Thank you, I will. And it was nice meeting you. 
-		</dialogue>
-	</frame>
-
-
-	<frame>
-		<speaker>Asa</speaker>
-		<dialogue>
-And you. 
-		</dialogue>
+		<dialogue >Thank you, I will. And it was nice meeting you. </dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-And try to nod mind my copies. I've been practicing keeping them up for exnteded periods. 
-		</dialogue>
+		<dialogue trigger="4">And you. </dialogue>
+	</frame>
+
+
+	<frame>
+		<speaker>Iraden</speaker>
+		<dialogue trigger="5">...</dialogue>
+	</frame>
+
+	<frame>
+		<speaker>Iraden</speaker>
+		<dialogue trigger="6">I guess this is as good as anywhere else</dialogue>
 	</frame>
 
 
 	<frame>
 		<speaker>Fray</speaker>
-		<dialogue>
-			Wakey wakey. Meeting. 
-		</dialogue>
+		<dialogue trigger="7">Wakey wakey. Meeting. </dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Iraden</speaker>
-		<dialogue>
-	Thanks, yeah. I'm coming. 
-		</dialogue>
+		<dialogue>Thanks, yeah. I'm coming. </dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-You're actually on time this time, Fray?
+		<dialogue trigger ="8">You're actually on time this time, Fray?
 I accounted for your sleeping in for nothing.
 		</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Fray</speaker>
-		<dialogue>
-Oh, I just bought the newbie here so he could fill me in after. 
+		<dialogue>Oh, I just bought the newbie here so he could fill me in after. 
 I'm planning on dozing off a few minutes in. 
 		</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-			Very funny. But there's not really much to this one. 
+		<dialogue>Very funny. But there's not really much to this one. 
 			You're to report to a keep out East. Do a bit of survey work, and
 			report back here. Ensure the report is sealed up the entire way.
 		</dialogue>
@@ -227,93 +192,82 @@ I'm planning on dozing off a few minutes in.
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-			There's a small peasant uprising I need you to check out. 
-			We're being paid by the 
+		<dialogue>There's a small peasant uprising I need you to check out. 
+We're being paid by the... 
 		</dialogue>
 	</frame>
 
 
 	<frame>
 		<speaker>Morthred</speaker>
-		<dialogue>
-			Survey work? You made it sound like it was a matter of importance. 
-			Surely we can do more than just survey. 
+		<dialogue>Survey work? You made it sound like it was a matter of importance. 
+Surely we can do more than just survey. 
 		</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-			Morthred. All our missions are important. 
+		<dialogue>Morthred. All our missions are important. 
 		</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Morthred</speaker>
-		<dialogue>
-			We're supposed to turn the tides of battle. 
-			Provide surgical strikes against the enemy that crumble them. 
-			A rebellion should be easy .
+		<dialogue>We're supposed to turn the tides of battle. 
+Provide surgical strikes against the enemy that crumble them. 
+A rebellion should be easy .
 		</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Fray</speaker>
-		<dialogue>
-			Obviously there's a little more to this than that. 
-			Some sort of cloak and dagger stuff. 
-			Please tell me there's more to it than this Asa. 
+		<dialogue>Obviously there's a little more to this than that. 
+Some sort of cloak and dagger stuff. 
+Please tell me there's more to it than this Asa. 
 		</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-			You would be correct. I appreciate your enthusiasm
-			I need you to do exactly as I ask. Some missions may be mundane, but
-			we don't make you do them for no reason at all. Trust us. 
-			Things are often more than they seem. 
+		<dialogue>You would be correct. I appreciate your enthusiasm Morthred, but
+I need you to do exactly as I ask. Some missions may be mundane, but
+we don't make you do them for no reason at all. Trust us. 
+Things are often more than they seem. 
 		</dialogue>
 	</frame>
 	
 	<frame>
 		<speaker>Fray</speaker>
-		<dialogue>
-		By 'us' he means the Stratiegic side of our group, Iraden. 
-		We're the tactical side. The ones who get our hands dirty. 
+		<dialogue>By 'us' he means the Stratiegic side of our group, Iraden. 
+We're the tactical side. The ones who get our hands dirty. 
 		</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-			I assure you, we'll get our hands dirty also when we need to.
-			You'll be reporting to Generald Leigh, a old friend of mine. 
+		<dialogue>I assure you, we'll get our hands dirty also when we need to.
+You'll be reporting to Generald Leigh, an old friend of mine. 
 		</dialogue>
 	</frame>
 
 
 	<frame>
 		<speaker>Morthred</speaker>
-		<dialogue>
-			He's employed by the house of the Headsman, in Hai. 		
+		<dialogue>He's employed by the house of the Headsman, in Hai. 		
 		</dialogue>
 	</frame>
 
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-			Correct. They own a small land on the boarder. 
+		<dialogue>Correct. They own a small bit of land on the boarder. 
 		</dialogue>
 	</frame>
 
 	<frame>
 		<speaker>Asa</speaker>
-		<dialogue>
-			Make your way then, reciever further orders from Leigh.
-			Then come back. No need to be overly clandestine. 
+		<dialogue>Make your way then, reciever further orders from Leigh.
+Then come back. No need to be overly clandestine. 
 		</dialogue>
 	</frame>
 

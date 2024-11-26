@@ -41,7 +41,7 @@ public class Supposititious : TacticalAbility, BattleEventListener
             return;
         }
 
-        BattleCharacterObject BCO = BC.getCharacterFromName(nBattleEvent.target);
+        BattleCharacterObject BCO = BC.getCharacterFromNameID(nBattleEvent.target);
         if(BCO is null){ return; }
 
         if(BCO.GetAllegiance() != CharacterAllegiance.Controlled)

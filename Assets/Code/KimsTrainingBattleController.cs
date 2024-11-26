@@ -176,14 +176,14 @@ public class KimsTrainingBattleController : BattleController
 
         toggleCutscene(true);
 
-        objList.addObjective(new Objective("irdHit0", 1, BattleEventType.Hit).addDescription("Spar with Kim").addTarget("Iraden-4"));
+        objList.addObjective(new VagueObjective("irdHit0", 1, BattleEventType.Hit).addDescription("Spar with Kim").addTarget("Kim"));
 
-        objList.addObjective(new Objective("kmReact0", 1, BattleEventType.React).makeInvisible().addReuslt(false.ToString()).addTarget("Iraden-4"));
+        objList.addObjective(new VagueObjective("kmReact0", 1, BattleEventType.React).makeInvisible().addReuslt(false.ToString()).addTarget("Iraden"));
 
 
-        objList.addObjective(new Objective("kmKill0", 1, BattleEventType.Kill).addSubject("Kim-3").makeInvisible());
+        objList.addObjective(new VagueObjective("kmKill0", 1, BattleEventType.Kill).addSubject("Kim").makeInvisible());
 
-        objList.addObjective(new Objective("irKill0", 1, BattleEventType.Kill).addSubject("Iraden-4").makeInvisible());
+        objList.addObjective(new VagueObjective("irKill0", 1, BattleEventType.Kill).addSubject("Iraden").makeInvisible());
 
         baseTacticalAbilities.Add(new Supposititious(this));
         baseTacticalAbilities.Add(new Distraction(this));

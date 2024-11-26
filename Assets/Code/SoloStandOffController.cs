@@ -78,8 +78,7 @@ public class SoloStandOffController : StandOffController
             playSound(Resources.Load<AudioClip>("Audio/SoundEffects/run"));
         }
 
-        GameObject.Destroy(GameObject.Find("uI_StandOffAttackeeSide_Object"));
-        this.transform.position = new Vector2(GameObject.Find("Main Camera").transform.position.x + 20, GameObject.Find("Main Camera").transform.position.y + 5);
+        GameObject.Destroy(GetComponentsInChildren<MsSuperSecretScriptThatImUsingAsAFlag>().ToList().Find(x => x.gameObject.name == "uI_StandOffAttackeeSide_Object").gameObject);        this.transform.position = new Vector2(GameObject.Find("Main Camera").transform.position.x + 20, GameObject.Find("Main Camera").transform.position.y + 5);
     }
 
     // Update is called once per frame

@@ -8,26 +8,21 @@ public class Siege1BattleController : BattleController
     GameObject fodderGuardPrefab;
     GameObject archerPrefab;
 
+
+
     public override void endBattle()
     {
+        GlobalGameController.GGC.mapToBeLoaded = new ExWhySiege2();
 
+        GlobalGameController.GGC.BCToBeLoaded = 7;
+        GlobalGameController.GGC.CutsceneToBeLoaded = 5;
+
+        GlobalGameController.GGC.startCutscene();
     }
 
     public override void GBCTexecutions(int index)
     {
 
-    }
-
-    public override void interact(int index)
-    {
-        base.interact(index);
-        switch (index)
-        {
-            case 1:
-                exileCharacter(getActiveCharacter());    
-
-            break;  
-        }
     }
 
     public override List<TacticalAbility> getTacticalAbilities()
@@ -38,8 +33,8 @@ public class Siege1BattleController : BattleController
 
         if (getActiveCharacter().getOccupying().xPosition == 14 && getActiveCharacter().getOccupying().yPosition == 2)
         {
-            Interact nInteract = new Interact(this, 1, "Climb the rope and extract");
-            output.Add(nInteract);
+
+            output.Add(new Extract(this));
         }
 
         return output;
@@ -76,13 +71,11 @@ public class Siege1BattleController : BattleController
 
         spawnCharacter(Instantiate(fodderGuardPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[8, 5], new FodderGuard(), AIClusters[0]);
         spawnCharacter(Instantiate(fodderGuardPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[9, 5], new FodderGuard(), AIClusters[0]);
-        spawnCharacter(Instantiate(fodderGuardPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[10, 5], new FodderGuard(), AIClusters[0]);
         spawnCharacter(Instantiate(fodderGuardPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[11, 5], new FodderGuard(), AIClusters[0]);
         spawnCharacter(Instantiate(fodderGuardPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[7, 8], new FodderGuard(), AIClusters[1]);
         spawnCharacter(Instantiate(fodderGuardPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[8, 8], new FodderGuard(), AIClusters[1]);
         spawnCharacter(Instantiate(fodderGuardPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[9, 8], new FodderGuard(), AIClusters[1]);
-        spawnCharacter(Instantiate(fodderGuardPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[10, 8], new FodderGuard(), AIClusters[1]);
-
+        
         spawnCharacter(Instantiate(archerPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[7, 7], new Archer(), AIClusters[1]);
         spawnCharacter(Instantiate(archerPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[8, 7], new Archer(), AIClusters[0]);
 
@@ -103,23 +96,28 @@ public class Siege1BattleController : BattleController
             case "ext0":
                 if (getAllAllegiance(CharacterAllegiance.Controlled).Count == 1)
                 {
+                    controllerActive = false;
                     openEndWindow();
                 }
                 else
                 {
                     objList.removeObjective("ext0");
-                    objList.addObjective(new Objective("ext0", 1, BattleEventType.Interact).addDescription("Find a way to enter the fort"));
+                    objList.addObjective(new Objective("ext0", 1, BattleEventType.Attack).addDescription("Enter the fort").addVerb("Extraction"));
                     Debug.Log("this worked btw");
                 }
                 break;
+
+            case "pkSpawn0":
+                spawnPack();
+            break;
         }
     }
 
     public void spawnPack()
     {
 
-        spawnCharacter(Instantiate(fodderGuardPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[8, 5], new FodderGuard());
-        spawnCharacter(Instantiate(archerPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[7, 7], new Archer(), AIClusters[1]);
+        spawnCharacter(Instantiate(fodderGuardPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[0, 7], new FodderGuard(true));
+        spawnCharacter(Instantiate(archerPrefab), CharacterAllegiance.Enemey, map.gridObject.gridCells[0, 8], new Archer(true));
     }
 
     void Start()
@@ -231,13 +229,15 @@ public class Siege1BattleController : BattleController
         addObjectiveHighlight(14, 2);
 
 
-        objList.addObjective(new Objective("ext0", 1, BattleEventType.Interact).addDescription("Find a way to enter the fort"));
+        objList.addObjective(new Objective("ext0", 1, BattleEventType.Attack).addDescription("Find a way to enter the fort (Use the Extraction tactic when in place)").addVerb("Extraction"));
 
         objList.addObjective(new Objective("pkSpawn0", 1, BattleEventType.Time).addModifier(ObjectiveModifier.GreaterThan, 50).makeInvisible());
     }
 
     void Update()
     {
+        if (!controllerActive) { return; }
+
         controls();
 
         if (getActiveCharacter() != null)

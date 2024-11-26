@@ -54,6 +54,26 @@ public abstract class Cutscene : MonoBehaviour
 
     }
 
+    public GameObject fadeout(Color initial, Color transition, float rate = 1)
+    {
+        GameObject GO = Instantiate(ResourceLoader.loadGameObject("Fader"));
+        GO.GetComponent<FaderController>().initialize(initial, transition, rate);
+        return GO;
+    }
+
+    public void zoomCamera(float zoom)
+    {
+        Camera.main.orthographicSize = Camera.main.orthographicSize + zoom;
+
+    }
+
+    public void panCamera(Vector2 translation)
+    {
+        Camera.main.transform.Translate(translation);
+        bigTextBox.transform.position = Camera.main.transform.position + new Vector3(0, -2, 1);
+
+    }
+
     public void testPhase()
     {
         phaseTime = phaseTime - Time.deltaTime;
@@ -109,7 +129,6 @@ public abstract class Cutscene : MonoBehaviour
     {
         speakerSprites.Add(spriteName, Resources.Load<Sprite>("CutsceneSpeakerSprites/" + location));
     }
-
 
 
     public void addSprite(string speakerName, Sprite sprite)
@@ -183,10 +202,6 @@ public abstract class Cutscene : MonoBehaviour
         actorControllers = new List<CutsceneActorController>();
     }
 
-    public void recreateTextBox()
-    {
-    }
-
     public virtual void spawnActors(List<GameObject> actors)
     {
         int spawnIndex = 0;
@@ -197,6 +212,23 @@ public abstract class Cutscene : MonoBehaviour
             actorControllers.Add(GO.GetComponent<CutsceneActorController>());
             spawnIndex++;
         }
+    }
+
+    public CutsceneActorController spawnActor(string name, Vector3 location, bool flip = false)
+    {
+        GameObject GO = Instantiate(Resources.Load<GameObject>("CutsceneActors/" + name));
+        GO.transform.Translate(location);
+        if (flip)
+        {
+            GO.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        GO.GetComponent<CutsceneActorController>().initialize();
+        return GO.GetComponent<CutsceneActorController>();
+    }
+
+    public void panCamera()
+    {
+
     }
 
     public abstract void endCutscene();

@@ -22,6 +22,7 @@ public class Mission
     public int BCID;
     public ExWhy map;
     public bool hasSetCharacters = false;
+    List <string> setCharacterNames = new List <string>();
 
     //###Constructor###
     public Mission(string nName, string nDescription, string nIconPath, MissionType nType, int BCID, float nXMarkerPosition, float nYMarkerPosition, ExWhy nMap = null, int nCutsceneInt = 0, bool hasSet = false)
@@ -38,4 +39,16 @@ public class Mission
         hasSetCharacters = hasSet;
     }
 
+    public void addSetCharacters(List<string> characterNames)
+    {
+        foreach (string characterName in characterNames)
+        {
+            setCharacterNames.Add(characterName);
+        }
+    }
+
+    public List<string> getSetCharacters()
+    {
+        return setCharacterNames;
+    }
 }

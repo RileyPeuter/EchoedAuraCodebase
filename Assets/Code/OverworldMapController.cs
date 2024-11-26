@@ -20,20 +20,50 @@ public class OverworldMapController : MonoBehaviour
         agency = ag;
     }
 
-    public void selectMission(Mission mission)
+    public void deselectMission()
     {
-        if(characterSelect != null)
+        if (characterSelect != null)
         {
             GameObject.Destroy(characterSelect);
+            characterListController.resetList();
         }
 
+    }
+
+    public void selectMission(Mission mission)
+    {
+        
+        deselectMission();
+
         selectedMission = mission;
-        characterSelect = Instantiate(Resources.Load<GameObject>("UIElements/uI_SelectCharacters_Panel"), this.transform);
+        if (!selectedMission.hasSetCharacters)
+        {
+            characterSelect = Instantiate(Resources.Load<GameObject>("UIElements/uI_SelectCharacters_Panel"), this.transform);
+        }
+        else
+        {
+        }
         characterSelect.GetComponent<CharacterSelectController>().initialize(UIController.HighestWindow);
         characterSelect.GetComponent<CharacterSelectController>().initialize(null, false);
 
         characterSelect.GetComponent<CharacterSelectController>().setOWMC(this);
         characterListController.highLight();
+
+    }
+
+    public bool tryAddCharacters(Mission mission)
+    {
+        List<StoredCharacterObject> characters = characterListController.getCharacters();
+
+        foreach(string name in mission.getSetCharacters())
+        {
+            StoredCharacterObject foundCharacter = characters.Find(x => x.getCharacterName() == "name");
+            if (foundCharacter is null)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void resetSelection()

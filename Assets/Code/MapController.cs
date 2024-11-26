@@ -29,13 +29,6 @@ BattleController battleController;
 
     }
 
-    public void kapp(int mx, int my)
-    {
-        print(mx);
-        print(my);
-
-    }
-    
     public ExWhy gridObject;
 
     public ExWhyCell getMouseCell(float cellSizeMultiplier = 4f)
@@ -104,7 +97,9 @@ BattleController battleController;
             case 7:
                 battleController = this.gameObject.AddComponent<Siege2BattleController>();
             break;
-
+            case 8:
+                battleController = this.gameObject.AddComponent<Siege3BattleController>();
+            break;
 
         }
         if(GGC.getMissionCharacters() != null)

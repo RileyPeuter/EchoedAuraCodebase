@@ -161,6 +161,29 @@ public abstract class BattleCharacterAI
         return null;
     }
 
+    public ExWhyCell getClosestTarget(List<CharacterAllegiance> alliegences)
+    {
+        ExWhyCell output = null;
+        int closest = 999;
+
+        foreach (BattleCharacterObject pot in BattleController.ActiveBattleController.getAllAlliegiances(alliegences))
+        {
+            int dis = ExWhy.getDistanceBetweenCells(BCO.getOccupying(), pot.getOccupying());
+            if (dis < closest){
+                closest = dis;
+                output = pot.getOccupying();
+            }
+        }
+        if (BattleController.ActiveBattleController.AR.contains(output))
+        {
+            return output;
+        }
+
+        Debug.Log("Couldn't find a target");
+        return null;
+    }
+
+
     public virtual ExWhyCell moveTowardsControlled(bool requiresAbailable = false)
     {
         return AbilityRange.getClosestCell(BattleController.ActiveBattleController.getAllAllegiance(CharacterAllegiance.Controlled)[0].getOccupying(), BattleController.ActiveBattleController.AR.findCellsInRange(RangeMode.Move), requiresAbailable);

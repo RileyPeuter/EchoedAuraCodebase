@@ -36,7 +36,8 @@ public class DualStandOffController : StandOffController
         attackAttempt = AA;
         leftSide = new StandOffSide(attackAttempt.getAttacker(), resourceName, GetComponentsInChildren<MsSuperSecretScriptThatImUsingAsAFlag>().ToList().Find(x => x.gameObject.name == "uI_StandOffAttackerSide_Object").gameObject);
         rightSide = new StandOffSide(attackAttempt.getAttackee(), resourceName, GetComponentsInChildren<MsSuperSecretScriptThatImUsingAsAFlag>().ToList().Find(x => x.gameObject.name == "uI_StandOffAttackeeSide_Object").gameObject);
-        damageText = GameObject.Find("uI_Damage_Text").GetComponent<Text>();
+        damageText = rollPanel.GetComponentsInChildren<Text>().ToList().Find(x => x.name == "uI_Damage_Text");
+        //bro, why do you keep using Find, this is why you're unemployed
 
 
         foreach (SpriteRenderer sr in gameObject.GetComponentsInChildren<SpriteRenderer>())
@@ -231,7 +232,7 @@ public class DualStandOffController : StandOffController
                     break;
 
                 case reactionType.Block:
-                    reductionAmount = 2;
+                    reductionAmount = 1;
                     rightSide.effectMessage("Blocked: (" +  reductionAmount.ToString() + ")");
                     break;
             }
@@ -290,9 +291,12 @@ public class DualStandOffController : StandOffController
 
     void intialState()
     {
-        if(leftSide.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime > 0.3 && !leftSide.getAnimator().GetCurrentAnimatorClipInfo(0)[0].clip.isLooping)
+        if (rightSide.characterSide.GetAllegiance() == CharacterAllegiance.Controlled)
         {
-            leftSide.getAnimator().speed = 0;
+            if (leftSide.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime > 0.3 && !leftSide.getAnimator().GetCurrentAnimatorClipInfo(0)[0].clip.isLooping)
+            {
+                leftSide.getAnimator().speed = 0;
+            }
         }
 
         if (timer > 1f)
@@ -406,9 +410,11 @@ public class DualStandOffController : StandOffController
     protected override void cast()
     {
         storedDamage = attackAttempt.cast(rightSide, reductionAmount);
-        damageText.text = storedDamage.ToString();
+//        damageText.text = storedDamage.ToString();
         BattleController.ActiveBattleController.BEL.addEvent(BattleEventType.Hit,  attackAttempt.getAttacker().getNameID(), attackAttempt.getAbility().name, attackAttempt.getAttackee().getNameID(), storedDamage.ToString());
-
-        rightSide.effectMessage(damageText.text);
+        if (storedDamage > 0)
+        {
+            rightSide.effectMessage(damageText.text);
+        }
     }
 }

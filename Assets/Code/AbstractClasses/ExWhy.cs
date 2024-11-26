@@ -106,6 +106,43 @@ public abstract class ExWhy
         return (targetMoveCell.occupier == null && targetMoveCell.walkable);
     }
 
+    public ExWhyCell getClosestAvailableCell(int nX, int nY)
+    {
+        if (gridCells[nX, nY].occupier == null && gridCells[nX, nY].walkable)
+        {
+            return gridCells[nX, nY];
+        }
+
+        bool flag = true;
+        int x = 0;
+        int y = 0;
+        ExWhyCell output = null;
+        while (flag)
+        {
+            for (int a = -x; a < x; a++)
+            {
+                for (int b = -y; b < y; b++)
+                {
+                    if (checkIfCordsAreValid(nX + a, nY + b))
+                    {
+                        ExWhyCell potential = gridCells[nX + a, nY + b];
+                        if (potential.walkable && potential.occupier is null)
+                        {
+                            return potential;
+                        }
+                    }
+                }
+            }
+            x++;
+            y++;
+
+            if (y == 10) { return null; }
+        }
+        return output;
+    }
+
+
+
     public ExWhyCell getClosestAvailableCell(ExWhyCell epicentre)
     {
         bool flag = true;

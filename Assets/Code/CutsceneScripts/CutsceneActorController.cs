@@ -17,8 +17,17 @@ public class CutsceneActorController : MonoBehaviour
         moveDirection = direction;
         moveSpeed = speed;
         moveDuration = duration;
-        ActorAnimator.SetBool("moving", true);
-        moving = true;
+        if (movement)
+        {
+            ActorAnimator.SetBool("moving", true);
+        }
+         moving = true;
+    }
+
+    public void setOverrideAnimation(int aniID)
+    {
+        ActorAnimator.SetInteger("aniOverrideInt", aniID);
+        ActorAnimator.SetTrigger("aniOverride");
     }
 
     void move()
@@ -32,10 +41,16 @@ public class CutsceneActorController : MonoBehaviour
         }
     }
 
-    //###UnityMessages###
-    void Start()
+    public void initialize()
     {
-        ActorAnimator = GetComponent<Animator>(); 
+        ActorAnimator = GetComponent<Animator>();
+    }
+
+    //###UnityMessages###
+
+    private void Start()
+    {
+        ActorAnimator = GetComponent<Animator>();
     }
 
     void Update()

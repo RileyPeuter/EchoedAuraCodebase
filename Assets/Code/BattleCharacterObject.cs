@@ -399,6 +399,8 @@ public class BattleCharacterObject : MonoBehaviour
         characterAnimator = GetComponent<Animator>();
         visionRange = character.defaultVision;
         getAI().initialize(this);
+        abilityMove = new Move();
+
     }
 
     public void initialize(Character ch, CharacterAllegiance chAl, int nID = -1)
@@ -423,10 +425,12 @@ public class BattleCharacterObject : MonoBehaviour
             CharacterAI = character.getDefualtBCAI();
         }
         characterAnimator = GetComponent<Animator>();
+        abilityMove = new Move();
+
     }
 
     //###UnityMessages###
- void Start()
+    void Start()
     {
         manaFlow = adjustManaFlow(character.getDerivedStat(derivedStat.manaFlow));
         availableMovement = character.getDerivedStat(derivedStat.movement);

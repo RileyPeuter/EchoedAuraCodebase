@@ -21,6 +21,11 @@ public class MapCharacterListController : Window
         highlighted = true;
     }
 
+    public List<StoredCharacterObject> getCharacters()
+    {
+        return characters;
+    }
+
     void Start()
     {
         populateList();
@@ -37,6 +42,14 @@ public class MapCharacterListController : Window
     public void addCharacters(List<StoredCharacterObject> n_characters)
     {
         characters = n_characters;
+    }
+
+    public void resetList()
+    {
+        foreach(GameObject charButton in characterButtons)
+        {
+            charButton.GetComponent<CharacterSnippetController>().reenable();
+        }
     }
 
     public void deselectCharacter(StoredCharacterObject characterObject)

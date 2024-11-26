@@ -25,7 +25,13 @@ public class GenericBattleCutscene : BattleCutscene
 
     void Update()
     {
+        if (phaseTime > 0)
+        {
+            testPhase();
+            return;
+        }
         buttonCheck();
+
         setDialogueLocation();
     }
 }
